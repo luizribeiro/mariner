@@ -1,0 +1,34 @@
+---
+dist: bionic
+
+language: python
+python:
+  - "3.7"
+  - "3.8"
+
+cache:
+  pip: true
+
+before_install:
+  - pip install poetry
+
+install:
+  - poetry install
+
+before_script:
+  # for some reason poetry is still setting up the venv somewhere else
+  # despite the settings on poetry.toml
+  - sed -i "/.venv\\/lib\\//d" .pyre_configuration
+  - sed -i "s#.venv#$(poetry env info --path)#g" .pyre_configuration
+
+script:
+  - poetry run flake8
+  - poetry run black --check .
+  - >-
+    poetry run pyre --noninteractive
+    --search-path "$(poetry env info --path)/lib/"python*/site-packages
+  - poetry run green --run-coverage
+
+after_success:
+  - pip install codecov
+  - codecov
