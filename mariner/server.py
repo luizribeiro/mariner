@@ -1,4 +1,7 @@
+import logging
+
 from flask import Flask
+from waitress import serve
 
 from mariner.mars import ElegooMars
 
@@ -24,3 +27,9 @@ def hello() -> str:
             elegoo_mars.close()
         except Exception:
             pass
+
+
+def main() -> None:
+    logger = logging.getLogger("waitress")
+    logger.setLevel(logging.INFO)
+    serve(app, host="0.0.0.0", port=5000)
