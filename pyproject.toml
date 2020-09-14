@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "mariner"
+version = "0.0.1"
+description = "An utility for controlling Elegoo Mars 3D printers"
+license = "MIT"
+readme = "README.md"
+authors = [
+  "Luiz Ribeiro <luizribeiro@gmail.com>",
+]
+
+[tool.poetry.dependencies]
+python = "^3.7"
+pyserial = "3.4"
+
+[tool.poetry.dev-dependencies]
+flake8 = "3.8.3"
+pyre-check = "0.0.52"
+python-language-server = "0.35.0"
+black = "20.8b1"
+
+[build-system]
+requires = ["poetry>=1.0.10"]
+build-backend = "poetry.masonry.api"

@@ -1,0 +1,7 @@
+*.egg-info/
+.DS_Store
+.coverage
+.pyre/
+.tox/
+.venv/
+__pycache__/
