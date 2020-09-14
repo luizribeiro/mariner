@@ -39,6 +39,19 @@ class ElegooMars:
         serial_port.write(data)
         return serial_port.readline().decode("utf-8")
 
+    # M20: list files
+
+    # M4000: full state information (Z pos, bytes printed, etc)
+
+    # M27: print status (in bytes)
+    # M25: pause printing
+    # M24: resume printing
+    # M33: stop printing
+
+    # M6030: start printing
+
+    # M114: query Z position
+
 
 elegoo_mars = ElegooMars()
 elegoo_mars.open()
