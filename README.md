@@ -1,4 +1,4 @@
-# mariner
+# 🛰️ mariner
 
 ## Setup
 
