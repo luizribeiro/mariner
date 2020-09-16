@@ -5,3 +5,5 @@
 .tox/
 .venv/
 __pycache__/
+frontend/dist/
+frontend/node_modules/
