@@ -1,15 +1,31 @@
+import os
 import logging
 
-from flask import Flask
+from flask import Flask, render_template
 from waitress import serve
+from whitenoise import WhiteNoise
 
 from mariner.mars import ElegooMars
 
 
-app = Flask(__name__)
+frontend_dist_directory: str = os.path.abspath("./frontend/dist/")
+app = Flask(
+    __name__,
+    template_folder=frontend_dist_directory,
+    static_folder=frontend_dist_directory,
+)
+# pyre-ignore[8]: incompatible attribute type
+app.wsgi_app = WhiteNoise(app.wsgi_app)
+# pyre-ignore[16]: undefined attribute
+app.wsgi_app.add_files(frontend_dist_directory)
 
 
-@app.route("/")
+@app.route("/", methods=["GET"])
+def index() -> str:
+    return render_template("index.html")
+
+
+@app.route("/data", methods=["GET"])
 def hello() -> str:
     try:
         elegoo_mars = ElegooMars()
