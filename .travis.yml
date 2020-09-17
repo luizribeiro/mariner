@@ -12,8 +12,17 @@ cache:
 before_install:
   - pip install poetry
 
+  # setup yarn
+  - sudo apt-key adv --fetch-keys http://dl.yarnpkg.com/debian/pubkey.gpg
+  - >-
+    echo "deb http://dl.yarnpkg.com/debian/ stable main"
+    | sudo tee /etc/apt/sources.list.d/yarn.list
+  - sudo apt-get update -qq
+  - sudo apt-get install -y -qq yarn
+
 install:
   - poetry install
+  - ( cd frontend/ && yarn install )
 
 before_script:
   # for some reason poetry is still setting up the venv somewhere else
@@ -28,6 +37,11 @@ script:
     poetry run pyre --noninteractive
     --search-path "$(poetry env info --path)/lib/"python*/site-packages
   - poetry run green --run-coverage
+
+  - cd frontend/
+  - yarn run prettier --check src/
+  - yarn run tsc
+  - yarn build
 
 after_success:
   - pip install codecov
