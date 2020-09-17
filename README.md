@@ -8,11 +8,13 @@
 
 ```
 poetry install --no-dev
+cd frontend
+yarn install
+yarn build
 ```
 
 ## Running
 
 ```
-poetry shell
-mariner
+poetry run mariner
 ```
