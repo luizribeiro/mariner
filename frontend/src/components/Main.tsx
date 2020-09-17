@@ -21,7 +21,7 @@ import Typography from "@material-ui/core/Typography";
 import clsx from "clsx";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 
-import theme from "../theme.ts";
+import theme from "../theme";
 
 const drawerWidth = 240;
 

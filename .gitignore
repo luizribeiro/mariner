@@ -3,6 +3,7 @@
 .coverage
 .pyre/
 .tox/
+.typescript
 .venv/
 __pycache__/
 frontend/dist/
