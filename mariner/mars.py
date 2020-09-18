@@ -54,6 +54,15 @@ class ElegooMars:
 
         raise NotImplementedError
 
+    def get_z_pos(self) -> float:
+        data = self._send_and_read(b"M114")
+        return float(
+            none_throws(
+                re.search("Z:([0-9.]+)", data),
+                "Received invalid status response from printer",
+            ).group(1)
+        )
+
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 

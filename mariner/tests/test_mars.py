@@ -84,3 +84,15 @@ class ElegooMarsTest(TestCase):
         expect(print_status.is_printing).to_equal(True)
         expect(print_status.current_byte).to_equal(0)
         expect(print_status.total_bytes).to_equal(23543968)
+
+    def test_get_z_pos(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            b"ok C: X:0.000000 Y:0.000000 Z:155.000000 E:0.000000\r\n"
+        )
+
+        self.printer.open()
+        z_pos = self.printer.get_z_pos()
+        self.printer.close()
+
+        self.serial_port_mock.write.assert_called_once_with(b"M114")
+        expect(z_pos).is_almost_equal(155.0, max_delta=1e-9)
