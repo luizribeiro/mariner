@@ -44,3 +44,15 @@ class ElegooMarsTest(TestCase):
 
         self.serial_port_mock.write.assert_called_once_with(b"M4002")
         expect(firmware_version).to_equal("V4.3.4_LCDC")
+
+    def test_get_state(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            b"ok B:0/0 X:0.000 Y:0.000 Z:151.900 F:0/0 D:31540/0/1 "
+        )
+
+        self.printer.open()
+        # TODO: make this return a dataclass with the parsed information
+        self.printer.get_state()
+        self.printer.close()
+
+        self.serial_port_mock.write.assert_called_once_with(b"M4000")
