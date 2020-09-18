@@ -1,0 +1,19 @@
+---
+version: 2
+updates:
+  - package-ecosystem: pip
+    directory: "/"
+    schedule:
+      interval: daily
+      time: "10:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - luizribeiro
+  - package-ecosystem: npm
+    directory: "/frontend/"
+    schedule:
+      interval: daily
+      time: "10:00"
+    open-pull-requests-limit: 10
+    assignees:
+      - luizribeiro
