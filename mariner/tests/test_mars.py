@@ -4,6 +4,7 @@ from unittest.mock import MagicMock, patch
 
 from pyexpect import expect
 
+from mariner.exceptions import UnexpectedResponse
 from mariner.mars import ElegooMars
 
 
@@ -108,10 +109,27 @@ class ElegooMarsTest(TestCase):
         expect(selected_file).equals("LittleBBC.ctb")
 
     def test_select_file(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            # FIXME: this isn't right, readline would return only the first one
+            b"File opened:lattice.ctb Size:26058253\r\nFile selected\r\nok N:0\r\n"
+        )
         self.printer.open()
         self.printer.select_file("lattice.ctb")
         self.printer.close()
         self.serial_port_mock.write.assert_called_once_with(b"M23 lattice.ctb")
+
+    def test_select_nonexisting_file(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            # FIXME: this isn't right, readline would return only the first one
+            b"//############Error!cann't open file foobar.ctb!\r\n"
+            + b"open failed, File :foobar.ctb\r\n"
+            + b"ok N:0\r\n"
+        )
+        self.printer.open()
+        with self.assertRaises(UnexpectedResponse):
+            self.printer.select_file("foobar.ctb")
+        self.printer.close()
+        self.serial_port_mock.write.assert_called_once_with(b"M23 foobar.ctb")
 
     def test_reboot(self) -> None:
         self.printer.open()

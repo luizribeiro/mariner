@@ -5,6 +5,8 @@ from typing import Optional
 import serial
 from pyre_extensions import none_throws
 
+from mariner.exceptions import UnexpectedResponse
+
 
 @dataclass(frozen=True)
 class PrintStatus:
@@ -73,8 +75,9 @@ class ElegooMars:
         )
 
     def select_file(self, filename: str) -> None:
-        self._send((f"M23 {filename}").encode())
-        # TODO: check response (should contain ok)
+        response = self._send_and_read((f"M23 {filename}").encode())
+        if "File opened" not in response:
+            raise UnexpectedResponse(response)
 
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
