@@ -97,15 +97,15 @@ class ElegooMarsTest(TestCase):
         self.serial_port_mock.write.assert_called_once_with(b"M114")
         expect(z_pos).is_almost_equal(155.0, max_delta=1e-9)
 
-    def test_get_last_selected_file(self) -> None:
+    def test_get_selected_file(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok 'LittleBBC.ctb'\r\n"
 
         self.printer.open()
-        last_selected_file = self.printer.get_last_selected_file()
+        selected_file = self.printer.get_selected_file()
         self.printer.close()
 
         self.serial_port_mock.write.assert_called_once_with(b"M4006")
-        expect(last_selected_file).equals("LittleBBC.ctb")
+        expect(selected_file).equals("LittleBBC.ctb")
 
     def test_reboot(self) -> None:
         self.printer.open()

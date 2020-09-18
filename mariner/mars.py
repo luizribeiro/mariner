@@ -63,7 +63,7 @@ class ElegooMars:
             ).group(1)
         )
 
-    def get_last_selected_file(self) -> str:
+    def get_selected_file(self) -> str:
         data = self._send_and_read(b"M4006")
         return str(
             none_throws(
