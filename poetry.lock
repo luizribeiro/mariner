@@ -296,7 +296,7 @@ description = "A performant type checker for Python"
 name = "pyre-check"
 optional = false
 python-versions = ">=3.6"
-version = "0.0.52"
+version = "0.0.54"
 
 [package.dependencies]
 dataclasses = "*"
@@ -493,7 +493,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "798c1d30dafa2423b870f0a22e4630c602a85b546c583fbc30878bbff2606c2c"
+content-hash = "aed71cd6ee8f2ef7d44150f82a9cbf230a5341834079cc5e7ea9e94b19bbd926"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -698,9 +698,9 @@ pyflakes = [
     {file = "pyflakes-2.2.0.tar.gz", hash = "sha256:35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8"},
 ]
 pyre-check = [
-    {file = "pyre-check-0.0.52.tar.gz", hash = "sha256:cf33487283c9f0bf582e07026ed4ae0e0fadb4b50e429edcfc0a60632cb28fe0"},
-    {file = "pyre_check-0.0.52-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:ad251e363a8707f462d34f3b0898b8e0e3b3bec64522eb9e38f85bf872218668"},
-    {file = "pyre_check-0.0.52-py3-none-manylinux1_x86_64.whl", hash = "sha256:2bf97fa0aa4a932d1ce03aa24a4999a6b8e5c89f15eca52e773efb6a1f7f8520"},
+    {file = "pyre-check-0.0.54.tar.gz", hash = "sha256:d4b8c3310ec4ff62556b575ee4faed11727a1ed750c8c8908bfdfe3f940da6bb"},
+    {file = "pyre_check-0.0.54-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:247f96648a6da127dcf16e8ccdef7c0d7fd6a439d08c468da23e608569ae1052"},
+    {file = "pyre_check-0.0.54-py3-none-manylinux1_x86_64.whl", hash = "sha256:a3d641ba217eded90b29a44ad9042101446539537d192d8d5b25e5f95ceb889a"},
 ]
 pyre-extensions = [
     {file = "pyre-extensions-0.0.18.tar.gz", hash = "sha256:60e0411e91ecbeaf1fd5d8851ffce42baf6a74ec7ccd01db545c7a97f15aac30"},
