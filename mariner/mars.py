@@ -76,12 +76,8 @@ class ElegooMars:
 
     # M20: list files
 
-    # M4000: full state information (Z pos, bytes printed, etc)
-
     # M25: pause printing
     # M24: resume printing
     # M33: stop printing
 
     # M6030: start printing
-
-    # M114: query Z position
