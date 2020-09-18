@@ -72,6 +72,10 @@ class ElegooMars:
             ).group(1)
         )
 
+    def select_file(self, filename: str) -> None:
+        self._send((f"M23 {filename}").encode())
+        # TODO: check response (should contain ok)
+
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 
