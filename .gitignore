@@ -6,5 +6,6 @@
 .typescript
 .venv/
 __pycache__/
+coverage
 frontend/dist/
 frontend/node_modules/
