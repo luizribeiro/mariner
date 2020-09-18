@@ -63,6 +63,15 @@ class ElegooMars:
             ).group(1)
         )
 
+    def get_last_selected_file(self) -> str:
+        data = self._send_and_read(b"M4006")
+        return str(
+            none_throws(
+                re.search("ok '([^']+)'\r\n", data),
+                "Received invalid status response from printer",
+            ).group(1)
+        )
+
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 
