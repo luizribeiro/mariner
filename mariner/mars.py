@@ -1,8 +1,16 @@
 import re
+from dataclasses import dataclass
 from typing import Optional
 
 import serial
 from pyre_extensions import none_throws
+
+
+@dataclass(frozen=True)
+class PrintStatus:
+    is_printing: bool
+    current_byte: Optional[int] = None
+    total_bytes: Optional[int] = None
 
 
 class ElegooMars:
@@ -29,6 +37,23 @@ class ElegooMars:
     def get_state(self) -> str:
         return self._send_and_read(b"M4000")
 
+    def get_print_status(self) -> PrintStatus:
+        data = self._send_and_read(b"M27")
+        if "SD printing byte" in data:
+            match = none_throws(
+                re.search("SD printing byte ([0-9]+)/([0-9]+)", data),
+                "Received invalid status response from printer",
+            )
+            return PrintStatus(
+                is_printing=True,
+                current_byte=int(match.group(1)),
+                total_bytes=int(match.group(2)),
+            )
+        elif "It's not printing now" in data:
+            return PrintStatus(is_printing=False)
+
+        raise NotImplementedError
+
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 
@@ -44,7 +69,6 @@ class ElegooMars:
 
     # M4000: full state information (Z pos, bytes printed, etc)
 
-    # M27: print status (in bytes)
     # M25: pause printing
     # M24: resume printing
     # M33: stop printing
