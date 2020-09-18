@@ -106,3 +106,15 @@ class ElegooMarsTest(TestCase):
 
         self.serial_port_mock.write.assert_called_once_with(b"M4006")
         expect(last_selected_file).equals("LittleBBC.ctb")
+
+    def test_reboot(self) -> None:
+        self.printer.open()
+
+        self.printer.reboot()
+        self.serial_port_mock.write.assert_called_once_with(b"M6040 I0")
+        self.serial_port_mock.reset_mock()
+
+        self.printer.reboot(delay_in_ms=123)
+        self.serial_port_mock.write.assert_called_once_with(b"M6040 I123")
+
+        self.printer.close()

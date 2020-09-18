@@ -75,13 +75,24 @@ class ElegooMars:
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 
+    def reboot(self, delay_in_ms: int = 0) -> None:
+        self._send((f"M6040 I{delay_in_ms}").encode())
+
     def _send_and_read(self, data: bytes) -> str:
+        self._send(data)
+
+        serial_port = none_throws(
+            self._serial_port,
+            "Tried to communicate with serial port without opening it",
+        )
+        return serial_port.readline().decode("utf-8")
+
+    def _send(self, data: bytes) -> None:
         serial_port = none_throws(
             self._serial_port,
             "Tried to communicate with serial port without opening it",
         )
         serial_port.write(data)
-        return serial_port.readline().decode("utf-8")
 
     # M20: list files
 
