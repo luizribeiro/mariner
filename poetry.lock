@@ -276,6 +276,14 @@ version = "2.6.0"
 
 [[package]]
 category = "dev"
+description = "Python expectaton library"
+name = "pyexpect"
+optional = false
+python-versions = "*"
+version = "1.0.20"
+
+[[package]]
+category = "dev"
 description = "passive checker of Python programs"
 name = "pyflakes"
 optional = false
@@ -486,7 +494,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["jaraco.itertools", "func-timeout"]
 
 [metadata]
-content-hash = "228580416c4f100a47390bd29c2c631677c52b01f47eeeb936ad5aafc5f3fbb9"
+content-hash = "20e472395963dd78eeed4f3d5ba5004dfda31cf78b786e44fa890de4455783a0"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -682,6 +690,10 @@ psutil = [
 pycodestyle = [
     {file = "pycodestyle-2.6.0-py2.py3-none-any.whl", hash = "sha256:2295e7b2f6b5bd100585ebcb1f616591b652db8a741695b3d8f5d28bdc934367"},
     {file = "pycodestyle-2.6.0.tar.gz", hash = "sha256:c58a7d2815e0e8d7972bf1803331fb0152f867bd89adf8a01dfd55085434192e"},
+]
+pyexpect = [
+    {file = "pyexpect-1.0.20-py2-none-any.whl", hash = "sha256:3310b1b26b7dc233ddf9bd5e78fa594e275d8a2607be905a786e63c0d9df7926"},
+    {file = "pyexpect-1.0.20.tar.gz", hash = "sha256:acaaa6f96de315dc99cac3da810156bf3829d1eb5c49180f00a4fdde82eabc76"},
 ]
 pyflakes = [
     {file = "pyflakes-2.2.0-py2.py3-none-any.whl", hash = "sha256:0d94e0e05a19e57a99444b6ddcf9a6eb2e5c68d3ca1e98e90707af8152c90a92"},

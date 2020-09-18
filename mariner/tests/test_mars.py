@@ -2,6 +2,8 @@ import unittest.mock
 from unittest import TestCase
 from unittest.mock import MagicMock, patch
 
+from pyexpect import expect
+
 from mariner.mars import ElegooMars
 
 
@@ -32,3 +34,13 @@ class ElegooMarsTest(TestCase):
         self.printer.close()
         self.serial_port_mock.open.assert_not_called()
         self.serial_port_mock.close.assert_called_once_with()
+
+    def test_get_firmware_version(self) -> None:
+        self.serial_port_mock.readline.return_value = b"ok V4.3.4_LCDC\n"
+
+        self.printer.open()
+        firmware_version = self.printer.get_firmware_version()
+        self.printer.close()
+
+        self.serial_port_mock.write.assert_called_once_with(b"M4002")
+        expect(firmware_version).to_equal("V4.3.4_LCDC")
