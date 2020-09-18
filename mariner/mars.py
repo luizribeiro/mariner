@@ -14,6 +14,7 @@ class ElegooMars:
             baudrate=115200,
             timeout=0.1,
         )
+        none_throws(self._serial_port).open()
 
     def close(self) -> None:
         none_throws(self._serial_port).close()
