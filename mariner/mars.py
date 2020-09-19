@@ -87,6 +87,11 @@ class ElegooMars:
         if "ok" not in response:
             raise UnexpectedResponse(response)
 
+    def pause_printing(self) -> None:
+        response = self._send_and_read(b"M25")
+        if "ok" not in response:
+            raise UnexpectedResponse(response)
+
     resume_printing: Callable[["ElegooMars"], None] = start_printing
 
     def stop_printing(self) -> None:

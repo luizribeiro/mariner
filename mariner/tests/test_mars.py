@@ -171,6 +171,13 @@ class ElegooMarsTest(TestCase):
         self.serial_port_mock.write.assert_called_once_with(b"M24")
         self.printer.close()
 
+    def test_pause_printing(self) -> None:
+        self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
+        self.printer.open()
+        self.printer.pause_printing()
+        self.serial_port_mock.write.assert_called_once_with(b"M25")
+        self.printer.close()
+
     def test_reboot(self) -> None:
         self.printer.open()
 
