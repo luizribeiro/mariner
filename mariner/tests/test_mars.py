@@ -196,6 +196,13 @@ class ElegooMarsTest(TestCase):
 
         self.printer.close()
 
+    def test_stop_motors(self) -> None:
+        self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
+        self.printer.open()
+        self.printer.stop_motors()
+        self.serial_port_mock.write.assert_called_once_with(b"M112")
+        self.printer.close()
+
     def test_reboot(self) -> None:
         self.printer.open()
 

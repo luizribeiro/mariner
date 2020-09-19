@@ -106,6 +106,11 @@ class ElegooMars:
         if "Error" in response:
             raise UnexpectedResponse(response)
 
+    def stop_motors(self) -> None:
+        response = self._send_and_read(b"M112")
+        if "ok" not in response:
+            raise UnexpectedResponse(response)
+
     def reboot(self, delay_in_ms: int = 0) -> None:
         self._send((f"M6040 I{delay_in_ms}").encode())
 
