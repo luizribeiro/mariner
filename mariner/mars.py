@@ -1,6 +1,7 @@
 import re
 from dataclasses import dataclass
-from typing import Callable, Optional
+from types import TracebackType
+from typing import Callable, Optional, Type
 
 import serial
 from pyre_extensions import none_throws
@@ -28,6 +29,19 @@ class ElegooMars:
 
     def close(self) -> None:
         none_throws(self._serial_port).close()
+
+    def __enter__(self) -> "ElegooMars":
+        self.open()
+        return self
+
+    def __exit__(
+        self,
+        exc_type: Optional[Type[BaseException]],
+        exc_value: Optional[BaseException],
+        traceback: Optional[TracebackType],
+    ) -> bool:
+        self.close()
+        return False
 
     def get_firmware_version(self) -> str:
         data = self._send_and_read(b"M4002")

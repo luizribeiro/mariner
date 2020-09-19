@@ -36,6 +36,18 @@ class ElegooMarsTest(TestCase):
         self.serial_port_mock.open.assert_not_called()
         self.serial_port_mock.close.assert_called_once_with()
 
+    def test_usage_with_context_manager(self) -> None:
+        self.serial_port_mock.open.assert_not_called()
+        self.serial_port_mock.close.assert_not_called()
+
+        with self.printer:
+            self.serial_port_mock.open.assert_called_once_with()
+            self.serial_port_mock.close.assert_not_called()
+            self.serial_port_mock.reset_mock()
+
+        self.serial_port_mock.open.assert_not_called()
+        self.serial_port_mock.close.assert_called_once_with()
+
     def test_get_firmware_version(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok V4.3.4_LCDC\n"
 
