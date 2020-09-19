@@ -196,6 +196,13 @@ class ElegooMarsTest(TestCase):
 
         self.printer.close()
 
+    def test_move_to_home(self) -> None:
+        self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
+        self.printer.open()
+        self.printer.move_to_home()
+        self.serial_port_mock.write.assert_called_once_with(b"G28")
+        self.printer.close()
+
     def test_stop_motors(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
