@@ -26,6 +26,7 @@
     "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
+    "babel-plugin-transform-class-properties": "^6.24.1",
     "eslint": "^7.9.0",
     "eslint-plugin-react": "^7.20.6",
     "html-loader": "^1.3.0",
@@ -52,6 +53,9 @@
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/.typescript/"
-    ]
+    ],
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "babel-jest"
+    }
   }
 }
