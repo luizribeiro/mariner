@@ -1,11 +1,8 @@
 import Box from "@material-ui/core/Box";
 import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
-import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
-import LinearProgress, {
-  LinearProgressProps,
-} from "@material-ui/core/LinearProgress";
+import LinearProgress from "@material-ui/core/LinearProgress";
 import Grid from "@material-ui/core/Grid";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import React from "react";
@@ -36,8 +33,11 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PrintStatus(props: { progress: number }) {
+export default function PrintStatus(props: {
+  progress: number;
+}): React.ReactElement {
   const classes = useStyles();
+  const { progress } = props;
 
   return (
     <Card className={classes.root}>
@@ -57,11 +57,11 @@ export default function PrintStatus(props: { progress: number }) {
             </Typography>
             <Box display="flex" alignItems="center">
               <Box width="100%" mr={1}>
-                <LinearProgress variant="determinate" value={20} />
+                <LinearProgress variant="determinate" value={progress} />
               </Box>
               <Box minWidth={35}>
                 <Typography variant="body2" color="textSecondary">
-                  {`${Math.round(20)}%`}
+                  {`${Math.round(progress)}%`}
                 </Typography>
               </Box>
             </Box>

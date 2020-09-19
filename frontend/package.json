@@ -2,7 +2,8 @@
   "scripts": {
     "start": "webpack-dev-server --watch --mode development",
     "build": "webpack --mode production",
-    "test": "jest"
+    "test": "jest",
+    "lint": "yarn eslint 'src/**/*.{js,jsx,ts,tsx}'"
   },
   "devDependencies": {
     "@babel/core": "^7.11.6",
@@ -11,6 +12,9 @@
     "@babel/preset-typescript": "^7.10.4",
     "@types/jest": "^26.0.14",
     "@types/react-dom": "^16.9.8",
+    "@typescript-eslint/eslint-plugin": "^4.1.1",
+    "@typescript-eslint/parser": "^4.1.1",
+    "babel-eslint": "^10.1.0",
     "babel-jest": "^26.3.0",
     "babel-loader": "^8.1.0",
     "eslint": "^7.9.0",

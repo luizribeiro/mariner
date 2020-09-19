@@ -88,7 +88,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Main() {
+export default function Main(): React.ReactElement {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
