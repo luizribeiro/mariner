@@ -82,6 +82,11 @@ class ElegooMars:
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 
+    def stop_printing(self) -> None:
+        response = self._send_and_read(b"M33")
+        if "Error" in response:
+            raise UnexpectedResponse(response)
+
     def reboot(self, delay_in_ms: int = 0) -> None:
         self._send((f"M6040 I{delay_in_ms}").encode())
 

@@ -131,6 +131,24 @@ class ElegooMarsTest(TestCase):
         self.printer.close()
         self.serial_port_mock.write.assert_called_once_with(b"M23 foobar.ctb")
 
+    def test_stop_printing(self) -> None:
+        self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
+        self.printer.open()
+        self.printer.stop_printing()
+        self.serial_port_mock.write.assert_called_once_with(b"M33")
+        self.printer.close()
+
+    def test_stop_printing_when_not_printing(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            # FIXME: this isn't right, readline would return only the first one
+            b"Error:It's not printing now!\r\nok N:0\r\n"
+        )
+        self.printer.open()
+        with self.assertRaises(UnexpectedResponse):
+            self.printer.stop_printing()
+        self.printer.close()
+        self.serial_port_mock.write.assert_called_once_with(b"M33")
+
     def test_reboot(self) -> None:
         self.printer.open()
 
