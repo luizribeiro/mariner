@@ -1,7 +1,8 @@
 import os
 import logging
 
-from flask import Flask, render_template
+from flask import Flask, jsonify, render_template
+from pyre_extensions import none_throws
 from waitress import serve
 from whitenoise import WhiteNoise
 
@@ -25,24 +26,33 @@ def index() -> str:
     return render_template("index.html")
 
 
-@app.route("/data", methods=["GET"])
-def hello() -> str:
+@app.route("/print_status", methods=["GET"])
+def print_status() -> str:
     try:
         elegoo_mars = ElegooMars()
         elegoo_mars.open()
 
-        response = "Hello, World!\n"
-        response += f"Firmware Version: {elegoo_mars.get_firmware_version()}\n"
-        response += f"State: {elegoo_mars.get_state()}\n"
+        selected_file = elegoo_mars.get_selected_file()
+        print_status = elegoo_mars.get_print_status()
 
-        return response.replace("\n", "<br />")
-    except Exception as ex:
-        return f"Error: {str(ex)}<br />"
+        if print_status.is_printing:
+            progress = (
+                100.0
+                * none_throws(print_status.current_byte)
+                / none_throws(print_status.total_bytes)
+            )
+        else:
+            progress = 0.0
+
+        return jsonify(
+            {
+                "selected_file": selected_file,
+                "is_printing": print_status.is_printing,
+                "progress": progress,
+            }
+        )
     finally:
-        try:
-            elegoo_mars.close()
-        except Exception:
-            pass
+        elegoo_mars.close()
 
 
 def main() -> None:
