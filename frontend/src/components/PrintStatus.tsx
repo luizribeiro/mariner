@@ -1,5 +1,5 @@
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
+import IconButton from "@material-ui/core/IconButton";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
@@ -7,6 +7,7 @@ import LinearProgress, {
   LinearProgressProps,
 } from "@material-ui/core/LinearProgress";
 import Grid from "@material-ui/core/Grid";
+import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import React from "react";
 import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/core/styles";
@@ -19,6 +20,13 @@ const useStyles = makeStyles({
   title: {
     fontSize: 16,
     fontWeight: "bold",
+  },
+  playButton: {
+    padding: 6,
+  },
+  playIcon: {
+    height: 38,
+    width: 38,
   },
   gridRoot: {
     flexGrow: 1,
@@ -37,17 +45,26 @@ export default function PrintStatus(progress: number) {
         <Typography className={classes.title} color="textPrimary" gutterBottom>
           Elegoo Mars Pro
         </Typography>
-        <Typography component="h6" variant="h6" color="textSecondary">
-          lattice.ctb
-        </Typography>
-        <Box display="flex" alignItems="center">
-          <Box width="100%" mr={1}>
-            <LinearProgress variant="determinate" value={20} />
+        <Box display="flex">
+          <Box paddingRight={1}>
+            <IconButton className={classes.playButton} aria-label="play/pause">
+              <PlayArrowIcon className={classes.playIcon} />
+            </IconButton>
           </Box>
-          <Box minWidth={35}>
-            <Typography variant="body2" color="textSecondary">
-              {`${Math.round(20)}%`}
+          <Box width="100%">
+            <Typography component="h6" variant="h6" color="textSecondary">
+              lattice.ctb
             </Typography>
+            <Box display="flex" alignItems="center">
+              <Box width="100%" mr={1}>
+                <LinearProgress variant="determinate" value={20} />
+              </Box>
+              <Box minWidth={35}>
+                <Typography variant="body2" color="textSecondary">
+                  {`${Math.round(20)}%`}
+                </Typography>
+              </Box>
+            </Box>
           </Box>
         </Box>
         <div className={classes.gridRoot}>
