@@ -14,6 +14,8 @@ class MarinerServerTest(TestCase):
         self.printer_patcher = patch("mariner.server.ElegooMars")
         printer_constructor_mock = self.printer_patcher.start()
         printer_constructor_mock.return_value = self.printer_mock
+        self.printer_mock.__enter__ = Mock(return_value=self.printer_mock)
+        self.printer_mock.__exit__ = Mock(return_value=None)
 
     def tearDown(self) -> None:
         self.printer_patcher.stop()

@@ -28,10 +28,7 @@ def index() -> str:
 
 @app.route("/print_status", methods=["GET"])
 def print_status() -> str:
-    try:
-        elegoo_mars = ElegooMars()
-        elegoo_mars.open()
-
+    with ElegooMars() as elegoo_mars:
         selected_file = elegoo_mars.get_selected_file()
         print_status = elegoo_mars.get_print_status()
 
@@ -51,8 +48,6 @@ def print_status() -> str:
                 "progress": progress,
             }
         )
-    finally:
-        elegoo_mars.close()
 
 
 def main() -> None:
