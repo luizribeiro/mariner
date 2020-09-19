@@ -7,7 +7,7 @@ import PrintStatus from "../PrintStatus";
 const axiosMock = new MockAdapter(axios);
 
 export default {
-  title: "Example/PrintStatus",
+  title: "PrintStatus",
   component: PrintStatus,
   argTypes: {
     isPrinting: { control: "boolean" },
