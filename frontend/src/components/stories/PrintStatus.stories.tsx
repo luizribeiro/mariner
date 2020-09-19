@@ -1,9 +1,7 @@
-import React from "react";
 import { Story } from "@storybook/react";
-
-import PrintStatus from "../PrintStatus";
-
+import React from "react";
 import type { PrintStatusProps } from "../PrintStatus";
+import PrintStatus from "../PrintStatus";
 
 export default {
   title: "Example/PrintStatus",

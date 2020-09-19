@@ -1,28 +1,27 @@
 import AppBar from "@material-ui/core/AppBar";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
 import Drawer from "@material-ui/core/Drawer";
-import FolderIcon from "@material-ui/icons/Folder";
-import HelpIcon from "@material-ui/icons/Help";
-import HistoryIcon from "@material-ui/icons/History";
-import HomeIcon from "@material-ui/icons/Home";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import MenuIcon from "@material-ui/icons/Menu";
-import React from "react";
-import SettingsIcon from "@material-ui/icons/Settings";
+import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import FolderIcon from "@material-ui/icons/Folder";
+import HelpIcon from "@material-ui/icons/Help";
+import HistoryIcon from "@material-ui/icons/History";
+import HomeIcon from "@material-ui/icons/Home";
+import MenuIcon from "@material-ui/icons/Menu";
+import SettingsIcon from "@material-ui/icons/Settings";
 import clsx from "clsx";
-import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
-
-import PrintStatus from "./PrintStatus";
+import React from "react";
 import theme from "../theme";
+import PrintStatus from "./PrintStatus";
 
 const drawerWidth = 240;
 
