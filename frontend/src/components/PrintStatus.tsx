@@ -36,7 +36,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PrintStatus(progress: number) {
+export default function PrintStatus(props: { progress: number }) {
   const classes = useStyles();
 
   return (
