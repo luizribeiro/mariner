@@ -187,7 +187,7 @@ export default function Main(): React.ReactElement {
         </Drawer>
         <main className={classes.content}>
           <div className={classes.toolbar} />
-          <PrintStatus progress={25.0} />
+          <PrintStatus />
         </main>
       </div>
     </ThemeProvider>
