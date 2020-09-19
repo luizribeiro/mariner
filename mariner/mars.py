@@ -79,6 +79,13 @@ class ElegooMars:
         if "File opened" not in response:
             raise UnexpectedResponse(response)
 
+    def move_by(self, z_dist_mm: float, mm_per_min: int = 600) -> None:
+        response = self._send_and_read(
+            (f"G0 Z{z_dist_mm:.1f} F{mm_per_min} I0").encode()
+        )
+        if "ok" not in response:
+            raise UnexpectedResponse(response)
+
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
 
