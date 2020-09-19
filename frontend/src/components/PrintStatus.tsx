@@ -33,9 +33,13 @@ const useStyles = makeStyles({
   },
 });
 
-export default function PrintStatus(props: {
+export type PrintStatusProps = {
   progress: number;
-}): React.ReactElement {
+};
+
+export default function PrintStatus(
+  props: PrintStatusProps
+): React.ReactElement {
   const classes = useStyles();
   const { progress } = props;
 
