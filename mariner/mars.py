@@ -1,6 +1,6 @@
 import re
 from dataclasses import dataclass
-from typing import Optional
+from typing import Callable, Optional
 
 import serial
 from pyre_extensions import none_throws
@@ -81,6 +81,13 @@ class ElegooMars:
 
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
+
+    def start_printing(self) -> None:
+        response = self._send_and_read(b"M24")
+        if "ok" not in response:
+            raise UnexpectedResponse(response)
+
+    resume_printing: Callable[["ElegooMars"], None] = start_printing
 
     def stop_printing(self) -> None:
         response = self._send_and_read(b"M33")
