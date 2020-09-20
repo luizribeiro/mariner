@@ -33,7 +33,7 @@ export default class FileList extends React.Component<{}, FileListState> {
 
   async componentDidMount(): Promise<void> {
     const response: AxiosResponse<FileListAPIResponse> = await axios.get(
-      "api/file_list"
+      "api/list_files"
     );
     this.setState({
       isLoading: false,

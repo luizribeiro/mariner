@@ -12,7 +12,7 @@ export default {
 };
 
 const Template: Story = (_args) => {
-  axiosMock.onGet("api/file_list").reply(200, {
+  axiosMock.onGet("api/list_files").reply(200, {
     files: [
       { filename: "z-axis-stabilizer.ctb" },
       { filename: "case v2.ctb" },
