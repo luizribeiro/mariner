@@ -16,7 +16,6 @@ export default {
         options: ["IDLE", "STARTING_PRINT", "PRINTING"],
       },
     },
-    isPrinting: { control: "boolean" },
     progress: { control: { type: "number", min: 0, max: 100 } },
     selectedFile: { control: "text" },
   },
@@ -26,7 +25,6 @@ const Template: Story = (args) => {
   axiosMock.onGet("api/print_status").reply(200, {
     state: args.state,
     selected_file: args.selectedFile,
-    is_printing: args.isPrinting,
     progress: args.progress,
   });
   return <PrintStatus />;
@@ -35,7 +33,6 @@ const Template: Story = (args) => {
 export const Printing = Template.bind({});
 Printing.args = {
   state: "PRINTING",
-  isPrinting: true,
   selectedFile: "lattice.ctb",
   progress: 20.0,
 };
@@ -43,7 +40,6 @@ Printing.args = {
 export const Paused = Template.bind({});
 Paused.args = {
   state: "PRINTING", // TODO add support for paused state
-  isPrinting: false,
   selectedFile: "lattice.ctb",
   progress: 20.0,
 };
@@ -51,7 +47,6 @@ Paused.args = {
 export const Idle = Template.bind({});
 Idle.args = {
   state: "IDLE",
-  isPrinting: false,
   selectedFile: "lattice.ctb",
   progress: 0.0,
 };
@@ -59,7 +54,6 @@ Idle.args = {
 export const StartingPrint = Template.bind({});
 StartingPrint.args = {
   state: "STARTING_PRINT",
-  isPrinting: true,
   selectedFile: "lattice.ctb",
   progress: 0.0,
 };

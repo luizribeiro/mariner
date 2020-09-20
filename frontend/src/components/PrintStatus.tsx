@@ -52,7 +52,6 @@ export interface PrintStatusState {
   isLoading: boolean;
   data?: {
     state: PrinterState;
-    isPrinting: boolean;
     selectedFile: string;
     progress: number;
   };
@@ -61,7 +60,6 @@ export interface PrintStatusState {
 interface PrintStatusAPIResponse {
   state: string;
   selected_file: string;
-  is_printing: boolean;
   progress: number;
 }
 
@@ -81,7 +79,6 @@ class PrintStatus extends React.Component<
       isLoading: false,
       data: {
         state: toPrinterState(response.data.state),
-        isPrinting: response.data.is_printing,
         progress: response.data.progress,
         selectedFile: response.data.selected_file,
       },
@@ -90,19 +87,20 @@ class PrintStatus extends React.Component<
 
   _renderButton(): React.ReactElement {
     const { classes } = this.props;
-    const { isPrinting } = nullthrows(this.state.data);
+    const { state } = nullthrows(this.state.data);
 
-    const icon = isPrinting ? (
-      <PauseIcon className={classes.playIcon} />
-    ) : (
-      <PlayArrowIcon className={classes.playIcon} />
-    );
+    const icon =
+      state === "PRINTING" ? (
+        <PauseIcon className={classes.playIcon} />
+      ) : (
+        <PlayArrowIcon className={classes.playIcon} />
+      );
 
     return (
       <IconButton
         className={classes.playButton}
         aria-label="play/pause"
-        onClick={async () => (isPrinting ? cancelPrint() : null)}
+        onClick={async () => (state === "PRINTING" ? cancelPrint() : null)}
       >
         {icon}
       </IconButton>
