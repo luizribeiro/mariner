@@ -20,6 +20,16 @@ const Template: Story = (_args) => {
     is_printing: true,
     progress: 25.0,
   });
+
+  axiosMock.onGet("api/file_list").reply(200, {
+    files: [
+      { filename: "z-axis-stabilizer.ctb" },
+      { filename: "case v2.ctb" },
+      { filename: "lattice.ctb" },
+      { filename: "pi zero case.ctb" },
+    ],
+  });
+
   return <Main />;
 };
 

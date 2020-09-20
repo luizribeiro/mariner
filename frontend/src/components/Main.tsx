@@ -22,6 +22,7 @@ import SettingsIcon from "@material-ui/icons/Settings";
 import clsx from "clsx";
 import React from "react";
 import theme from "../theme";
+import FileList from "./FileList";
 import PrintStatus from "./PrintStatus";
 
 const drawerWidth = 240;
@@ -193,6 +194,7 @@ function Main({ width }: WithWidth): React.ReactElement {
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
             <PrintStatus />
+            <FileList />
           </Container>
         </main>
       </ThemeProvider>
