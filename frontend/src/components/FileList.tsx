@@ -13,17 +13,35 @@ import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 
-export interface FileListState {
-  isLoading: boolean;
-  data?: FileListAPIResponse;
+interface FileAPIResponse {
+  filename: string;
+}
+
+function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
+  return (
+    <ListItem key={file.filename}>
+      <ListItemAvatar>
+        <Avatar>
+          <LayersIcon />
+        </Avatar>
+      </ListItemAvatar>
+      <ListItemText primary={file.filename} />
+      <ListItemSecondaryAction>
+        <IconButton edge="end" aria-label="print">
+          <PrintIcon />
+        </IconButton>
+      </ListItemSecondaryAction>
+    </ListItem>
+  );
 }
 
 interface FileListAPIResponse {
-  files: [
-    {
-      filename: string;
-    }
-  ];
+  files: [FileAPIResponse];
+}
+
+export interface FileListState {
+  isLoading: boolean;
+  data?: FileListAPIResponse;
 }
 
 export default class FileList extends React.Component<{}, FileListState> {
@@ -48,19 +66,7 @@ export default class FileList extends React.Component<{}, FileListState> {
 
     const { files } = nullthrows(this.state.data);
     const listItems = files.map((file) => (
-      <ListItem key={file.filename}>
-        <ListItemAvatar>
-          <Avatar>
-            <LayersIcon />
-          </Avatar>
-        </ListItemAvatar>
-        <ListItemText primary={file.filename} />
-        <ListItemSecondaryAction>
-          <IconButton edge="end" aria-label="print">
-            <PrintIcon />
-          </IconButton>
-        </ListItemSecondaryAction>
-      </ListItem>
+      <FileListItem file={file} key={file.filename} />
     ));
 
     return (
