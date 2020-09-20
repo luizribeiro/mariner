@@ -9,11 +9,6 @@ const axiosMock = new MockAdapter(axios);
 export default {
   title: "FileList",
   component: FileList,
-  argTypes: {
-    isPrinting: { control: "boolean" },
-    progress: { control: { type: "number", min: 0, max: 100 } },
-    selectedFile: { control: "text" },
-  },
 };
 
 const Template: Story = (_args) => {
