@@ -21,6 +21,7 @@ import MenuIcon from "@material-ui/icons/Menu";
 import SettingsIcon from "@material-ui/icons/Settings";
 import clsx from "clsx";
 import React from "react";
+import { Link, Route, Switch } from "react-router-dom";
 import theme from "../theme";
 import FileList from "./FileList";
 import PrintStatus from "./PrintStatus";
@@ -157,13 +158,13 @@ function Main({ width }: WithWidth): React.ReactElement {
           </div>
           <Divider />
           <List>
-            <ListItem button key="home">
+            <ListItem button key="home" component={Link} to="/">
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button key="files">
+            <ListItem button key="files" component={Link} to="/files">
               <ListItemIcon>
                 <FolderIcon />
               </ListItemIcon>
@@ -195,8 +196,10 @@ function Main({ width }: WithWidth): React.ReactElement {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
-            <PrintStatus />
-            <FileList />
+            <Switch>
+              <Route path="/" component={PrintStatus} exact />
+              <Route path="/files" component={FileList} />
+            </Switch>
           </Container>
         </main>
       </ThemeProvider>

@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
+import StoryRouter from "storybook-react-router";
 import Main from "../Main";
 
 const axiosMock = new MockAdapter(axios);
@@ -12,6 +13,7 @@ export default {
   parameters: {
     layout: "fullscreen",
   },
+  decorators: [StoryRouter()],
 };
 
 const Template: Story = (_args) => {
