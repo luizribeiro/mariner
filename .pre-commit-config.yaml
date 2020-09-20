@@ -22,3 +22,28 @@ repos:
         entry: poetry run green
         language: python
         pass_filenames: false
+      - id: eslint
+        name: eslint
+        entry: yarn --cwd frontend/ lint
+        language: node
+        pass_filenames: false
+      - id: prettier
+        name: prettier
+        entry: yarn --cwd frontend/ run prettier --check src/
+        language: node
+        pass_filenames: false
+      - id: tsc
+        name: tsc
+        entry: yarn --cwd frontend/ run tsc
+        language: node
+        pass_filenames: false
+      - id: webpack
+        name: webpack
+        entry: yarn --cwd frontend/ build
+        language: node
+        pass_filenames: false
+      - id: jest
+        name: jest
+        entry: yarn --cwd frontend/ test
+        language: node
+        pass_filenames: false
