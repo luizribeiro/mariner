@@ -12,6 +12,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
+import { startPrint } from "../commands";
 
 interface FileAPIResponse {
   filename: string;
@@ -27,7 +28,11 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
       </ListItemAvatar>
       <ListItemText primary={file.filename} />
       <ListItemSecondaryAction>
-        <IconButton edge="end" aria-label="print">
+        <IconButton
+          edge="end"
+          aria-label="print"
+          onClick={async () => await startPrint(file.filename)}
+        >
           <PrintIcon />
         </IconButton>
       </ListItemSecondaryAction>

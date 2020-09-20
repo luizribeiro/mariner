@@ -11,6 +11,7 @@ import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
+import { cancelPrint } from "../commands";
 
 const styles = () =>
   createStyles({
@@ -86,7 +87,11 @@ class PrintStatus extends React.Component<
     );
 
     return (
-      <IconButton className={classes.playButton} aria-label="play/pause">
+      <IconButton
+        className={classes.playButton}
+        aria-label="play/pause"
+        onClick={async () => (isPrinting ? cancelPrint() : null)}
+      >
         {icon}
       </IconButton>
     );
