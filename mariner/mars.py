@@ -1,7 +1,7 @@
 import re
 from dataclasses import dataclass
 from types import TracebackType
-from typing import Callable, Optional, Type
+from typing import Optional, Type
 
 import serial
 from pyre_extensions import none_throws
