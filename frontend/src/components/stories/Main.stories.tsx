@@ -15,7 +15,7 @@ export default {
 };
 
 const Template: Story = (_args) => {
-  axiosMock.onGet("print_status").reply(200, {
+  axiosMock.onGet("api/print_status").reply(200, {
     selected_file: "lattice.ctb",
     is_printing: true,
     progress: 25.0,
