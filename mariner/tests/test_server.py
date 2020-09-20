@@ -60,3 +60,23 @@ class MarinerServerTest(TestCase):
                 "files": [{"filename": "a.ctb"}, {"filename": "b.ctb"}],
             }
         )
+
+    def test_command_pause_print(self) -> None:
+        response = self.client.post("/api/printer/command/pause_print")
+        expect(response.get_json()).to_equal({"success": True})
+        self.printer_mock.pause_printing.assert_called_once_with()
+
+    def test_command_resume_print(self) -> None:
+        response = self.client.post("/api/printer/command/resume_print")
+        expect(response.get_json()).to_equal({"success": True})
+        self.printer_mock.resume_printing.assert_called_once_with()
+
+    def test_command_cancel_print(self) -> None:
+        response = self.client.post("/api/printer/command/cancel_print")
+        expect(response.get_json()).to_equal({"success": True})
+        self.printer_mock.stop_printing.assert_called_once_with()
+
+    def test_command_reboot(self) -> None:
+        response = self.client.post("/api/printer/command/reboot")
+        expect(response.get_json()).to_equal({"success": True})
+        self.printer_mock.reboot.assert_called_once_with()

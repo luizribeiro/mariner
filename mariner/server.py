@@ -1,5 +1,6 @@
 import os
 import logging
+from enum import Enum
 
 from flask import Flask, jsonify, render_template
 from pyre_extensions import none_throws
@@ -59,6 +60,28 @@ def list_files() -> str:
             "files": [{"filename": filename} for filename in files],
         }
     )
+
+
+class PrinterCommand(Enum):
+    PAUSE_PRINT = "pause_print"
+    RESUME_PRINT = "resume_print"
+    CANCEL_PRINT = "cancel_print"
+    REBOOT = "reboot"
+
+
+@app.route("/api/printer/command/<command>", methods=["POST"])
+def printer_command(command: str) -> str:
+    printer_command = PrinterCommand(command)
+    with ElegooMars() as elegoo_mars:
+        if printer_command == PrinterCommand.PAUSE_PRINT:
+            elegoo_mars.pause_printing()
+        elif printer_command == PrinterCommand.RESUME_PRINT:
+            elegoo_mars.resume_printing()
+        elif printer_command == PrinterCommand.CANCEL_PRINT:
+            elegoo_mars.stop_printing()
+        elif printer_command == PrinterCommand.REBOOT:
+            elegoo_mars.reboot()
+        return jsonify({"success": True})
 
 
 def main() -> None:
