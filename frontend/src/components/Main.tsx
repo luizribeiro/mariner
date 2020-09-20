@@ -2,13 +2,13 @@ import AppBar from "@material-ui/core/AppBar";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Divider from "@material-ui/core/Divider";
-import Drawer from "@material-ui/core/Drawer";
 import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
+import SwipeableDrawer from "@material-ui/core/SwipeableDrawer";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import withWidth, { WithWidth } from "@material-ui/core/withWidth";
@@ -141,12 +141,14 @@ function Main({ width }: WithWidth): React.ReactElement {
             </Typography>
           </Toolbar>
         </AppBar>
-        <Drawer
+        <SwipeableDrawer
           variant={drawerVariant}
           classes={{
             paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
           }}
           open={open}
+          onOpen={handleDrawerOpen}
+          onClose={handleDrawerClose}
         >
           <div className={classes.toolbarIcon}>
             <IconButton onClick={handleDrawerClose}>
@@ -189,7 +191,7 @@ function Main({ width }: WithWidth): React.ReactElement {
               <ListItemText primary="Help" />
             </ListItem>
           </List>
-        </Drawer>
+        </SwipeableDrawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="lg" className={classes.container}>
