@@ -21,6 +21,7 @@ const styles = () =>
     title: {
       fontSize: 16,
       fontWeight: "bold",
+      paddingBottom: 12,
     },
     playButton: {
       padding: 6,
@@ -32,7 +33,7 @@ const styles = () =>
     gridRoot: {
       flexGrow: 1,
       padding: 24,
-      paddingBottom: 12,
+      paddingBottom: 6,
       textAlign: "center",
     },
   });
@@ -131,7 +132,7 @@ class PrintStatus extends React.Component<
           <div className={classes.gridRoot}>
             <Grid container spacing={3}>
               <Grid item xs={6}>
-                <Typography variant="h4" color="textPrimary" display="inline">
+                <Typography variant="h5" color="textPrimary" display="inline">
                   2h44&nbsp;
                 </Typography>
                 <Typography
@@ -143,10 +144,10 @@ class PrintStatus extends React.Component<
                 </Typography>
               </Grid>
               <Grid item xs={6}>
-                <Typography variant="h4" color="textPrimary" display="inline">
+                <Typography variant="h5" color="textPrimary" display="inline">
                   53
                 </Typography>
-                <Typography variant="h5" color="textPrimary" display="inline">
+                <Typography variant="h6" color="textPrimary" display="inline">
                   /79&nbsp;
                 </Typography>
                 <Typography
