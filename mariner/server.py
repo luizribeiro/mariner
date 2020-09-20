@@ -7,7 +7,7 @@ from pyre_extensions import none_throws
 from waitress import serve
 from whitenoise import WhiteNoise
 
-from mariner.mars import ElegooMars
+from mariner.mars import ElegooMars, PrinterState
 from mariner.config import FILES_DIRECTORY
 
 
@@ -34,7 +34,7 @@ def print_status() -> str:
         selected_file = elegoo_mars.get_selected_file()
         print_status = elegoo_mars.get_print_status()
 
-        if print_status.is_printing:
+        if print_status.state == PrinterState.PRINTING:
             progress = (
                 100.0
                 * none_throws(print_status.current_byte)
@@ -47,7 +47,6 @@ def print_status() -> str:
             {
                 "state": print_status.state.value,
                 "selected_file": selected_file,
-                "is_printing": print_status.is_printing,
                 "progress": progress,
             }
         )

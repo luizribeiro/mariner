@@ -82,7 +82,6 @@ class ElegooMarsTest(TestCase):
 
         self.serial_port_mock.write.assert_called_once_with(b"M27")
         expect(print_status.state).to_equal(PrinterState.IDLE)
-        expect(print_status.is_printing).to_equal(False)
         expect(print_status.current_byte).to_be_none()
         expect(print_status.total_bytes).to_be_none()
 
@@ -97,7 +96,6 @@ class ElegooMarsTest(TestCase):
 
         self.serial_port_mock.write.assert_called_once_with(b"M27")
         expect(print_status.state).to_equal(PrinterState.STARTING_PRINT)
-        expect(print_status.is_printing).to_equal(True)
         expect(print_status.current_byte).to_equal(0)
         expect(print_status.total_bytes).to_equal(23543968)
 
@@ -112,7 +110,6 @@ class ElegooMarsTest(TestCase):
 
         self.serial_port_mock.write.assert_called_once_with(b"M27")
         expect(print_status.state).to_equal(PrinterState.PRINTING)
-        expect(print_status.is_printing).to_equal(True)
         expect(print_status.current_byte).to_equal(23012)
         expect(print_status.total_bytes).to_equal(23543968)
 

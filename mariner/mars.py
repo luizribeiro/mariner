@@ -19,7 +19,6 @@ class PrinterState(Enum):
 @dataclass(frozen=True)
 class PrintStatus:
     state: PrinterState
-    is_printing: bool
     current_byte: Optional[int] = None
     total_bytes: Optional[int] = None
 
@@ -76,12 +75,11 @@ class ElegooMars:
                 state=PrinterState.PRINTING
                 if current_byte > 0
                 else PrinterState.STARTING_PRINT,
-                is_printing=True,
                 current_byte=current_byte,
                 total_bytes=total_bytes,
             )
         elif "It's not printing now" in data:
-            return PrintStatus(state=PrinterState.IDLE, is_printing=False)
+            return PrintStatus(state=PrinterState.IDLE)
 
         raise NotImplementedError
 

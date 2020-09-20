@@ -24,7 +24,6 @@ class MarinerServerTest(TestCase):
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
             state=PrinterState.PRINTING,
-            is_printing=True,
             current_byte=42,
             total_bytes=120,
         )
@@ -33,7 +32,6 @@ class MarinerServerTest(TestCase):
             {
                 "state": "PRINTING",
                 "selected_file": "foobar.ctb",
-                "is_printing": True,
                 "progress": 35.0,
             }
         )
@@ -42,7 +40,6 @@ class MarinerServerTest(TestCase):
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
             state=PrinterState.STARTING_PRINT,
-            is_printing=True,
             current_byte=0,
             total_bytes=120,
         )
@@ -51,7 +48,6 @@ class MarinerServerTest(TestCase):
             {
                 "state": "STARTING_PRINT",
                 "selected_file": "foobar.ctb",
-                "is_printing": True,
                 "progress": 0.0,
             }
         )
@@ -60,7 +56,6 @@ class MarinerServerTest(TestCase):
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
             state=PrinterState.IDLE,
-            is_printing=False,
             current_byte=0,
             total_bytes=0,
         )
@@ -69,7 +64,6 @@ class MarinerServerTest(TestCase):
             {
                 "state": "IDLE",
                 "selected_file": "foobar.ctb",
-                "is_printing": False,
                 "progress": 0.0,
             }
         )
