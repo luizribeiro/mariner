@@ -17,7 +17,7 @@ export default {
 };
 
 const Template: Story = (args) => {
-  axiosMock.onGet("print_status").reply(200, {
+  axiosMock.onGet("api/print_status").reply(200, {
     selected_file: args.selectedFile,
     is_printing: args.isPrinting,
     progress: args.progress,

@@ -27,7 +27,7 @@ class MarinerServerTest(TestCase):
             current_byte=42,
             total_bytes=120,
         )
-        response = self.client.get("/print_status")
+        response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
             {
                 "selected_file": "foobar.ctb",
@@ -43,7 +43,7 @@ class MarinerServerTest(TestCase):
             current_byte=0,
             total_bytes=0,
         )
-        response = self.client.get("/print_status")
+        response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
             {
                 "selected_file": "foobar.ctb",

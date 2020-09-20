@@ -63,7 +63,7 @@ class PrintStatus extends React.Component<
 
   async componentDidMount(): Promise<void> {
     const response: AxiosResponse<PrintStatusAPIResponse> = await axios.get(
-      "print_status"
+      "api/print_status"
     );
     this.setState({
       isLoading: false,

@@ -26,7 +26,7 @@ def index() -> str:
     return render_template("index.html")
 
 
-@app.route("/print_status", methods=["GET"])
+@app.route("/api/print_status", methods=["GET"])
 def print_status() -> str:
     with ElegooMars() as elegoo_mars:
         selected_file = elegoo_mars.get_selected_file()
