@@ -1,7 +1,8 @@
 import unittest.mock
 from unittest import TestCase
-from unittest.mock import MagicMock, patch
+from unittest.mock import MagicMock, Mock, patch
 
+import serial
 from pyexpect import expect
 
 from mariner.exceptions import UnexpectedResponse
@@ -14,11 +15,11 @@ class ElegooMarsTest(TestCase):
     serial_port_mock: MagicMock
 
     def setUp(self) -> None:
-        self.printer = ElegooMars()
-        self.serial_port_mock = MagicMock()
+        self.serial_port_mock = Mock(spec=serial.Serial)
         self.serial_port_patcher = patch("mariner.mars.serial.Serial")
         serial_port_constructor = self.serial_port_patcher.start()
         serial_port_constructor.return_value = self.serial_port_mock
+        self.printer = ElegooMars()
 
     def tearDown(self) -> None:
         self.serial_port_patcher.stop()

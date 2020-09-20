@@ -17,18 +17,20 @@ class PrintStatus:
 
 
 class ElegooMars:
-    _serial_port: Optional[serial.Serial] = None
+    _serial_port: serial.Serial
 
-    def open(self) -> None:
+    def __init__(self) -> None:
         self._serial_port = serial.Serial(
-            "/dev/serial0",
             baudrate=115200,
             timeout=0.1,
         )
-        none_throws(self._serial_port).open()
+
+    def open(self) -> None:
+        self._serial_port.port = "/dev/serial0"
+        self._serial_port.open()
 
     def close(self) -> None:
-        none_throws(self._serial_port).close()
+        self._serial_port.close()
 
     def __enter__(self) -> "ElegooMars":
         self.open()
@@ -136,18 +138,10 @@ class ElegooMars:
     def _send_and_read(self, data: bytes) -> str:
         self._send(data)
 
-        serial_port = none_throws(
-            self._serial_port,
-            "Tried to communicate with serial port without opening it",
-        )
-        return serial_port.readline().decode("utf-8")
+        return self._serial_port.readline().decode("utf-8")
 
     def _send(self, data: bytes) -> None:
-        serial_port = none_throws(
-            self._serial_port,
-            "Tried to communicate with serial port without opening it",
-        )
-        serial_port.write(data)
+        self._serial_port.write(data)
 
     # M20: list files
 
