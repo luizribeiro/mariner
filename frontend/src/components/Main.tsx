@@ -11,6 +11,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { makeStyles, ThemeProvider } from "@material-ui/core/styles";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
+import withWidth, { WithWidth } from "@material-ui/core/withWidth";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import FolderIcon from "@material-ui/icons/Folder";
 import HelpIcon from "@material-ui/icons/Help";
@@ -90,12 +91,12 @@ const useStyles = makeStyles((theme) => ({
     overflow: "auto",
   },
   container: {
-    paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    paddingTop: theme.spacing(2),
+    paddingBottom: theme.spacing(2),
   },
 }));
 
-export default function Main(): React.ReactElement {
+function Main({ width }: WithWidth): React.ReactElement {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -104,6 +105,8 @@ export default function Main(): React.ReactElement {
   const handleDrawerClose = () => {
     setOpen(false);
   };
+  const isSmallScreen = /xs|sm/.test(width);
+  const drawerVariant = isSmallScreen ? "temporary" : "permanent";
 
   return (
     <div className={classes.root}>
@@ -138,7 +141,7 @@ export default function Main(): React.ReactElement {
           </Toolbar>
         </AppBar>
         <Drawer
-          variant="permanent"
+          variant={drawerVariant}
           classes={{
             paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose),
           }}
@@ -196,3 +199,5 @@ export default function Main(): React.ReactElement {
     </div>
   );
 }
+
+export default withWidth()(Main);
