@@ -1,5 +1,6 @@
 import re
 from dataclasses import dataclass
+from enum import Enum
 from types import TracebackType
 from typing import Optional, Type
 
@@ -9,8 +10,15 @@ from pyre_extensions import none_throws
 from mariner.exceptions import UnexpectedResponse
 
 
+class PrinterState(Enum):
+    IDLE = "IDLE"
+    STARTING_PRINT = "STARTING_PRINT"
+    PRINTING = "PRINTING"
+
+
 @dataclass(frozen=True)
 class PrintStatus:
+    state: PrinterState
     is_printing: bool
     current_byte: Optional[int] = None
     total_bytes: Optional[int] = None
@@ -62,13 +70,18 @@ class ElegooMars:
                 re.search("SD printing byte ([0-9]+)/([0-9]+)", data),
                 "Received invalid status response from printer",
             )
+            current_byte = int(match.group(1))
+            total_bytes = int(match.group(2))
             return PrintStatus(
+                state=PrinterState.PRINTING
+                if current_byte > 0
+                else PrinterState.STARTING_PRINT,
                 is_printing=True,
-                current_byte=int(match.group(1)),
-                total_bytes=int(match.group(2)),
+                current_byte=current_byte,
+                total_bytes=total_bytes,
             )
         elif "It's not printing now" in data:
-            return PrintStatus(is_printing=False)
+            return PrintStatus(state=PrinterState.IDLE, is_printing=False)
 
         raise NotImplementedError
 

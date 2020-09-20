@@ -45,6 +45,7 @@ def print_status() -> str:
 
         return jsonify(
             {
+                "state": print_status.state.value,
                 "selected_file": selected_file,
                 "is_printing": print_status.is_printing,
                 "progress": progress,

@@ -6,7 +6,7 @@ import serial
 from pyexpect import expect
 
 from mariner.exceptions import UnexpectedResponse
-from mariner.mars import ElegooMars
+from mariner.mars import ElegooMars, PrinterState
 
 
 class ElegooMarsTest(TestCase):
@@ -81,11 +81,12 @@ class ElegooMarsTest(TestCase):
         self.printer.close()
 
         self.serial_port_mock.write.assert_called_once_with(b"M27")
+        expect(print_status.state).to_equal(PrinterState.IDLE)
         expect(print_status.is_printing).to_equal(False)
         expect(print_status.current_byte).to_be_none()
         expect(print_status.total_bytes).to_be_none()
 
-    def test_get_print_status_while_printing(self) -> None:
+    def test_get_print_status_while_starting_print(self) -> None:
         self.serial_port_mock.readline.return_value = (
             b"SD printing byte 0/23543968\r\nok N:0\r\n"
         )
@@ -95,8 +96,24 @@ class ElegooMarsTest(TestCase):
         self.printer.close()
 
         self.serial_port_mock.write.assert_called_once_with(b"M27")
+        expect(print_status.state).to_equal(PrinterState.STARTING_PRINT)
         expect(print_status.is_printing).to_equal(True)
         expect(print_status.current_byte).to_equal(0)
+        expect(print_status.total_bytes).to_equal(23543968)
+
+    def test_get_print_status_while_printing(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            b"SD printing byte 23012/23543968\r\nok N:0\r\n"
+        )
+
+        self.printer.open()
+        print_status = self.printer.get_print_status()
+        self.printer.close()
+
+        self.serial_port_mock.write.assert_called_once_with(b"M27")
+        expect(print_status.state).to_equal(PrinterState.PRINTING)
+        expect(print_status.is_printing).to_equal(True)
+        expect(print_status.current_byte).to_equal(23012)
         expect(print_status.total_bytes).to_equal(23543968)
 
     def test_get_z_pos(self) -> None:

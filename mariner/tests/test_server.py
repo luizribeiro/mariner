@@ -3,7 +3,7 @@ from unittest.mock import patch, MagicMock, Mock
 
 from pyexpect import expect
 
-from mariner.mars import ElegooMars, PrintStatus
+from mariner.mars import ElegooMars, PrinterState, PrintStatus
 from mariner.server import app
 
 
@@ -23,6 +23,7 @@ class MarinerServerTest(TestCase):
     def test_print_status_while_printing(self) -> None:
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
+            state=PrinterState.PRINTING,
             is_printing=True,
             current_byte=42,
             total_bytes=120,
@@ -30,15 +31,35 @@ class MarinerServerTest(TestCase):
         response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
             {
+                "state": "PRINTING",
                 "selected_file": "foobar.ctb",
                 "is_printing": True,
                 "progress": 35.0,
             }
         )
 
+    def test_print_status_while_starting_print(self) -> None:
+        self.printer_mock.get_selected_file.return_value = "foobar.ctb"
+        self.printer_mock.get_print_status.return_value = PrintStatus(
+            state=PrinterState.STARTING_PRINT,
+            is_printing=True,
+            current_byte=0,
+            total_bytes=120,
+        )
+        response = self.client.get("/api/print_status")
+        expect(response.get_json()).to_equal(
+            {
+                "state": "STARTING_PRINT",
+                "selected_file": "foobar.ctb",
+                "is_printing": True,
+                "progress": 0.0,
+            }
+        )
+
     def test_print_status_while_idle(self) -> None:
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
+            state=PrinterState.IDLE,
             is_printing=False,
             current_byte=0,
             total_bytes=0,
@@ -46,6 +67,7 @@ class MarinerServerTest(TestCase):
         response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
             {
+                "state": "IDLE",
                 "selected_file": "foobar.ctb",
                 "is_printing": False,
                 "progress": 0.0,
