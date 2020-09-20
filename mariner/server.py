@@ -77,8 +77,7 @@ def printer_command(command: str) -> str:
         if printer_command == PrinterCommand.START_PRINT:
             # TODO: validate filename before sending it to the printer
             filename = str(request.args.get("filename"))
-            elegoo_mars.select_file(filename)
-            elegoo_mars.start_printing()
+            elegoo_mars.start_printing(filename)
         elif printer_command == PrinterCommand.PAUSE_PRINT:
             elegoo_mars.pause_printing()
         elif printer_command == PrinterCommand.RESUME_PRINT:

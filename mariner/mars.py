@@ -110,8 +110,8 @@ class ElegooMars:
         if "ok" not in response:
             raise UnexpectedResponse(response)
 
-    def start_printing(self) -> None:
-        response = self._send_and_read(b"M24")
+    def start_printing(self, filename: str) -> None:
+        response = self._send_and_read((f"M6030 '{filename}'").encode())
         if "ok" not in response:
             raise UnexpectedResponse(response)
 
@@ -120,7 +120,10 @@ class ElegooMars:
         if "ok" not in response:
             raise UnexpectedResponse(response)
 
-    resume_printing: Callable[["ElegooMars"], None] = start_printing
+    def resume_printing(self) -> None:
+        response = self._send_and_read(b"M24")
+        if "ok" not in response:
+            raise UnexpectedResponse(response)
 
     def stop_printing(self) -> None:
         response = self._send_and_read(b"M33")

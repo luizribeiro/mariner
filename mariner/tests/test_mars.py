@@ -165,16 +165,16 @@ class ElegooMarsTest(TestCase):
     def test_start_printing(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
-        self.printer.start_printing()
-        self.serial_port_mock.write.assert_called_once_with(b"M24")
+        self.printer.start_printing("benchy.ctb")
+        self.serial_port_mock.write.assert_called_once_with(b"M6030 'benchy.ctb'")
         self.printer.close()
 
     def test_start_printing_with_invalid_response(self) -> None:
         self.serial_port_mock.readline.return_value = b"foobar\r\n"
         self.printer.open()
         with self.assertRaises(UnexpectedResponse):
-            self.printer.start_printing()
-        self.serial_port_mock.write.assert_called_once_with(b"M24")
+            self.printer.start_printing("benchy.ctb")
+        self.serial_port_mock.write.assert_called_once_with(b"M6030 'benchy.ctb'")
         self.printer.close()
 
     def test_resume_printing(self) -> None:
