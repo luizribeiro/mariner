@@ -39,9 +39,19 @@ const styles = () =>
     },
   });
 
+type PrinterState = "IDLE" | "STARTING_PRINT" | "PRINTING";
+
+function toPrinterState(state: string): PrinterState {
+  if (state !== "IDLE" && state !== "STARTING_PRINT" && state !== "PRINTING") {
+    throw Error("Unknown printer state " + state);
+  }
+  return state;
+}
+
 export interface PrintStatusState {
   isLoading: boolean;
   data?: {
+    state: PrinterState;
     isPrinting: boolean;
     selectedFile: string;
     progress: number;
@@ -49,6 +59,7 @@ export interface PrintStatusState {
 }
 
 interface PrintStatusAPIResponse {
+  state: string;
   selected_file: string;
   is_printing: boolean;
   progress: number;
@@ -69,6 +80,7 @@ class PrintStatus extends React.Component<
     this.setState({
       isLoading: false,
       data: {
+        state: toPrinterState(response.data.state),
         isPrinting: response.data.is_printing,
         progress: response.data.progress,
         selectedFile: response.data.selected_file,

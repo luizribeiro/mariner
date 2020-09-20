@@ -18,8 +18,8 @@ export default {
 
 const Template: Story = (_args) => {
   axiosMock.onGet("api/print_status").reply(200, {
+    state: "PRINTING",
     selected_file: "lattice.ctb",
-    is_printing: true,
     progress: 25.0,
   });
 
