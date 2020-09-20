@@ -138,7 +138,11 @@ class ElegooMars:
     def _send_and_read(self, data: bytes) -> str:
         self._send(data)
 
-        return self._serial_port.readline().decode("utf-8")
+        response = self._serial_port.readline().decode("utf-8")
+        # TODO actually read the rest of the response instead of just
+        # flushing it like this
+        self._serial_port.read(size=1024)
+        return response
 
     def _send(self, data: bytes) -> None:
         self._serial_port.write(data)
