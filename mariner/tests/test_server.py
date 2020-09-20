@@ -1,5 +1,5 @@
 from unittest import TestCase
-from unittest.mock import patch, Mock
+from unittest.mock import patch, MagicMock, Mock
 
 from pyexpect import expect
 
@@ -49,5 +49,14 @@ class MarinerServerTest(TestCase):
                 "selected_file": "foobar.ctb",
                 "is_printing": False,
                 "progress": 0.0,
+            }
+        )
+
+    @patch("mariner.server.os.listdir", return_value=["a.ctb", "b.ctb"])
+    def test_list_files(self, _list_dir_mock: MagicMock) -> None:
+        response = self.client.get("/api/list_files")
+        expect(response.get_json()).to_equal(
+            {
+                "files": [{"filename": "a.ctb"}, {"filename": "b.ctb"}],
             }
         )

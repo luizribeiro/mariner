@@ -7,6 +7,7 @@ from waitress import serve
 from whitenoise import WhiteNoise
 
 from mariner.mars import ElegooMars
+from mariner.config import FILES_DIRECTORY
 
 
 frontend_dist_directory: str = os.path.abspath("./frontend/dist/")
@@ -48,6 +49,16 @@ def print_status() -> str:
                 "progress": progress,
             }
         )
+
+
+@app.route("/api/list_files", methods=["GET"])
+def list_files() -> str:
+    files = os.listdir(FILES_DIRECTORY)
+    return jsonify(
+        {
+            "files": [{"filename": filename} for filename in files],
+        }
+    )
 
 
 def main() -> None:
