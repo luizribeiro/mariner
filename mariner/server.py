@@ -2,7 +2,7 @@ import os
 import logging
 from enum import Enum
 
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, request
 from pyre_extensions import none_throws
 from waitress import serve
 from whitenoise import WhiteNoise
@@ -63,6 +63,7 @@ def list_files() -> str:
 
 
 class PrinterCommand(Enum):
+    START_PRINT = "start_print"
     PAUSE_PRINT = "pause_print"
     RESUME_PRINT = "resume_print"
     CANCEL_PRINT = "cancel_print"
@@ -73,7 +74,12 @@ class PrinterCommand(Enum):
 def printer_command(command: str) -> str:
     printer_command = PrinterCommand(command)
     with ElegooMars() as elegoo_mars:
-        if printer_command == PrinterCommand.PAUSE_PRINT:
+        if printer_command == PrinterCommand.START_PRINT:
+            # TODO: validate filename before sending it to the printer
+            filename = str(request.args.get("filename"))
+            elegoo_mars.select_file(filename)
+            elegoo_mars.start_printing()
+        elif printer_command == PrinterCommand.PAUSE_PRINT:
             elegoo_mars.pause_printing()
         elif printer_command == PrinterCommand.RESUME_PRINT:
             elegoo_mars.resume_printing()

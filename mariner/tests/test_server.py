@@ -61,6 +61,14 @@ class MarinerServerTest(TestCase):
             }
         )
 
+    def test_command_start_printing(self) -> None:
+        response = self.client.post(
+            "/api/printer/command/start_print?filename=foobar.ctb"
+        )
+        expect(response.get_json()).to_equal({"success": True})
+        self.printer_mock.select_file.assert_called_once_with("foobar.ctb")
+        self.printer_mock.start_printing.assert_called_once_with()
+
     def test_command_pause_print(self) -> None:
         response = self.client.post("/api/printer/command/pause_print")
         expect(response.get_json()).to_equal({"success": True})
