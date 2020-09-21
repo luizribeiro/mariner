@@ -1,17 +1,18 @@
 import Box from "@material-ui/core/Box";
+import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import Grid from "@material-ui/core/Grid";
-import IconButton from "@material-ui/core/IconButton";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
+import StopIcon from "@material-ui/icons/Stop";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
-import { cancelPrint } from "../commands";
+import { cancelPrint, pausePrint, resumePrint } from "../commands";
 
 const styles = () =>
   createStyles({
@@ -33,8 +34,9 @@ const styles = () =>
     },
     gridRoot: {
       flexGrow: 1,
-      padding: 24,
-      paddingBottom: 6,
+      padding: 12,
+      paddingTop: 20,
+      paddingBottom: 20,
       textAlign: "center",
     },
   });
@@ -85,25 +87,56 @@ class PrintStatus extends React.Component<
     });
   }
 
-  _renderButton(): React.ReactElement {
-    const { classes } = this.props;
+  _renderButtons(): React.ReactElement | null {
     const { state } = nullthrows(this.state.data);
-
-    const icon =
-      state === "PRINTING" ? (
-        <PauseIcon className={classes.playIcon} />
-      ) : (
-        <PlayArrowIcon className={classes.playIcon} />
-      );
+    if (state === "IDLE") {
+      return null;
+    }
 
     return (
-      <IconButton
-        className={classes.playButton}
-        aria-label="play/pause"
-        onClick={async () => (state === "PRINTING" ? cancelPrint() : null)}
+      <Grid
+        container
+        direction="row"
+        justify="center"
+        alignItems="center"
+        spacing={3}
       >
-        {icon}
-      </IconButton>
+        <Grid item>
+          <Button
+            variant="contained"
+            color="primary"
+            size="small"
+            startIcon={<PlayArrowIcon />}
+            onClick={async () => await resumePrint()}
+            disabled
+          >
+            Resume
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            startIcon={<PauseIcon />}
+            onClick={async () => await pausePrint()}
+            disabled={state === "STARTING_PRINT"}
+          >
+            Pause
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button
+            variant="outlined"
+            color="primary"
+            size="small"
+            startIcon={<StopIcon />}
+            onClick={async () => await cancelPrint()}
+          >
+            Stop
+          </Button>
+        </Grid>
+      </Grid>
     );
   }
 
@@ -126,8 +159,8 @@ class PrintStatus extends React.Component<
           >
             Elegoo Mars Pro
           </Typography>
+
           <Box display="flex">
-            <Box paddingRight={1}>{this._renderButton()}</Box>
             <Box width="100%">
               <Typography component="h6" variant="h6" color="textSecondary">
                 {selectedFile}
@@ -144,6 +177,7 @@ class PrintStatus extends React.Component<
               </Box>
             </Box>
           </Box>
+
           <div className={classes.gridRoot}>
             <Grid container spacing={3}>
               <Grid item xs={6}>
@@ -175,6 +209,8 @@ class PrintStatus extends React.Component<
               </Grid>
             </Grid>
           </div>
+
+          {this._renderButtons()}
         </CardContent>
       </Card>
     );
