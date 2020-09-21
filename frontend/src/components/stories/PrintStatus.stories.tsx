@@ -44,7 +44,7 @@ Printing.args = {
 
 export const Paused = Template.bind({});
 Paused.args = {
-  state: "PRINTING", // TODO add support for paused state
+  state: "PAUSED",
   selectedFile: "lattice.ctb",
   progress: 20.0,
 };

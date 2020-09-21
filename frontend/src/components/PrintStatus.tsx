@@ -44,10 +44,15 @@ const styles = () =>
     },
   });
 
-type PrinterState = "IDLE" | "STARTING_PRINT" | "PRINTING";
+type PrinterState = "IDLE" | "STARTING_PRINT" | "PRINTING" | "PAUSED";
 
 function toPrinterState(state: string): PrinterState {
-  if (state !== "IDLE" && state !== "STARTING_PRINT" && state !== "PRINTING") {
+  if (
+    state !== "IDLE" &&
+    state !== "STARTING_PRINT" &&
+    state !== "PRINTING" &&
+    state !== "PAUSED"
+  ) {
     throw Error("Unknown printer state " + state);
   }
   return state;
@@ -111,7 +116,7 @@ class PrintStatus extends React.Component<
             size="small"
             startIcon={<PlayArrowIcon />}
             onClick={async () => await resumePrint()}
-            disabled
+            disabled={state !== "PAUSED"}
           >
             Resume
           </Button>
@@ -123,7 +128,7 @@ class PrintStatus extends React.Component<
             size="small"
             startIcon={<PauseIcon />}
             onClick={async () => await pausePrint()}
-            disabled={state === "STARTING_PRINT"}
+            disabled={state === "PAUSED" || state === "STARTING_PRINT"}
           >
             Pause
           </Button>
