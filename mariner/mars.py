@@ -14,6 +14,7 @@ class PrinterState(Enum):
     IDLE = "IDLE"
     STARTING_PRINT = "STARTING_PRINT"
     PRINTING = "PRINTING"
+    PAUSED = "PAUSED"
 
 
 @dataclass(frozen=True)
@@ -63,25 +64,31 @@ class ElegooMars:
         return self._send_and_read(b"M4000")
 
     def get_print_status(self) -> PrintStatus:
-        data = self._send_and_read(b"M27")
-        if "SD printing byte" in data:
-            match = none_throws(
-                re.search("SD printing byte ([0-9]+)/([0-9]+)", data),
-                "Received invalid status response from printer",
-            )
-            current_byte = int(match.group(1))
-            total_bytes = int(match.group(2))
-            return PrintStatus(
-                state=PrinterState.PRINTING
-                if current_byte > 0
-                else PrinterState.STARTING_PRINT,
-                current_byte=current_byte,
-                total_bytes=total_bytes,
-            )
-        elif "It's not printing now" in data:
+        data = self._send_and_read(b"M4000")
+        match = none_throws(
+            re.search("D:([0-9]+)/([0-9]+)/([0-9]+)", data),
+            "Received invalid status response from printer",
+        )
+
+        current_byte = int(match.group(1))
+        total_bytes = int(match.group(2))
+        is_paused = match.group(3) == "1"
+
+        if total_bytes == 0:
             return PrintStatus(state=PrinterState.IDLE)
 
-        raise NotImplementedError
+        if current_byte == 0:
+            state = PrinterState.STARTING_PRINT
+        elif is_paused:
+            state = PrinterState.PAUSED
+        else:
+            state = PrinterState.PRINTING
+
+        return PrintStatus(
+            state=state,
+            current_byte=current_byte,
+            total_bytes=total_bytes,
+        )
 
     def get_z_pos(self) -> float:
         data = self._send_and_read(b"M114")

@@ -34,14 +34,14 @@ def print_status() -> str:
         selected_file = elegoo_mars.get_selected_file()
         print_status = elegoo_mars.get_print_status()
 
-        if print_status.state == PrinterState.PRINTING:
+        if print_status.state == PrinterState.IDLE:
+            progress = 0.0
+        else:
             progress = (
                 100.0
                 * none_throws(print_status.current_byte)
                 / none_throws(print_status.total_bytes)
             )
-        else:
-            progress = 0.0
 
         return jsonify(
             {

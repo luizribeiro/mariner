@@ -73,45 +73,59 @@ class ElegooMarsTest(TestCase):
 
     def test_get_print_status_when_not_printing(self) -> None:
         self.serial_port_mock.readline.return_value = (
-            b"Error:It's not printing now!\r\nok N:0\r\n"
+            b"ok B:0/0 X:0.000 Y:0.000 Z:8.233 F:0/0 D:0/0/1 "
         )
 
         self.printer.open()
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M27")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000")
         expect(print_status.state).to_equal(PrinterState.IDLE)
         expect(print_status.current_byte).to_be_none()
         expect(print_status.total_bytes).to_be_none()
 
     def test_get_print_status_while_starting_print(self) -> None:
         self.serial_port_mock.readline.return_value = (
-            b"SD printing byte 0/23543968\r\nok N:0\r\n"
+            b"ok B:0/0 X:0.000 Y:0.000 Z:-33.421 F:256/256 D:0/11494803/0 "
         )
 
         self.printer.open()
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M27")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000")
         expect(print_status.state).to_equal(PrinterState.STARTING_PRINT)
         expect(print_status.current_byte).to_equal(0)
-        expect(print_status.total_bytes).to_equal(23543968)
+        expect(print_status.total_bytes).to_equal(11494803)
 
     def test_get_print_status_while_printing(self) -> None:
         self.serial_port_mock.readline.return_value = (
-            b"SD printing byte 23012/23543968\r\nok N:0\r\n"
+            b"ok B:0/0 X:0.000 Y:0.000 Z:0.100 F:256/256 D:76903/11494803/0 "
         )
 
         self.printer.open()
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M27")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000")
         expect(print_status.state).to_equal(PrinterState.PRINTING)
-        expect(print_status.current_byte).to_equal(23012)
-        expect(print_status.total_bytes).to_equal(23543968)
+        expect(print_status.current_byte).to_equal(76903)
+        expect(print_status.total_bytes).to_equal(11494803)
+
+    def test_get_print_status_when_paused(self) -> None:
+        self.serial_port_mock.readline.return_value = (
+            b"ok B:0/0 X:0.000 Y:0.000 Z:78.000 F:256/256 D:5957675/11494803/1 "
+        )
+
+        self.printer.open()
+        print_status = self.printer.get_print_status()
+        self.printer.close()
+
+        self.serial_port_mock.write.assert_called_once_with(b"M4000")
+        expect(print_status.state).to_equal(PrinterState.PAUSED)
+        expect(print_status.current_byte).to_equal(5957675)
+        expect(print_status.total_bytes).to_equal(11494803)
 
     def test_get_z_pos(self) -> None:
         self.serial_port_mock.readline.return_value = (

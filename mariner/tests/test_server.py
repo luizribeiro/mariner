@@ -36,6 +36,22 @@ class MarinerServerTest(TestCase):
             }
         )
 
+    def test_print_status_when_paused(self) -> None:
+        self.printer_mock.get_selected_file.return_value = "foobar.ctb"
+        self.printer_mock.get_print_status.return_value = PrintStatus(
+            state=PrinterState.PAUSED,
+            current_byte=42,
+            total_bytes=120,
+        )
+        response = self.client.get("/api/print_status")
+        expect(response.get_json()).to_equal(
+            {
+                "state": "PAUSED",
+                "selected_file": "foobar.ctb",
+                "progress": 35.0,
+            }
+        )
+
     def test_print_status_while_starting_print(self) -> None:
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
