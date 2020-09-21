@@ -6,12 +6,15 @@ import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import Typography from "@material-ui/core/Typography";
+import CheckIcon from "@material-ui/icons/Check";
+import FolderIcon from "@material-ui/icons/Folder";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import StopIcon from "@material-ui/icons/Stop";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
+import { Link } from "react-router-dom";
 import { cancelPrint, pausePrint, resumePrint } from "../commands";
 
 const styles = () =>
@@ -147,19 +150,48 @@ class PrintStatus extends React.Component<
       return null;
     }
 
-    const { progress, selectedFile } = nullthrows(this.state.data);
+    const { state, progress, selectedFile } = nullthrows(this.state.data);
 
-    return (
-      <Card className={classes.root}>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textPrimary"
-            gutterBottom
-          >
-            Elegoo Mars Pro
+    let content: React.ReactElement;
+    if (state === "IDLE") {
+      content = (
+        <Box>
+          <Typography variant="h5" gutterBottom>
+            <Grid
+              container
+              direction="row"
+              justify="center"
+              alignItems="center"
+              spacing={1}
+            >
+              <Grid item>
+                <CheckIcon fontSize="large" />
+              </Grid>
+              <Grid item>Ready</Grid>
+            </Grid>
           </Typography>
-
+          <Grid
+            container
+            alignItems="flex-start"
+            justify="flex-end"
+            direction="row"
+          >
+            <Button
+              variant="outlined"
+              color="primary"
+              size="small"
+              startIcon={<FolderIcon />}
+              component={Link}
+              to="/files"
+            >
+              Files
+            </Button>
+          </Grid>
+        </Box>
+      );
+    } else {
+      content = (
+        <React.Fragment>
           <Box display="flex">
             <Box width="100%">
               <Typography component="h6" variant="h6" color="textSecondary">
@@ -211,6 +243,21 @@ class PrintStatus extends React.Component<
           </div>
 
           {this._renderButtons()}
+        </React.Fragment>
+      );
+    }
+
+    return (
+      <Card className={classes.root}>
+        <CardContent>
+          <Typography
+            className={classes.title}
+            color="textPrimary"
+            gutterBottom
+          >
+            Elegoo Mars Pro
+          </Typography>
+          {content}
         </CardContent>
       </Card>
     );

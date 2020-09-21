@@ -2,6 +2,7 @@ import { Story } from "@storybook/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
+import { MemoryRouter } from "react-router";
 import PrintStatus from "../PrintStatus";
 
 const axiosMock = new MockAdapter(axios);
@@ -27,7 +28,11 @@ const Template: Story = (args) => {
     selected_file: args.selectedFile,
     progress: args.progress,
   });
-  return <PrintStatus />;
+  return (
+    <MemoryRouter>
+      <PrintStatus />
+    </MemoryRouter>
+  );
 };
 
 export const Printing = Template.bind({});
