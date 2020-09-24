@@ -16,7 +16,7 @@ flask = "1.1.2"
 pyre-extensions = "0.0.18"
 pyserial = "3.4"
 python = "^3.7"
-typedstruct = { git = "https://github.com/luizribeiro/typedstruct.git", branch = "master" }
+typedstruct = "0.1.0"
 waitress = "1.4.4"
 whitenoise = "5.2.0"
 
