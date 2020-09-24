@@ -1,3 +1,4 @@
+import pathlib
 from dataclasses import dataclass
 from typing import Sequence
 
@@ -44,12 +45,14 @@ class CTBLayerDef(LittleEndianStruct):
 class CTBFile:
     def __init__(
         self,
+        filename: str,
         height_mm: float,
         layer_height: float,
         layer_count: int,
         print_time_secs: int,
         end_byte_offset_by_layer: Sequence[int],
     ) -> None:
+        self.filename = filename
         self.height_mm = height_mm
         self.layer_height = layer_height
         self.layer_count = layer_count
@@ -57,8 +60,8 @@ class CTBFile:
         self.end_byte_offset_by_layer = end_byte_offset_by_layer
 
     @classmethod
-    def read(self, filename: str) -> "CTBFile":
-        with open(filename, "rb") as file:
+    def read(self, path: pathlib.Path) -> "CTBFile":
+        with open(str(path), "rb") as file:
             ctb_header = CTBHeader.unpack(file.read(CTBHeader.get_size()))
 
             end_byte_offset_by_layer = []
@@ -70,6 +73,7 @@ class CTBFile:
                 )
 
             return CTBFile(
+                filename=path.name,
                 height_mm=ctb_header.height_mm,
                 layer_height=ctb_header.layer_height,
                 layer_count=ctb_header.layer_count,
