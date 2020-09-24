@@ -296,7 +296,7 @@ description = "A performant type checker for Python"
 name = "pyre-check"
 optional = false
 python-versions = ">=3.6"
-version = "0.0.52"
+version = "0.0.55"
 
 [package.dependencies]
 dataclasses = "*"
@@ -501,7 +501,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "1ead8b4db35b86533e75ffe9a9156123122cce6a06083df17418c010ff6da429"
+content-hash = "6f9b8c64066e8373263ce2dae52b2c8b18ab6ced631466bb11785cc3f59d01c0"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -511,7 +511,6 @@ appdirs = [
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
 ]
 black = [
-    {file = "black-20.8b1-py3-none-any.whl", hash = "sha256:70b62ef1527c950db59062cda342ea224d772abdf6adc58b86a45421bab20a6b"},
     {file = "black-20.8b1.tar.gz", hash = "sha256:1c02557aa099101b9d21496f8a914e9ed2222ef70336404eeeac8edba836fbea"},
 ]
 click = [
@@ -707,9 +706,9 @@ pyflakes = [
     {file = "pyflakes-2.2.0.tar.gz", hash = "sha256:35b2d75ee967ea93b55750aa9edbbf72813e06a66ba54438df2cfac9e3c27fc8"},
 ]
 pyre-check = [
-    {file = "pyre-check-0.0.52.tar.gz", hash = "sha256:cf33487283c9f0bf582e07026ed4ae0e0fadb4b50e429edcfc0a60632cb28fe0"},
-    {file = "pyre_check-0.0.52-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:ad251e363a8707f462d34f3b0898b8e0e3b3bec64522eb9e38f85bf872218668"},
-    {file = "pyre_check-0.0.52-py3-none-manylinux1_x86_64.whl", hash = "sha256:2bf97fa0aa4a932d1ce03aa24a4999a6b8e5c89f15eca52e773efb6a1f7f8520"},
+    {file = "pyre-check-0.0.55.tar.gz", hash = "sha256:2619066042d5938228de88b905959a7e85ed39aedaf63f0f2314b18cb73972f6"},
+    {file = "pyre_check-0.0.55-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:9d921681afb3eef9c8328c704904f56d1e90f5a8310c3743e59b304c602e174a"},
+    {file = "pyre_check-0.0.55-py3-none-manylinux1_x86_64.whl", hash = "sha256:0e2dca8bafdda8001d9c870f2a5955aeacf9e695b1d0d130b60f25a83ccfcd28"},
 ]
 pyre-extensions = [
     {file = "pyre-extensions-0.0.18.tar.gz", hash = "sha256:60e0411e91ecbeaf1fd5d8851ffce42baf6a74ec7ccd01db545c7a97f15aac30"},
