@@ -73,10 +73,19 @@ def print_status() -> str:
 
 @app.route("/api/list_files", methods=["GET"])
 def list_files() -> str:
-    files = os.listdir(FILES_DIRECTORY)
+    filename_list = os.listdir(FILES_DIRECTORY)
+    files = []
+    for filename in filename_list:
+        ctb_file = CTBFile.read(FILES_DIRECTORY / filename)
+        files.append(
+            {
+                "filename": filename,
+                "print_time_secs": ctb_file.print_time_secs,
+            }
+        )
     return jsonify(
         {
-            "files": [{"filename": filename} for filename in files],
+            "files": files,
         }
     )
 

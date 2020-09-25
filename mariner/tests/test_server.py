@@ -111,7 +111,10 @@ class MarinerServerTest(TestCase):
         response = self.client.get("/api/list_files")
         expect(response.get_json()).to_equal(
             {
-                "files": [{"filename": "a.ctb"}, {"filename": "b.ctb"}],
+                "files": [
+                    {"filename": "a.ctb", "print_time_secs": 200},
+                    {"filename": "b.ctb", "print_time_secs": 200},
+                ],
             }
         )
 
