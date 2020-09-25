@@ -7,8 +7,9 @@ from pyre_extensions import none_throws
 from waitress import serve
 from whitenoise import WhiteNoise
 
-from mariner.mars import ElegooMars, PrinterState
 from mariner.config import FILES_DIRECTORY
+from mariner.file_formats.ctb import CTBFile
+from mariner.mars import ElegooMars, PrinterState
 
 
 frontend_dist_directory: str = os.path.abspath("./frontend/dist/")
@@ -36,7 +37,24 @@ def print_status() -> str:
 
         if print_status.state == PrinterState.IDLE:
             progress = 0.0
+            print_details = {}
         else:
+            ctb_file = CTBFile.read(FILES_DIRECTORY / selected_file)
+
+            if print_status.current_byte == 0:
+                current_layer = 1
+            else:
+                current_layer = (
+                    ctb_file.end_byte_offset_by_layer.index(print_status.current_byte)
+                    + 1
+                )
+
+            print_details = {
+                "current_layer": current_layer,
+                "layer_count": ctb_file.layer_count,
+                "print_time_secs": ctb_file.print_time_secs,
+            }
+
             progress = (
                 100.0
                 * none_throws(print_status.current_byte)
@@ -48,6 +66,7 @@ def print_status() -> str:
                 "state": print_status.state.value,
                 "selected_file": selected_file,
                 "progress": progress,
+                **print_details,
             }
         )
 
