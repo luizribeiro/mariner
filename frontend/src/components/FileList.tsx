@@ -16,9 +16,15 @@ import { startPrint } from "../commands";
 
 interface FileAPIResponse {
   filename: string;
+  print_time_secs: number;
 }
 
 function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
+  const printHours = Math.floor(file.print_time_secs / 3600);
+  const printMinutes = Math.floor((file.print_time_secs % 3600) / 60)
+    .toString()
+    .padStart(2, "0");
+  const printTime = `${printHours}h${printMinutes}`;
   return (
     <ListItem key={file.filename}>
       <ListItemAvatar>
@@ -26,7 +32,7 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
           <LayersIcon />
         </Avatar>
       </ListItemAvatar>
-      <ListItemText primary={file.filename} />
+      <ListItemText primary={file.filename} secondary={printTime} />
       <ListItemSecondaryAction>
         <IconButton
           edge="end"
