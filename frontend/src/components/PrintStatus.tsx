@@ -64,6 +64,9 @@ export interface PrintStatusState {
     state: PrinterState;
     selectedFile: string;
     progress: number;
+    currentLayer?: number;
+    layerCount?: number;
+    printTimeSecs?: number;
   };
 }
 
@@ -71,6 +74,9 @@ interface PrintStatusAPIResponse {
   state: string;
   selected_file: string;
   progress: number;
+  current_layer?: number;
+  layer_count?: number;
+  print_time_secs?: number;
 }
 
 class PrintStatus extends React.Component<
@@ -91,6 +97,9 @@ class PrintStatus extends React.Component<
         state: toPrinterState(response.data.state),
         progress: response.data.progress,
         selectedFile: response.data.selected_file,
+        currentLayer: response.data.current_layer,
+        layerCount: response.data.layer_count,
+        printTimeSecs: response.data.print_time_secs,
       },
     });
   }
@@ -155,7 +164,13 @@ class PrintStatus extends React.Component<
       return null;
     }
 
-    const { state, progress, selectedFile } = nullthrows(this.state.data);
+    const {
+      state,
+      progress,
+      selectedFile,
+      layerCount,
+      currentLayer,
+    } = nullthrows(this.state.data);
 
     let content: React.ReactElement;
     if (state === "IDLE") {
@@ -231,10 +246,10 @@ class PrintStatus extends React.Component<
               </Grid>
               <Grid item xs={6}>
                 <Typography variant="h5" color="textPrimary" display="inline">
-                  53
+                  {currentLayer}
                 </Typography>
                 <Typography variant="h6" color="textPrimary" display="inline">
-                  /79&nbsp;
+                  /{layerCount}&nbsp;
                 </Typography>
                 <Typography
                   variant="body1"

@@ -27,6 +27,9 @@ const Template: Story = (args) => {
     state: args.state,
     selected_file: args.selectedFile,
     progress: args.progress,
+    current_layer: args.current_layer,
+    layer_count: args.layer_count,
+    print_time_secs: args.print_time_secs,
   });
   return (
     <MemoryRouter>
@@ -40,6 +43,9 @@ Printing.args = {
   state: "PRINTING",
   selectedFile: "lattice.ctb",
   progress: 20.0,
+  current_layer: 120,
+  layer_count: 600,
+  print_time_secs: 4800,
 };
 
 export const Paused = Template.bind({});
@@ -47,6 +53,9 @@ Paused.args = {
   state: "PAUSED",
   selectedFile: "lattice.ctb",
   progress: 20.0,
+  current_layer: 120,
+  layer_count: 600,
+  print_time_secs: 4800,
 };
 
 export const Idle = Template.bind({});
@@ -61,4 +70,7 @@ StartingPrint.args = {
   state: "STARTING_PRINT",
   selectedFile: "lattice.ctb",
   progress: 0.0,
+  current_layer: 1,
+  layer_count: 600,
+  print_time_secs: 4800,
 };
