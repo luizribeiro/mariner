@@ -30,7 +30,7 @@ app.config.from_mapping(
 cache = Cache(app)
 
 
-@cache.memoize(timeout=None)
+@cache.memoize(timeout=0)
 def _read_ctb_file(filename: str) -> CTBFile:
     return CTBFile.read(FILES_DIRECTORY / filename)
 
