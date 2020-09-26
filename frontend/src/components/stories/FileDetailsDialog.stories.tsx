@@ -25,7 +25,7 @@ const Template: Story = (_args) => {
 
   const [open, setOpen] = React.useState(false);
 
-  const handleClickOpen = () => () => {
+  const handleClickOpen = () => {
     setOpen(true);
   };
 
@@ -35,7 +35,7 @@ const Template: Story = (_args) => {
 
   return (
     <div>
-      <Button onClick={handleClickOpen()}>Open</Button>
+      <Button onClick={handleClickOpen}>Open</Button>
       <FileDetailsDialog
         filename="stairs.ctb"
         onCancel={handleClose}
