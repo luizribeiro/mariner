@@ -42,22 +42,14 @@ class CTBLayerDef(LittleEndianStruct):
     unknown_03: int = StructType.uint32()
 
 
+@dataclass(frozen=True)
 class CTBFile:
-    def __init__(
-        self,
-        filename: str,
-        height_mm: float,
-        layer_height: float,
-        layer_count: int,
-        print_time_secs: int,
-        end_byte_offset_by_layer: Sequence[int],
-    ) -> None:
-        self.filename = filename
-        self.height_mm = height_mm
-        self.layer_height = layer_height
-        self.layer_count = layer_count
-        self.print_time_secs = print_time_secs
-        self.end_byte_offset_by_layer = end_byte_offset_by_layer
+    filename: str
+    height_mm: float
+    layer_height: float
+    layer_count: int
+    print_time_secs: int
+    end_byte_offset_by_layer: Sequence[int]
 
     @classmethod
     def read(self, path: pathlib.Path) -> "CTBFile":
