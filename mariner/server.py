@@ -68,8 +68,8 @@ def print_status() -> str:
 
             progress = (
                 100.0
-                * none_throws(print_status.current_byte)
-                / none_throws(print_status.total_bytes)
+                * none_throws(current_layer - 1)
+                / none_throws(ctb_file.layer_count)
             )
 
         return jsonify(

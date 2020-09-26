@@ -53,7 +53,7 @@ class MarinerServerTest(TestCase):
             {
                 "state": "PRINTING",
                 "selected_file": "foobar.ctb",
-                "progress": 35.0,
+                "progress": 31.57894736842105,
                 "layer_count": 19,
                 "current_layer": 7,
                 "print_time_secs": 200,
@@ -72,7 +72,7 @@ class MarinerServerTest(TestCase):
             {
                 "state": "PAUSED",
                 "selected_file": "foobar.ctb",
-                "progress": 35.0,
+                "progress": 31.57894736842105,
                 "layer_count": 19,
                 "current_layer": 7,
                 "print_time_secs": 200,
