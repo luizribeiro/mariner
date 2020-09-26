@@ -57,6 +57,7 @@ class MarinerServerTest(TestCase):
                 "layer_count": 19,
                 "current_layer": 7,
                 "print_time_secs": 200,
+                "time_left_secs": 137,
             }
         )
 
@@ -76,6 +77,7 @@ class MarinerServerTest(TestCase):
                 "layer_count": 19,
                 "current_layer": 7,
                 "print_time_secs": 200,
+                "time_left_secs": 137,
             }
         )
 
@@ -95,6 +97,7 @@ class MarinerServerTest(TestCase):
                 "layer_count": 19,
                 "current_layer": 1,
                 "print_time_secs": 200,
+                "time_left_secs": 200,
             }
         )
 

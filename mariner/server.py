@@ -60,17 +60,20 @@ def print_status() -> str:
                     + 1
                 )
 
-            print_details = {
-                "current_layer": current_layer,
-                "layer_count": ctb_file.layer_count,
-                "print_time_secs": ctb_file.print_time_secs,
-            }
-
             progress = (
                 100.0
                 * none_throws(current_layer - 1)
                 / none_throws(ctb_file.layer_count)
             )
+
+            print_details = {
+                "current_layer": current_layer,
+                "layer_count": ctb_file.layer_count,
+                "print_time_secs": ctb_file.print_time_secs,
+                "time_left_secs": round(
+                    ctb_file.print_time_secs * (100.0 - progress) / 100.0
+                ),
+            }
 
         return jsonify(
             {
