@@ -88,6 +88,8 @@ class PrintStatus extends React.Component<
   WithStyles<typeof styles>,
   PrintStatusState
 > {
+  intervalID: number | undefined;
+
   state: PrintStatusState = {
     isLoading: true,
   };
@@ -115,6 +117,14 @@ class PrintStatus extends React.Component<
 
   async componentDidMount(): Promise<void> {
     await this._refresh(0);
+    this.intervalID = window.setInterval(
+      async () => await this._refresh(0),
+      60 * 1000
+    );
+  }
+
+  componentWillUnmount() {
+    window.clearInterval(this.intervalID);
   }
 
   _renderButtons(): React.ReactElement | null {
