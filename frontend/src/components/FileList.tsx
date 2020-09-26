@@ -12,6 +12,7 @@ import PrintIcon from "@material-ui/icons/Print";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
+import { useHistory } from "react-router-dom";
 import { startPrint } from "../commands";
 import { renderTime } from "../utils";
 
@@ -22,6 +23,7 @@ interface FileAPIResponse {
 
 function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
   const printTime = renderTime(file.print_time_secs);
+  const history = useHistory();
   return (
     <ListItem key={file.filename}>
       <ListItemAvatar>
@@ -34,7 +36,10 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
         <IconButton
           edge="end"
           aria-label="print"
-          onClick={async () => await startPrint(file.filename)}
+          onClick={async () => {
+            await startPrint(file.filename);
+            history.push("/");
+          }}
         >
           <PrintIcon />
         </IconButton>
