@@ -1,3 +1,4 @@
+import Button from "@material-ui/core/Button";
 import { Story } from "@storybook/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
@@ -21,7 +22,30 @@ const Template: Story = (_args) => {
     resolution: [1440, 2560],
     print_time_secs: 5621,
   });
-  return <FileDetailsDialog filename="stairs.ctb" />;
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleClickOpen()}>Open</Button>
+      <FileDetailsDialog
+        filename="stairs.ctb"
+        onCancel={handleClose}
+        onClose={handleClose}
+        onPrint={handleClose}
+        open={open}
+        scroll="paper"
+      />
+    </div>
+  );
 };
 
 export const Default = Template.bind({});

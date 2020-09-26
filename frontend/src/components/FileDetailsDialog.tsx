@@ -1,6 +1,6 @@
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Dialog from "@material-ui/core/Dialog";
+import Dialog, { DialogProps } from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
@@ -23,19 +23,24 @@ interface FileDetailsAPIResponse {
   print_time_secs: number;
 }
 
+interface FileDetailsProps {
+  filename: string;
+}
+
 interface FileDetailsState {
   isLoading: boolean;
   data?: FileDetailsAPIResponse;
 }
 
-class FileDetails extends React.Component<{}, FileDetailsState> {
+class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
   state: FileDetailsState = {
     isLoading: true,
   };
 
   async componentDidMount(): Promise<void> {
     const response: AxiosResponse<FileDetailsAPIResponse> = await axios.get(
-      "api/file_details"
+      "api/file_details",
+      { params: { filename: this.props.filename } }
     );
     this.setState({
       isLoading: false,
@@ -76,44 +81,27 @@ class FileDetails extends React.Component<{}, FileDetailsState> {
   }
 }
 
-export default function FileDetailsDialog({
-  filename,
-}: {
-  filename: string;
-}): React.ReactElement {
-  const [open, setOpen] = React.useState(false);
-
-  const handleClickOpen = () => () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-
+export default function FileDetailsDialog(
+  props: {
+    filename: string;
+    onCancel: () => void;
+    onPrint: () => void;
+  } & DialogProps
+): React.ReactElement {
   return (
-    <div>
-      <Button onClick={handleClickOpen()}>Open</Button>
-      <Dialog
-        open={open}
-        onClose={handleClose}
-        scroll="paper"
-        aria-labelledby="scroll-dialog-title"
-        aria-describedby="scroll-dialog-description"
-      >
-        <DialogTitle id="scroll-dialog-title">{filename}</DialogTitle>
-        <DialogContent dividers>
-          <FileDetails />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={handleClose} color="primary">
-            Print
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </div>
+    <Dialog {...props}>
+      <DialogTitle>{props.filename}</DialogTitle>
+      <DialogContent dividers>
+        <FileDetails filename={props.filename} />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={props.onCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={props.onPrint} color="primary">
+          Print
+        </Button>
+      </DialogActions>
+    </Dialog>
   );
 }
