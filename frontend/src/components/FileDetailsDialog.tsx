@@ -71,7 +71,9 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
         <TableBody>
           {this._getTableContent(data).map((row) => (
             <TableRow key={row[0]}>
-              <TableCell>{row[0]}</TableCell>
+              <TableCell>
+                <b>{row[0]}</b>
+              </TableCell>
               <TableCell align="right">{row[1]}</TableCell>
             </TableRow>
           ))}
