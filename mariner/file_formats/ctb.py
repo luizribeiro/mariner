@@ -15,7 +15,7 @@ class CTBHeader(LittleEndianStruct):
     unknown_01: int = StructType.uint32()
     unknown_02: int = StructType.uint32()
     height_mm: float = StructType.float32()
-    layer_height: float = StructType.float32()
+    layer_height_mm: float = StructType.float32()
     layer_exposure: float = StructType.float32()
     bottom_exposure: float = StructType.float32()
     layer_off_time: float = StructType.float32()
@@ -31,7 +31,7 @@ class CTBHeader(LittleEndianStruct):
 
 @dataclass(frozen=True)
 class CTBLayerDef(LittleEndianStruct):
-    layer_height: float = StructType.float32()
+    layer_height_mm: float = StructType.float32()
     layer_exposure: float = StructType.float32()
     layer_off_time: float = StructType.float32()
     image_offset: int = StructType.uint32()
@@ -46,7 +46,7 @@ class CTBLayerDef(LittleEndianStruct):
 class CTBFile:
     filename: str
     height_mm: float
-    layer_height: float
+    layer_height_mm: float
     layer_count: int
     print_time_secs: int
     end_byte_offset_by_layer: Sequence[int]
@@ -67,7 +67,7 @@ class CTBFile:
             return CTBFile(
                 filename=path.name,
                 height_mm=ctb_header.height_mm,
-                layer_height=ctb_header.layer_height,
+                layer_height_mm=ctb_header.layer_height_mm,
                 layer_count=ctb_header.layer_count,
                 print_time_secs=ctb_header.print_time,
                 end_byte_offset_by_layer=end_byte_offset_by_layer,

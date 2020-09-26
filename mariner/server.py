@@ -1,5 +1,5 @@
-import os
 import logging
+import os
 from enum import Enum
 
 from flask import Flask, jsonify, render_template, request
@@ -100,6 +100,21 @@ def list_files() -> str:
     return jsonify(
         {
             "files": files,
+        }
+    )
+
+
+@app.route("/api/file_details", methods=["GET"])
+def file_details() -> str:
+    filename = str(request.args.get("filename"))
+    ctb_file = _read_ctb_file(filename)
+    return jsonify(
+        {
+            "filename": ctb_file.filename,
+            "height_mm": ctb_file.height_mm,
+            "layer_count": ctb_file.layer_count,
+            "layer_height_mm": round(ctb_file.layer_height_mm, 4),
+            "print_time_secs": ctb_file.print_time_secs,
         }
     )
 

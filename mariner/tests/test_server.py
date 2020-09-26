@@ -1,3 +1,4 @@
+import pathlib
 from unittest import TestCase
 from unittest.mock import patch, MagicMock, Mock
 
@@ -155,3 +156,24 @@ class MarinerServerTest(TestCase):
         response = self.client.post("/api/printer/command/reboot")
         expect(response.get_json()).to_equal({"success": True})
         self.printer_mock.reboot.assert_called_once_with()
+
+    def test_file_details(self) -> None:
+        path = (
+            pathlib.Path(__file__).parent.parent.absolute()
+            / "file_formats"
+            / "tests"
+            / "stairs.ctb"
+        )
+        ctb_file = CTBFile.read(path)
+
+        with patch("mariner.server.CTBFile.read", return_value=ctb_file):
+            response = self.client.get("/api/file_details?filename=stairs.ctb")
+            expect(response.get_json()).to_equal(
+                {
+                    "filename": "stairs.ctb",
+                    "height_mm": 20.0,
+                    "layer_count": 400,
+                    "layer_height_mm": 0.05,
+                    "print_time_secs": 5621,
+                }
+            )
