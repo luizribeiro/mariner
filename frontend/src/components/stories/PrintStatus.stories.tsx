@@ -30,6 +30,7 @@ const Template: Story = (args) => {
     current_layer: args.current_layer,
     layer_count: args.layer_count,
     print_time_secs: args.print_time_secs,
+    time_left_secs: args.time_left_secs,
   });
   return (
     <MemoryRouter>
@@ -46,6 +47,7 @@ Printing.args = {
   current_layer: 120,
   layer_count: 600,
   print_time_secs: 4800,
+  time_left_secs: 3840,
 };
 
 export const Paused = Template.bind({});
@@ -56,6 +58,7 @@ Paused.args = {
   current_layer: 120,
   layer_count: 600,
   print_time_secs: 4800,
+  time_left_secs: 3840,
 };
 
 export const Idle = Template.bind({});
@@ -73,4 +76,5 @@ StartingPrint.args = {
   current_layer: 1,
   layer_count: 600,
   print_time_secs: 4800,
+  time_left_secs: 4800,
 };

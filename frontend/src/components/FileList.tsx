@@ -13,6 +13,7 @@ import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { startPrint } from "../commands";
+import { renderTime } from "../utils";
 
 interface FileAPIResponse {
   filename: string;
@@ -20,11 +21,7 @@ interface FileAPIResponse {
 }
 
 function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
-  const printHours = Math.floor(file.print_time_secs / 3600);
-  const printMinutes = Math.floor((file.print_time_secs % 3600) / 60)
-    .toString()
-    .padStart(2, "0");
-  const printTime = `${printHours}h${printMinutes}`;
+  const printTime = renderTime(file.print_time_secs);
   return (
     <ListItem key={file.filename}>
       <ListItemAvatar>

@@ -16,6 +16,7 @@ import nullthrows from "nullthrows";
 import React from "react";
 import { Link } from "react-router-dom";
 import { cancelPrint, pausePrint, resumePrint } from "../commands";
+import { renderTime } from "../utils";
 
 const styles = () =>
   createStyles({
@@ -67,6 +68,7 @@ export interface PrintStatusState {
     currentLayer?: number;
     layerCount?: number;
     printTimeSecs?: number;
+    timeLeftSecs?: number;
   };
 }
 
@@ -77,6 +79,7 @@ interface PrintStatusAPIResponse {
   current_layer?: number;
   layer_count?: number;
   print_time_secs?: number;
+  time_left_secs?: number;
 }
 
 const WAIT_BEFORE_REFRESHING_STATUS_MS = 250;
@@ -105,6 +108,7 @@ class PrintStatus extends React.Component<
         currentLayer: response.data.current_layer,
         layerCount: response.data.layer_count,
         printTimeSecs: response.data.print_time_secs,
+        timeLeftSecs: response.data.time_left_secs,
       },
     });
   }
@@ -183,11 +187,12 @@ class PrintStatus extends React.Component<
     }
 
     const {
-      state,
+      currentLayer,
+      layerCount,
       progress,
       selectedFile,
-      layerCount,
-      currentLayer,
+      state,
+      timeLeftSecs,
     } = nullthrows(this.state.data);
 
     let content: React.ReactElement;
@@ -252,7 +257,7 @@ class PrintStatus extends React.Component<
             <Grid container spacing={3}>
               <Grid item xs={6}>
                 <Typography variant="h5" color="textPrimary" display="inline">
-                  2h44&nbsp;
+                  {renderTime(nullthrows(timeLeftSecs))}&nbsp;
                 </Typography>
                 <Typography
                   variant="body1"
