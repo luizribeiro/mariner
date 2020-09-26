@@ -5,7 +5,7 @@ from pyexpect import expect
 
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState, PrintStatus
-from mariner.server import app
+from mariner.server import app, _read_ctb_file
 
 
 class MarinerServerTest(TestCase):
@@ -28,6 +28,14 @@ class MarinerServerTest(TestCase):
         self.ctb_file_patcher = patch("mariner.server.CTBFile")
         ctb_file_class_mock = self.ctb_file_patcher.start()
         ctb_file_class_mock.read.return_value = self.ctb_file_mock
+
+        # this is so we don't try caching the values returned by this function during
+        # tests. this is important because during tests this function returns a Mock,
+        # which pickle cannot serialize.
+        self._read_ctb_file_patcher = patch(
+            "mariner.server._read_ctb_file", side_effect=_read_ctb_file.__wrapped__
+        )
+        self._read_ctb_file_patcher.start()
 
     def tearDown(self) -> None:
         self.printer_patcher.stop()

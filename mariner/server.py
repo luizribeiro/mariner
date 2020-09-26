@@ -3,6 +3,7 @@ import logging
 from enum import Enum
 
 from flask import Flask, jsonify, render_template, request
+from flask_caching import Cache
 from pyre_extensions import none_throws
 from waitress import serve
 from whitenoise import WhiteNoise
@@ -23,6 +24,16 @@ app.wsgi_app = WhiteNoise(app.wsgi_app)
 # pyre-ignore[16]: undefined attribute
 app.wsgi_app.add_files(frontend_dist_directory)
 
+app.config.from_mapping(
+    {"DEBUG": True, "CACHE_TYPE": "simple", "CACHE_DEFAULT_TIMEOUT": 300}
+)
+cache = Cache(app)
+
+
+@cache.memoize(timeout=None)
+def _read_ctb_file(filename: str) -> CTBFile:
+    return CTBFile.read(FILES_DIRECTORY / filename)
+
 
 @app.route("/", methods=["GET"])
 def index() -> str:
@@ -39,7 +50,7 @@ def print_status() -> str:
             progress = 0.0
             print_details = {}
         else:
-            ctb_file = CTBFile.read(FILES_DIRECTORY / selected_file)
+            ctb_file = _read_ctb_file(selected_file)
 
             if print_status.current_byte == 0:
                 current_layer = 1
@@ -76,7 +87,7 @@ def list_files() -> str:
     filename_list = os.listdir(FILES_DIRECTORY)
     files = []
     for filename in filename_list:
-        ctb_file = CTBFile.read(FILES_DIRECTORY / filename)
+        ctb_file = _read_ctb_file(filename)
         files.append(
             {
                 "filename": filename,

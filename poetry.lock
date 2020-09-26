@@ -100,6 +100,17 @@ docs = ["sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-
 dotenv = ["python-dotenv"]
 
 [[package]]
+category = "main"
+description = "Adds caching support to your Flask application"
+name = "flask-caching"
+optional = false
+python-versions = "*"
+version = "1.9.0"
+
+[package.dependencies]
+Flask = "*"
+
+[[package]]
 category = "dev"
 description = "Green is a clean, colorful, fast python test runner."
 name = "green"
@@ -501,7 +512,7 @@ docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-content-hash = "1ead8b4db35b86533e75ffe9a9156123122cce6a06083df17418c010ff6da429"
+content-hash = "7e3892ff051fdf6142eb8bd9de35432fd097f9ed379e2c1da9042adbe705c15e"
 lock-version = "1.0"
 python-versions = "^3.7"
 
@@ -569,6 +580,10 @@ flake8 = [
 flask = [
     {file = "Flask-1.1.2-py2.py3-none-any.whl", hash = "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"},
     {file = "Flask-1.1.2.tar.gz", hash = "sha256:4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060"},
+]
+flask-caching = [
+    {file = "Flask-Caching-1.9.0.tar.gz", hash = "sha256:a0356ad868b1d8ec2d0e675a6fe891c41303128f8904d5d79e180d8b3f952aff"},
+    {file = "Flask_Caching-1.9.0-py2.py3-none-any.whl", hash = "sha256:e6ef2e2af84e13c4fd32c1839c1943a42f11b6b0fbcfdd6bf46547ea5482dbfe"},
 ]
 green = [
     {file = "green-3.2.2.tar.gz", hash = "sha256:a7cc909290019903323481a1819addefb9d32b4868773326dec4648c63bbc071"},
