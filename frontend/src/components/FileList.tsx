@@ -15,6 +15,7 @@ import React from "react";
 import { useHistory } from "react-router-dom";
 import { startPrint } from "../commands";
 import { renderTime } from "../utils";
+import FileDetailsDialog from "./FileDetailsDialog";
 
 interface FileAPIResponse {
   filename: string;
@@ -22,6 +23,10 @@ interface FileAPIResponse {
 }
 
 function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
+  const [open, setOpen] = React.useState(false);
+  const handleClickOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const printTime = renderTime(file.print_time_secs);
   const history = useHistory();
   return (
@@ -33,16 +38,21 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
       </ListItemAvatar>
       <ListItemText primary={file.filename} secondary={printTime} />
       <ListItemSecondaryAction>
-        <IconButton
-          edge="end"
-          aria-label="print"
-          onClick={async () => {
-            await startPrint(file.filename);
-            history.push("/");
-          }}
-        >
+        <IconButton edge="end" aria-label="print" onClick={handleClickOpen}>
           <PrintIcon />
         </IconButton>
+        <FileDetailsDialog
+          filename={file.filename}
+          onCancel={handleClose}
+          onClose={handleClose}
+          onPrint={async () => {
+            await startPrint(file.filename);
+            setOpen(false);
+            history.push("/");
+          }}
+          open={open}
+          scroll="paper"
+        />
       </ListItemSecondaryAction>
     </ListItem>
   );
