@@ -129,7 +129,12 @@ class ElegooMars:
             raise UnexpectedResponse(response)
 
     def start_printing(self, filename: str) -> None:
-        response = self._send_and_read((f"M6030 '{filename}'").encode())
+        response = self._send_and_read(
+            (f"M6030 '{filename}'").encode(),
+            # the mainboard takes longer to reply to this command, so we override the
+            # timeout to 2 seconds
+            timeout_secs=2.0,
+        )
         if "ok" not in response:
             raise UnexpectedResponse(response)
 
@@ -156,10 +161,15 @@ class ElegooMars:
     def reboot(self, delay_in_ms: int = 0) -> None:
         self._send((f"M6040 I{delay_in_ms}").encode())
 
-    def _send_and_read(self, data: bytes) -> str:
+    def _send_and_read(self, data: bytes, timeout_secs: Optional[float] = None) -> str:
         self._send(data)
 
+        original_timeout = self._serial_port.timeout
+        if timeout_secs is not None:
+            self._serial_port.timeout = timeout_secs
         response = self._serial_port.readline().decode("utf-8")
+        if timeout_secs is not None:
+            self._serial_port.timeout = original_timeout
         # TODO actually read the rest of the response instead of just
         # flushing it like this
         self._serial_port.read(size=1024)
