@@ -1,9 +1,8 @@
-import Avatar from "@material-ui/core/Avatar";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemAvatar from "@material-ui/core/ListItemAvatar";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import LayersIcon from "@material-ui/icons/Layers";
 import axios, { AxiosResponse } from "axios";
@@ -27,13 +26,13 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
   const printTime = renderTime(file.print_time_secs);
   const history = useHistory();
   return (
-    <ListItem button key={file.filename} onClick={handleClickOpen}>
-      <ListItemAvatar>
-        <Avatar>
+    <React.Fragment>
+      <ListItem button key={file.filename} onClick={handleClickOpen}>
+        <ListItemIcon>
           <LayersIcon />
-        </Avatar>
-      </ListItemAvatar>
-      <ListItemText primary={file.filename} secondary={printTime} />
+        </ListItemIcon>
+        <ListItemText primary={file.filename} secondary={printTime} />
+      </ListItem>
       <FileDetailsDialog
         filename={file.filename}
         onCancel={handleClose}
@@ -46,7 +45,7 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
         open={open}
         scroll="paper"
       />
-    </ListItem>
+    </React.Fragment>
   );
 }
 
