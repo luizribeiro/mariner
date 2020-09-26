@@ -171,9 +171,11 @@ class MarinerServerTest(TestCase):
             expect(response.get_json()).to_equal(
                 {
                     "filename": "stairs.ctb",
+                    "bed_size_mm": [68.04, 120.96, 150.0],
                     "height_mm": 20.0,
                     "layer_count": 400,
                     "layer_height_mm": 0.05,
+                    "resolution": [1440, 2560],
                     "print_time_secs": 5621,
                 }
             )

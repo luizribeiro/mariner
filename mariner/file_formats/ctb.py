@@ -1,6 +1,6 @@
 import pathlib
 from dataclasses import dataclass
-from typing import Sequence
+from typing import Sequence, Tuple
 
 from typedstruct import LittleEndianStruct, StructType
 
@@ -45,9 +45,11 @@ class CTBLayerDef(LittleEndianStruct):
 @dataclass(frozen=True)
 class CTBFile:
     filename: str
+    bed_size_mm: Tuple[float, float, float]
     height_mm: float
     layer_height_mm: float
     layer_count: int
+    resolution: Tuple[int, int]
     print_time_secs: int
     end_byte_offset_by_layer: Sequence[int]
 
@@ -66,9 +68,15 @@ class CTBFile:
 
             return CTBFile(
                 filename=path.name,
+                bed_size_mm=(
+                    round(ctb_header.bed_size_x_mm, 4),
+                    round(ctb_header.bed_size_y_mm, 4),
+                    round(ctb_header.bed_size_z_mm, 4),
+                ),
                 height_mm=ctb_header.height_mm,
                 layer_height_mm=ctb_header.layer_height_mm,
                 layer_count=ctb_header.layer_count,
+                resolution=(ctb_header.resolution_x, ctb_header.resolution_y),
                 print_time_secs=ctb_header.print_time,
                 end_byte_offset_by_layer=end_byte_offset_by_layer,
             )
