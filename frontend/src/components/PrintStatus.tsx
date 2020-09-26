@@ -79,6 +79,8 @@ interface PrintStatusAPIResponse {
   print_time_secs?: number;
 }
 
+const WAIT_BEFORE_REFRESHING_STATUS_MS = 250;
+
 class PrintStatus extends React.Component<
   WithStyles<typeof styles>,
   PrintStatusState
@@ -87,7 +89,10 @@ class PrintStatus extends React.Component<
     isLoading: true,
   };
 
-  async componentDidMount(): Promise<void> {
+  async _refresh(
+    wait_ms: number = WAIT_BEFORE_REFRESHING_STATUS_MS
+  ): Promise<void> {
+    await new Promise((resolve) => setTimeout(resolve, wait_ms));
     const response: AxiosResponse<PrintStatusAPIResponse> = await axios.get(
       "api/print_status"
     );
@@ -102,6 +107,10 @@ class PrintStatus extends React.Component<
         printTimeSecs: response.data.print_time_secs,
       },
     });
+  }
+
+  async componentDidMount(): Promise<void> {
+    await this._refresh(0);
   }
 
   _renderButtons(): React.ReactElement | null {
@@ -124,7 +133,10 @@ class PrintStatus extends React.Component<
             color="primary"
             size="small"
             startIcon={<PlayArrowIcon />}
-            onClick={async () => await resumePrint()}
+            onClick={async () => {
+              await resumePrint();
+              await this._refresh();
+            }}
             disabled={state !== "PAUSED"}
           >
             Resume
@@ -136,7 +148,10 @@ class PrintStatus extends React.Component<
             color="primary"
             size="small"
             startIcon={<PauseIcon />}
-            onClick={async () => await pausePrint()}
+            onClick={async () => {
+              await pausePrint();
+              await this._refresh();
+            }}
             disabled={state === "PAUSED" || state === "STARTING_PRINT"}
           >
             Pause
@@ -148,7 +163,10 @@ class PrintStatus extends React.Component<
             color="primary"
             size="small"
             startIcon={<StopIcon />}
-            onClick={async () => await cancelPrint()}
+            onClick={async () => {
+              await cancelPrint();
+              await this._refresh();
+            }}
           >
             Stop
           </Button>
