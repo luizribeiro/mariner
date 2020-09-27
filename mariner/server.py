@@ -1,8 +1,10 @@
+import io
 import logging
 import os
 from enum import Enum
 
-from flask import Flask, jsonify, render_template, request
+import png
+from flask import Flask, Response, jsonify, make_response, render_template, request
 from flask_caching import Cache
 from pyre_extensions import none_throws
 from waitress import serve
@@ -119,6 +121,23 @@ def file_details() -> str:
             "print_time_secs": ctb_file.print_time_secs,
         }
     )
+
+
+@app.route("/api/file_preview", methods=["GET"])
+def file_preview() -> Response:
+    filename = str(request.args.get("filename"))
+
+    bytes = io.BytesIO()
+    preview_image: png.Image = CTBFile.read_preview(FILES_DIRECTORY / filename)
+    preview_image.write(bytes)
+
+    response = make_response(bytes.getvalue())
+    response.headers.set("Content-Type", "image/png")
+    response.headers.set(
+        "Content-Disposition", "attachment", filename=f"{filename}.png"
+    )
+
+    return response
 
 
 class PrinterCommand(Enum):

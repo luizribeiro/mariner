@@ -1,3 +1,4 @@
+import hashlib
 import pathlib
 from unittest import TestCase
 from unittest.mock import patch, MagicMock, Mock
@@ -178,4 +179,20 @@ class MarinerServerTest(TestCase):
                     "resolution": [1440, 2560],
                     "print_time_secs": 5621,
                 }
+            )
+
+    def test_file_preview(self) -> None:
+        path = (
+            pathlib.Path(__file__).parent.parent.absolute()
+            / "file_formats"
+            / "tests"
+            / "stairs.ctb"
+        )
+        ctb_preview = CTBFile.read_preview(path)
+
+        with patch("mariner.server.CTBFile.read_preview", return_value=ctb_preview):
+            response = self.client.get("/api/file_preview?filename=stairs.ctb")
+            expect(response.content_type).to_equal("image/png")
+            expect(hashlib.md5(response.get_data()).hexdigest()).to_equal(
+                "ca98c806d42898ba70626e556f714928"
             )
