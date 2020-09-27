@@ -1,5 +1,6 @@
 import io
 import logging
+import multiprocessing
 import os
 from enum import Enum
 
@@ -159,6 +160,14 @@ class PrinterCommand(Enum):
     REBOOT = "reboot"
 
 
+class CacheBootstrapper(multiprocessing.Process):
+    def run(self) -> None:
+        filename_list = os.listdir(FILES_DIRECTORY)
+        for filename in filename_list:
+            _read_ctb_file(filename)
+            _read_preview(filename)
+
+
 @app.route("/api/printer/command/<command>", methods=["POST"])
 def printer_command(command: str) -> str:
     printer_command = PrinterCommand(command)
@@ -179,6 +188,8 @@ def printer_command(command: str) -> str:
 
 
 def main() -> None:
+    CacheBootstrapper().start()
+
     logger = logging.getLogger("waitress")
     logger.setLevel(logging.INFO)
     serve(app, host="0.0.0.0", port=5000)
