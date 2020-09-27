@@ -1,6 +1,9 @@
+import hashlib
+import io
 import pathlib
 from unittest import TestCase
 
+import png
 from pyexpect import expect
 
 from mariner.file_formats.ctb import CTBFile
@@ -22,4 +25,17 @@ class CTBFileTest(TestCase):
         )
         expect(ctb_file.end_byte_offset_by_layer[-5:]).to_equal(
             [822027, 824704, 827383, 830061, 832745]
+        )
+
+    def test_preview_rendering(self) -> None:
+        path = pathlib.Path(__file__).parent.absolute() / "stairs.ctb"
+        bytes = io.BytesIO()
+        preview_image: png.Image = CTBFile.read_preview(path)
+        preview_image.write(bytes)
+        expect(preview_image.info["width"]).to_equal(400)
+        expect(preview_image.info["height"]).to_equal(300)
+        expect(preview_image.info["bitdepth"]).to_equal(5)
+        expect(preview_image.info["alpha"]).is_false()
+        expect(hashlib.md5(bytes.getvalue()).hexdigest()).to_equal(
+            "ca98c806d42898ba70626e556f714928"
         )
