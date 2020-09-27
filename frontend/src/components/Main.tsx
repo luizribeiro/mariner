@@ -109,6 +109,11 @@ function Main({ width }: WithWidth): React.ReactElement {
   };
   const isSmallScreen = /xs|sm/.test(width);
   const drawerVariant = isSmallScreen ? "temporary" : "permanent";
+  const handleDrawerItemClick = () => {
+    if (isSmallScreen) {
+      setOpen(false);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -158,25 +163,37 @@ function Main({ width }: WithWidth): React.ReactElement {
           </div>
           <Divider />
           <List>
-            <ListItem button key="home" component={Link} to="/">
+            <ListItem
+              button
+              key="home"
+              component={Link}
+              to="/"
+              onClick={handleDrawerItemClick}
+            >
               <ListItemIcon>
                 <HomeIcon />
               </ListItemIcon>
               <ListItemText primary="Home" />
             </ListItem>
-            <ListItem button key="files" component={Link} to="/files">
+            <ListItem
+              button
+              key="files"
+              component={Link}
+              to="/files"
+              onClick={handleDrawerItemClick}
+            >
               <ListItemIcon>
                 <FolderIcon />
               </ListItemIcon>
               <ListItemText primary="Files" />
             </ListItem>
-            <ListItem button key="history">
+            <ListItem button key="history" onClick={handleDrawerItemClick}>
               <ListItemIcon>
                 <HistoryIcon />
               </ListItemIcon>
               <ListItemText primary="History" />
             </ListItem>
-            <ListItem button key="settings">
+            <ListItem button key="settings" onClick={handleDrawerItemClick}>
               <ListItemIcon>
                 <SettingsIcon />
               </ListItemIcon>
@@ -185,7 +202,7 @@ function Main({ width }: WithWidth): React.ReactElement {
           </List>
           <Divider />
           <List>
-            <ListItem button key="help">
+            <ListItem button key="help" onClick={handleDrawerItemClick}>
               <ListItemIcon>
                 <HelpIcon />
               </ListItemIcon>
