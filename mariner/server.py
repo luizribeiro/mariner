@@ -27,7 +27,12 @@ app.wsgi_app = WhiteNoise(app.wsgi_app)
 app.wsgi_app.add_files(frontend_dist_directory)
 
 app.config.from_mapping(
-    {"DEBUG": True, "CACHE_TYPE": "simple", "CACHE_DEFAULT_TIMEOUT": 300}
+    {
+        "DEBUG": True,
+        "CACHE_TYPE": "filesystem",
+        "CACHE_DIR": "/tmp/mariner/",
+        "CACHE_DEFAULT_TIMEOUT": 300,
+    }
 )
 cache = Cache(app)
 
