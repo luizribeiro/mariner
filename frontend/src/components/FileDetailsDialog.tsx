@@ -65,20 +65,24 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
     }
 
     const data = nullthrows(this.state.data);
+    const imgURL = `api/file_preview?filename=${data.filename}`;
 
     return (
-      <Table>
-        <TableBody>
-          {this._getTableContent(data).map((row) => (
-            <TableRow key={row[0]}>
-              <TableCell>
-                <b>{row[0]}</b>
-              </TableCell>
-              <TableCell align="right">{row[1]}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+      <React.Fragment>
+        <img src={imgURL} alt="3D model preview" />
+        <Table>
+          <TableBody>
+            {this._getTableContent(data).map((row) => (
+              <TableRow key={row[0]}>
+                <TableCell>
+                  <b>{row[0]}</b>
+                </TableCell>
+                <TableCell align="right">{row[1]}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </React.Fragment>
     );
   }
 }
