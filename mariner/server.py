@@ -37,6 +37,14 @@ def _read_ctb_file(filename: str) -> CTBFile:
     return CTBFile.read(FILES_DIRECTORY / filename)
 
 
+@cache.memoize(timeout=0)
+def _read_preview(filename: str) -> bytes:
+    bytes = io.BytesIO()
+    preview_image: png.Image = CTBFile.read_preview(FILES_DIRECTORY / filename)
+    preview_image.write(bytes)
+    return bytes.getvalue()
+
+
 @app.route("/", methods=["GET"])
 def index() -> str:
     return render_template("index.html")
@@ -127,11 +135,9 @@ def file_details() -> str:
 def file_preview() -> Response:
     filename = str(request.args.get("filename"))
 
-    bytes = io.BytesIO()
-    preview_image: png.Image = CTBFile.read_preview(FILES_DIRECTORY / filename)
-    preview_image.write(bytes)
+    preview_bytes = _read_preview(filename)
 
-    response = make_response(bytes.getvalue())
+    response = make_response(preview_bytes)
     response.headers.set("Content-Type", "image/png")
     response.headers.set(
         "Content-Disposition", "attachment", filename=f"{filename}.png"
