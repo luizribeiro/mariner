@@ -2,6 +2,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
@@ -41,6 +42,11 @@ const styles = () =>
       padding: 12,
       paddingTop: 20,
       paddingBottom: 20,
+      textAlign: "center",
+    },
+    loadingContainer: {
+      flexGrow: 1,
+      padding: 18,
       textAlign: "center",
     },
   });
@@ -127,10 +133,10 @@ class PrintStatus extends React.Component<
     window.clearInterval(this.intervalID);
   }
 
-  _renderButtons(): React.ReactElement | null {
+  _renderButtons(): React.ReactElement {
     const { state } = nullthrows(this.state.data);
     if (state === "IDLE") {
-      return null;
+      return <CircularProgress />;
     }
 
     return (
@@ -189,11 +195,15 @@ class PrintStatus extends React.Component<
     );
   }
 
-  render(): React.ReactElement | null {
+  _renderContent(): React.ReactElement | null {
     const { classes } = this.props;
 
     if (this.state.isLoading) {
-      return null;
+      return (
+        <Box className={classes.loadingContainer}>
+          <CircularProgress />
+        </Box>
+      );
     }
 
     const {
@@ -205,9 +215,8 @@ class PrintStatus extends React.Component<
       timeLeftSecs,
     } = nullthrows(this.state.data);
 
-    let content: React.ReactElement;
     if (state === "IDLE") {
-      content = (
+      return (
         <Box>
           <Typography variant="h5" gutterBottom>
             <Grid
@@ -242,63 +251,67 @@ class PrintStatus extends React.Component<
           </Grid>
         </Box>
       );
-    } else {
-      content = (
-        <React.Fragment>
-          <Box display="flex">
-            <Box width="100%">
-              <Typography component="h6" variant="h6" color="textSecondary">
-                {selectedFile}
-              </Typography>
-              <Box display="flex" alignItems="center">
-                <Box width="100%" mr={1}>
-                  <LinearProgress variant="determinate" value={progress} />
-                </Box>
-                <Box minWidth={35}>
-                  <Typography variant="body2" color="textSecondary">
-                    {`${Math.round(progress)}%`}
-                  </Typography>
-                </Box>
+    }
+
+    return (
+      <React.Fragment>
+        <Box display="flex">
+          <Box width="100%">
+            <Typography component="h6" variant="h6" color="textSecondary">
+              {selectedFile}
+            </Typography>
+            <Box display="flex" alignItems="center">
+              <Box width="100%" mr={1}>
+                <LinearProgress variant="determinate" value={progress} />
+              </Box>
+              <Box minWidth={35}>
+                <Typography variant="body2" color="textSecondary">
+                  {`${Math.round(progress)}%`}
+                </Typography>
               </Box>
             </Box>
           </Box>
+        </Box>
 
-          <div className={classes.gridRoot}>
-            <Grid container spacing={3}>
-              <Grid item xs={6}>
-                <Typography variant="h5" color="textPrimary" display="inline">
-                  {renderTime(nullthrows(timeLeftSecs))}&nbsp;
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  display="inline"
-                >
-                  left
-                </Typography>
-              </Grid>
-              <Grid item xs={6}>
-                <Typography variant="h5" color="textPrimary" display="inline">
-                  {currentLayer}
-                </Typography>
-                <Typography variant="h6" color="textPrimary" display="inline">
-                  /{layerCount}&nbsp;
-                </Typography>
-                <Typography
-                  variant="body1"
-                  color="textSecondary"
-                  display="inline"
-                >
-                  layers
-                </Typography>
-              </Grid>
+        <div className={classes.gridRoot}>
+          <Grid container spacing={3}>
+            <Grid item xs={6}>
+              <Typography variant="h5" color="textPrimary" display="inline">
+                {renderTime(nullthrows(timeLeftSecs))}&nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                display="inline"
+              >
+                left
+              </Typography>
             </Grid>
-          </div>
+            <Grid item xs={6}>
+              <Typography variant="h5" color="textPrimary" display="inline">
+                {currentLayer}
+              </Typography>
+              <Typography variant="h6" color="textPrimary" display="inline">
+                /{layerCount}&nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                display="inline"
+              >
+                layers
+              </Typography>
+            </Grid>
+          </Grid>
+        </div>
 
-          {this._renderButtons()}
-        </React.Fragment>
-      );
-    }
+        {this._renderButtons()}
+      </React.Fragment>
+    );
+  }
+
+  render(): React.ReactElement | null {
+    const { classes } = this.props;
 
     return (
       <Card className={classes.root}>
@@ -310,7 +323,7 @@ class PrintStatus extends React.Component<
           >
             Elegoo Mars Pro
           </Typography>
-          {content}
+          {this._renderContent()}
         </CardContent>
       </Card>
     );

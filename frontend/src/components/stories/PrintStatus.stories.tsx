@@ -78,3 +78,12 @@ StartingPrint.args = {
   print_time_secs: 4800,
   time_left_secs: 4800,
 };
+
+export const Loading = (): React.ReactElement => {
+  axiosMock.onGet("api/print_status").abortRequest();
+  return (
+    <MemoryRouter>
+      <PrintStatus />
+    </MemoryRouter>
+  );
+};
