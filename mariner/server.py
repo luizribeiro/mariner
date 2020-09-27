@@ -162,6 +162,7 @@ class PrinterCommand(Enum):
 
 class CacheBootstrapper(multiprocessing.Process):
     def run(self) -> None:
+        os.nice(5)
         filename_list = os.listdir(FILES_DIRECTORY)
         for filename in filename_list:
             _read_ctb_file(filename)
