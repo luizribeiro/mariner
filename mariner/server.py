@@ -122,7 +122,7 @@ def file_details() -> str:
         {
             "filename": ctb_file.filename,
             "bed_size_mm": list(ctb_file.bed_size_mm),
-            "height_mm": ctb_file.height_mm,
+            "height_mm": round(ctb_file.height_mm, 4),
             "layer_count": ctb_file.layer_count,
             "layer_height_mm": round(ctb_file.layer_height_mm, 4),
             "resolution": list(ctb_file.resolution),
