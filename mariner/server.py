@@ -166,6 +166,7 @@ class CacheBootstrapper(multiprocessing.Process):
         filename_list = os.listdir(FILES_DIRECTORY)
         for filename in filename_list:
             _read_ctb_file(filename)
+        for filename in filename_list:
             _read_preview(filename)
 
 
