@@ -98,7 +98,7 @@ export default function FileDetailsDialog(
   return (
     <Dialog {...props}>
       <DialogTitle>{props.filename}</DialogTitle>
-      <DialogContent dividers>
+      <DialogContent style={{ padding: 0 }} dividers>
         <FileDetails filename={props.filename} />
       </DialogContent>
       <DialogActions>

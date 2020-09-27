@@ -1,4 +1,3 @@
-import Box from "@material-ui/core/Box";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { makeStyles } from "@material-ui/core/styles";
 import React from "react";
@@ -6,8 +5,25 @@ import React from "react";
 const useStyles = makeStyles({
   root: {
     background: "#5a5a5a",
-    width: 400,
-    height: 300,
+    paddingTop: "calc(3 / 4 * 100%)",
+    position: "relative",
+  },
+  image: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+  },
+  iconContainer: {
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
@@ -20,17 +36,18 @@ export default function FilePreview({
   const [progressDisplay, setProgressDisplay] = React.useState("block");
 
   return (
-    <Box
-      display="flex"
-      alignItems="center"
-      justifyContent="center"
-      className={classes.root}
-    >
-      <CircularProgress
-        style={{ color: "#aaa", display: progressDisplay }}
-        size={60}
+    <div className={classes.root}>
+      <div className={classes.iconContainer}>
+        <CircularProgress
+          style={{ color: "#aaa", display: progressDisplay }}
+          size={60}
+        />
+      </div>
+      <img
+        className={classes.image}
+        src={src}
+        onLoad={() => setProgressDisplay("none")}
       />
-      <img src={src} onLoad={() => setProgressDisplay("none")} />
-    </Box>
+    </div>
   );
 }
