@@ -29,6 +29,41 @@ class CTBHeader(LittleEndianStruct):
     layer_count: int = StructType.uint32()
     low_res_preview_offset: int = StructType.uint32()
     print_time: int = StructType.uint32()
+    projector: int = StructType.uint32()
+    param_offset: int = StructType.uint32()
+    param_size: int = StructType.uint32()
+    anti_alias_level: int = StructType.uint32()
+    light_pwm: int = StructType.uint16()
+    bottom_light_pwm: int = StructType.uint16()
+    encryption_seed: int = StructType.uint32()
+    slicer_offset: int = StructType.uint32()
+    slicer_size: int = StructType.uint32()
+
+
+@dataclass(frozen=True)
+class CTBSlicer(LittleEndianStruct):
+    skip_0: int = StructType.uint32()
+    skip_1: int = StructType.uint32()
+    skip_2: int = StructType.uint32()
+    skip_3: int = StructType.uint32()
+    skip_4: int = StructType.uint32()
+    skip_5: int = StructType.uint32()
+    skip_6: int = StructType.uint32()
+    machine_offset: int = StructType.uint32()
+    machine_size: int = StructType.uint32()
+    encryption_mode: int = StructType.uint32()
+    time_seconds: int = StructType.uint32()
+    unknown_01: int = StructType.uint32()
+    version_patch: int = StructType.unsigned_char()
+    version_minor: int = StructType.unsigned_char()
+    version_major: int = StructType.unsigned_char()
+    version_release: int = StructType.unsigned_char()
+    unknown_02: int = StructType.uint32()
+    unknown_03: int = StructType.uint32()
+    unknown_04: float = StructType.float32()
+    unknown_05: int = StructType.uint32()
+    unknown_06: int = StructType.uint32()
+    unknown_07: float = StructType.float32()
 
 
 @dataclass(frozen=True)
@@ -97,11 +132,19 @@ class CTBFile:
     resolution: Tuple[int, int]
     print_time_secs: int
     end_byte_offset_by_layer: Sequence[int]
+    slicer_version: str
+    printer_name: str
 
     @classmethod
     def read(self, path: pathlib.Path) -> "CTBFile":
         with open(str(path), "rb") as file:
             ctb_header = CTBHeader.unpack(file.read(CTBHeader.get_size()))
+
+            file.seek(ctb_header.slicer_offset)
+            ctb_slicer = CTBSlicer.unpack(file.read(CTBSlicer.get_size()))
+
+            file.seek(ctb_slicer.machine_offset)
+            printer_name = file.read(ctb_slicer.machine_size).decode()
 
             end_byte_offset_by_layer = []
             for layer in range(0, ctb_header.layer_count):
@@ -124,6 +167,15 @@ class CTBFile:
                 resolution=(ctb_header.resolution_x, ctb_header.resolution_y),
                 print_time_secs=ctb_header.print_time,
                 end_byte_offset_by_layer=end_byte_offset_by_layer,
+                slicer_version=".".join(
+                    [
+                        str(ctb_slicer.version_release),
+                        str(ctb_slicer.version_major),
+                        str(ctb_slicer.version_minor),
+                        str(ctb_slicer.version_patch),
+                    ]
+                ),
+                printer_name=printer_name,
             )
 
     @classmethod

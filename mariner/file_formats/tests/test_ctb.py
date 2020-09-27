@@ -26,6 +26,8 @@ class CTBFileTest(TestCase):
         expect(ctb_file.end_byte_offset_by_layer[-5:]).to_equal(
             [822027, 824704, 827383, 830061, 832745]
         )
+        expect(ctb_file.slicer_version).to_equal("1.6.5.1")
+        expect(ctb_file.printer_name).to_equal("ELEGOO MARS Pro")
 
     def test_preview_rendering(self) -> None:
         path = pathlib.Path(__file__).parent.absolute() / "stairs.ctb"
