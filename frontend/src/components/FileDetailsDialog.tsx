@@ -12,6 +12,7 @@ import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { renderTime } from "../utils";
+import FilePreview from "./FilePreview";
 
 interface FileDetailsAPIResponse {
   filename: string;
@@ -69,7 +70,7 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
 
     return (
       <React.Fragment>
-        <img src={imgURL} alt="3D model preview" />
+        <FilePreview src={imgURL} />
         <Table>
           <TableBody>
             {this._getTableContent(data).map((row) => (
