@@ -62,7 +62,16 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
 
   render(): React.ReactElement {
     if (this.state.isLoading) {
-      return <CircularProgress />;
+      return (
+        <CircularProgress
+          style={{
+            paddingTop: 30,
+            paddingBottom: 30,
+            paddingLeft: 100,
+            paddingRight: 100,
+          }}
+        />
+      );
     }
 
     const data = nullthrows(this.state.data);

@@ -5,7 +5,7 @@ import MockAdapter from "axios-mock-adapter";
 import React from "react";
 import FileDetailsDialog from "../FileDetailsDialog";
 
-const axiosMock = new MockAdapter(axios, { delayResponse: 500 });
+const axiosMock = new MockAdapter(axios);
 
 export default {
   title: "FileDetailsDialog",
@@ -49,3 +49,31 @@ const Template: Story = (_args) => {
 };
 
 export const Default = Template.bind({});
+
+export const Loading = (): React.ReactElement => {
+  axiosMock.onGet("api/file_details").abortRequest();
+
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleClickOpen}>Open</Button>
+      <FileDetailsDialog
+        filename="stairs.ctb"
+        onCancel={handleClose}
+        onClose={handleClose}
+        onPrint={handleClose}
+        open={open}
+        scroll="paper"
+      />
+    </div>
+  );
+};
