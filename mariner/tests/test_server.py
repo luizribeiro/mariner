@@ -131,6 +131,10 @@ class MarinerServerTest(TestCase):
             }
         )
 
+    def test_list_files_from_invalid_directory(self) -> None:
+        response = self.client.get("/api/list_files?path=../foo/")
+        expect(response.status_code).to_equal(400)
+
     def test_command_start_printing(self) -> None:
         response = self.client.post(
             "/api/printer/command/start_print?filename=foobar.ctb"

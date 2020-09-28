@@ -5,7 +5,15 @@ import os
 from enum import Enum
 
 import png
-from flask import Flask, Response, jsonify, make_response, render_template, request
+from flask import (
+    Flask,
+    Response,
+    abort,
+    jsonify,
+    make_response,
+    render_template,
+    request,
+)
 from flask_caching import Cache
 from pyre_extensions import none_throws
 from waitress import serve
@@ -103,7 +111,11 @@ def print_status() -> str:
 
 @app.route("/api/list_files", methods=["GET"])
 def list_files() -> str:
-    filename_list = os.listdir(FILES_DIRECTORY)
+    path_parameter = str(request.args.get("path", "."))
+    path = (FILES_DIRECTORY / path_parameter).resolve()
+    if FILES_DIRECTORY not in path.parents and path != FILES_DIRECTORY:
+        abort(400)
+    filename_list = os.listdir(path)
     files = []
     for filename in filename_list:
         ctb_file = _read_ctb_file(filename)
