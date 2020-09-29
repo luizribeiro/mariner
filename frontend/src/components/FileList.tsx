@@ -122,7 +122,9 @@ export default class FileList extends React.Component<{}, FileListState> {
         onSelect={(dirname) =>
           this.setState(
             (state, _props) => ({
+              isLoading: true,
               path: `${state.path}${dirname}/`,
+              data: undefined,
             }),
             async () => await this.refresh()
           )
@@ -141,7 +143,9 @@ export default class FileList extends React.Component<{}, FileListState> {
           onSelect={(_) =>
             this.setState(
               (state, _props) => ({
+                isLoading: true,
                 path: state.path.replace(/[^/]+\/$/, ""),
+                data: undefined,
               }),
               async () => await this.refresh()
             )
