@@ -182,11 +182,10 @@ class PrinterCommand(Enum):
 class CacheBootstrapper(multiprocessing.Process):
     def run(self) -> None:
         os.nice(5)
-        filename_list = os.listdir(FILES_DIRECTORY)
-        for filename in filename_list:
-            _read_ctb_file(FILES_DIRECTORY / filename)
-        for filename in filename_list:
-            _read_preview(FILES_DIRECTORY / filename)
+        for file in FILES_DIRECTORY.rglob("*.ctb"):
+            _read_ctb_file(file.absolute())
+        for file in FILES_DIRECTORY.rglob("*.ctb"):
+            _read_preview(file.absolute())
 
 
 @app.route("/api/printer/command/<command>", methods=["POST"])
