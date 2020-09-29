@@ -1,6 +1,6 @@
 import unittest.mock
 from unittest import TestCase
-from unittest.mock import MagicMock, Mock, patch
+from unittest.mock import MagicMock, Mock, call, patch
 
 import serial
 from pyexpect import expect
@@ -191,18 +191,49 @@ class ElegooMarsTest(TestCase):
         self.serial_port_mock.write.assert_called_once_with(b"M33")
 
     def test_start_printing(self) -> None:
-        self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
+        self.serial_port_mock.readline.side_effect = [
+            b"File opened:/benchy.ctb Size:11494803\r\n",
+            b"ok N:0\r\n",
+        ]
         self.printer.open()
         self.printer.start_printing("benchy.ctb")
-        self.serial_port_mock.write.assert_called_once_with(b"M6030 'benchy.ctb'")
+        self.serial_port_mock.write.assert_has_calls(
+            [
+                call(b"M23 benchy.ctb"),
+                call(b"M6030 'benchy.ctb'"),
+            ]
+        )
+        self.printer.close()
+
+    def test_start_printing_from_subdirectory(self) -> None:
+        self.serial_port_mock.readline.side_effect = [
+            b"File opened:/more/model.ctb Size:11494803\r\n",
+            b"ok N:0\r\n",
+        ]
+        self.printer.open()
+        self.printer.start_printing("more/model.ctb")
+        self.serial_port_mock.write.assert_has_calls(
+            [
+                call(b"M23 more/model.ctb"),
+                call(b"M6030 'model.ctb'"),
+            ]
+        )
         self.printer.close()
 
     def test_start_printing_with_invalid_response(self) -> None:
-        self.serial_port_mock.readline.return_value = b"foobar\r\n"
+        self.serial_port_mock.readline.side_effect = [
+            b"File opened:/benchy.ctb Size:11494803\r\n",
+            b"foobar\r\n",
+        ]
         self.printer.open()
         with self.assertRaises(UnexpectedResponse):
             self.printer.start_printing("benchy.ctb")
-        self.serial_port_mock.write.assert_called_once_with(b"M6030 'benchy.ctb'")
+        self.serial_port_mock.write.assert_has_calls(
+            [
+                call(b"M23 benchy.ctb"),
+                call(b"M6030 'benchy.ctb'"),
+            ]
+        )
         self.printer.close()
 
     def test_resume_printing(self) -> None:

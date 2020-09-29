@@ -1,3 +1,4 @@
+import os
 import re
 from dataclasses import dataclass
 from enum import Enum
@@ -129,8 +130,12 @@ class ElegooMars:
             raise UnexpectedResponse(response)
 
     def start_printing(self, filename: str) -> None:
+        # the printer's firmware is weird when the file is in a subdirectory. we need to
+        # send M23 to select the file with its full path and then M6030 with just the
+        # basename.
+        self.select_file(filename)
         response = self._send_and_read(
-            (f"M6030 '{filename}'").encode(),
+            (f"M6030 '{os.path.basename(filename)}'").encode(),
             # the mainboard takes longer to reply to this command, so we override the
             # timeout to 2 seconds
             timeout_secs=2.0,
