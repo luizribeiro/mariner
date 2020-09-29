@@ -149,6 +149,16 @@ class ElegooMarsTest(TestCase):
         self.serial_port_mock.write.assert_called_once_with(b"M4006")
         expect(selected_file).equals("LittleBBC.ctb")
 
+    def test_get_selected_file_with_leading_slash(self) -> None:
+        self.serial_port_mock.readline.return_value = b"ok '/subdir/LittleBBC.ctb'\r\n"
+
+        self.printer.open()
+        selected_file = self.printer.get_selected_file()
+        self.printer.close()
+
+        self.serial_port_mock.write.assert_called_once_with(b"M4006")
+        expect(selected_file).equals("subdir/LittleBBC.ctb")
+
     def test_select_file(self) -> None:
         self.serial_port_mock.readline.return_value = (
             # FIXME: this isn't right, readline would return only the first one

@@ -102,12 +102,15 @@ class ElegooMars:
 
     def get_selected_file(self) -> str:
         data = self._send_and_read(b"M4006")
-        return str(
+        selected_file = str(
             none_throws(
                 re.search("ok '([^']+)'\r\n", data),
                 "Received invalid status response from printer",
             ).group(1)
         )
+        # normalize the selected file by removing the leading slash, which is
+        # sometimes returned by the printer
+        return re.sub("^/", "", selected_file)
 
     def select_file(self, filename: str) -> None:
         response = self._send_and_read((f"M23 /{filename}").encode())
