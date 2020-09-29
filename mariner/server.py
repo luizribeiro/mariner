@@ -126,6 +126,9 @@ def list_files() -> str:
                 files.append(
                     {
                         "filename": dir_entry.name,
+                        "path": str(
+                            (path / dir_entry.name).relative_to(FILES_DIRECTORY)
+                        ),
                         "print_time_secs": ctb_file.print_time_secs,
                     }
                 )

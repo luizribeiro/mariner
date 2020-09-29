@@ -148,8 +148,8 @@ class MarinerServerTest(TestCase):
             {
                 "directories": [{"dirname": "subdir"}],
                 "files": [
-                    {"filename": "a.ctb", "print_time_secs": 200},
-                    {"filename": "b.ctb", "print_time_secs": 200},
+                    {"filename": "a.ctb", "path": "a.ctb", "print_time_secs": 200},
+                    {"filename": "b.ctb", "path": "b.ctb", "print_time_secs": 200},
                 ],
             }
         )
