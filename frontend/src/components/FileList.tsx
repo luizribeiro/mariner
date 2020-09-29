@@ -112,7 +112,6 @@ export default class FileList extends React.Component<{}, FileListState> {
     if (this.state.isLoading) {
       return null;
     }
-    console.log(this.state.path);
 
     const { directories, files } = nullthrows(this.state.data);
     const directoryListItems = directories.map((directory) => (
