@@ -149,6 +149,7 @@ def file_details() -> str:
     return jsonify(
         {
             "filename": ctb_file.filename,
+            "path": filename,
             "bed_size_mm": list(ctb_file.bed_size_mm),
             "height_mm": round(ctb_file.height_mm, 4),
             "layer_count": ctb_file.layer_count,
