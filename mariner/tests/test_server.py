@@ -154,6 +154,48 @@ class MarinerServerTest(TestCase):
             }
         )
 
+    @patch("mariner.server.os.scandir")
+    def test_list_files_under_subdirectory(self, _scandir_mock: MagicMock) -> None:
+        subdir = Mock(spec=DirEntry)
+        subdir.name = "subdir"
+        subdir.is_file.return_value = False
+        subdir.is_dir.return_value = True
+        a_ctb = Mock(spec=DirEntry)
+        a_ctb.name = "a.ctb"
+        a_ctb.is_file.return_value = True
+        a_ctb.is_dir.return_value = False
+        b_ctb = Mock(spec=DirEntry)
+        b_ctb.name = "b.ctb"
+        b_ctb.is_file.return_value = True
+        a_ctb.is_dir.return_value = False
+
+        _scandir_context_manager_mock = MagicMock()
+        _scandir_context_manager_mock.__enter__().__iter__.return_value = [
+            subdir,
+            a_ctb,
+            b_ctb,
+        ]
+        _scandir_mock.return_value = _scandir_context_manager_mock
+
+        response = self.client.get("/api/list_files?path=foo/bar/")
+        expect(response.get_json()).to_equal(
+            {
+                "directories": [{"dirname": "subdir"}],
+                "files": [
+                    {
+                        "filename": "a.ctb",
+                        "path": "foo/bar/a.ctb",
+                        "print_time_secs": 200,
+                    },
+                    {
+                        "filename": "b.ctb",
+                        "path": "foo/bar/b.ctb",
+                        "print_time_secs": 200,
+                    },
+                ],
+            }
+        )
+
     def test_list_files_from_invalid_directory(self) -> None:
         response = self.client.get("/api/list_files?path=../foo/")
         expect(response.status_code).to_equal(400)
