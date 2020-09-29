@@ -12,7 +12,18 @@ export default {
 };
 
 const Template: Story = (_args) => {
-  axiosMock.onGet("api/list_files").reply(200, {
+  axiosMock.onGet("api/list_files?path=figures/").reply(200, {
+    directories: [],
+    files: [{ filename: "batman.ctb", print_time_secs: 3600 }],
+  });
+
+  axiosMock.onGet("api/list_files?path=functional/").reply(200, {
+    directories: [],
+    files: [{ filename: "headphone-holder.ctb", print_time_secs: 3600 }],
+  });
+
+  axiosMock.onGet("api/list_files?path=").reply(200, {
+    directories: [{ dirname: "figures" }, { dirname: "functional" }],
     files: [
       { filename: "z-axis-stabilizer.ctb", print_time_secs: 3600 },
       { filename: "case v2.ctb", print_time_secs: 3540 },
