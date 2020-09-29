@@ -166,6 +166,9 @@ def file_details() -> str:
 @app.route("/api/file_preview", methods=["GET"])
 def file_preview() -> Response:
     filename = str(request.args.get("filename"))
+    path = (FILES_DIRECTORY / filename).resolve()
+    if FILES_DIRECTORY not in path.parents:
+        abort(400)
 
     preview_bytes = _read_preview(filename)
 

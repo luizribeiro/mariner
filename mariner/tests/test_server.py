@@ -296,3 +296,7 @@ class MarinerServerTest(TestCase):
             expect(hashlib.md5(response.get_data()).hexdigest()).to_equal(
                 "ca98c806d42898ba70626e556f714928"
             )
+
+    def test_file_preview_with_invalid_path(self) -> None:
+        response = self.client.get("/api/file_preview?filename=../../etc/passwd")
+        expect(response.status_code).to_equal(400)
