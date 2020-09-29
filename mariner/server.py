@@ -170,7 +170,7 @@ def file_preview() -> Response:
     if FILES_DIRECTORY not in path.parents:
         abort(400)
 
-    preview_bytes = _read_preview(filename)
+    preview_bytes = _read_preview(path)
 
     response = make_response(preview_bytes)
     response.headers.set("Content-Type", "image/png")
