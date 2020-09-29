@@ -157,7 +157,7 @@ class ElegooMarsTest(TestCase):
         self.printer.open()
         self.printer.select_file("lattice.ctb")
         self.printer.close()
-        self.serial_port_mock.write.assert_called_once_with(b"M23 lattice.ctb")
+        self.serial_port_mock.write.assert_called_once_with(b"M23 /lattice.ctb")
 
     def test_select_nonexisting_file(self) -> None:
         self.serial_port_mock.readline.return_value = (
@@ -170,7 +170,7 @@ class ElegooMarsTest(TestCase):
         with self.assertRaises(UnexpectedResponse):
             self.printer.select_file("foobar.ctb")
         self.printer.close()
-        self.serial_port_mock.write.assert_called_once_with(b"M23 foobar.ctb")
+        self.serial_port_mock.write.assert_called_once_with(b"M23 /foobar.ctb")
 
     def test_stop_printing(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
@@ -199,7 +199,7 @@ class ElegooMarsTest(TestCase):
         self.printer.start_printing("benchy.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
-                call(b"M23 benchy.ctb"),
+                call(b"M23 /benchy.ctb"),
                 call(b"M6030 'benchy.ctb'"),
             ]
         )
@@ -214,7 +214,7 @@ class ElegooMarsTest(TestCase):
         self.printer.start_printing("more/model.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
-                call(b"M23 more/model.ctb"),
+                call(b"M23 /more/model.ctb"),
                 call(b"M6030 'model.ctb'"),
             ]
         )
@@ -230,7 +230,7 @@ class ElegooMarsTest(TestCase):
             self.printer.start_printing("benchy.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
-                call(b"M23 benchy.ctb"),
+                call(b"M23 /benchy.ctb"),
                 call(b"M6030 'benchy.ctb'"),
             ]
         )

@@ -110,7 +110,7 @@ class ElegooMars:
         )
 
     def select_file(self, filename: str) -> None:
-        response = self._send_and_read((f"M23 {filename}").encode())
+        response = self._send_and_read((f"M23 /{filename}").encode())
         if "File opened" not in response:
             raise UnexpectedResponse(response)
 
