@@ -48,11 +48,13 @@ cache = Cache(app)
 
 @cache.memoize(timeout=0)
 def _read_ctb_file(filename: str) -> CTBFile:
+    assert os.path.isabs(filename)
     return CTBFile.read(FILES_DIRECTORY / filename)
 
 
 @cache.memoize(timeout=0)
 def _read_preview(filename: str) -> bytes:
+    assert os.path.isabs(filename)
     bytes = io.BytesIO()
     preview_image: png.Image = CTBFile.read_preview(FILES_DIRECTORY / filename)
     preview_image.write(bytes)
@@ -74,7 +76,7 @@ def print_status() -> str:
             progress = 0.0
             print_details = {}
         else:
-            ctb_file = _read_ctb_file(selected_file)
+            ctb_file = _read_ctb_file(FILES_DIRECTORY / selected_file)
 
             if print_status.current_byte == 0:
                 current_layer = 1
@@ -116,16 +118,22 @@ def list_files() -> str:
     if FILES_DIRECTORY not in path.parents and path != FILES_DIRECTORY:
         abort(400)
     with os.scandir(path) as dir_entries:
-        files = [
-            {
-                "filename": dir_entry.name,
-                "print_time_secs": _read_ctb_file(dir_entry.name).print_time_secs,
-            }
-            for dir_entry in dir_entries
-            if dir_entry.is_file()
-        ]
+        files = []
+        directories = []
+        for dir_entry in dir_entries:
+            if dir_entry.is_file():
+                ctb_file = _read_ctb_file(path / dir_entry.name)
+                files.append(
+                    {
+                        "filename": dir_entry.name,
+                        "print_time_secs": ctb_file.print_time_secs,
+                    }
+                )
+            else:
+                directories.append({"dirname": dir_entry.name})
         return jsonify(
             {
+                "directories": directories,
                 "files": files,
             }
         )
@@ -134,7 +142,7 @@ def list_files() -> str:
 @app.route("/api/file_details", methods=["GET"])
 def file_details() -> str:
     filename = str(request.args.get("filename"))
-    ctb_file = _read_ctb_file(filename)
+    ctb_file = _read_ctb_file(FILES_DIRECTORY / filename)
     return jsonify(
         {
             "filename": ctb_file.filename,
@@ -176,9 +184,9 @@ class CacheBootstrapper(multiprocessing.Process):
         os.nice(5)
         filename_list = os.listdir(FILES_DIRECTORY)
         for filename in filename_list:
-            _read_ctb_file(filename)
+            _read_ctb_file(FILES_DIRECTORY / filename)
         for filename in filename_list:
-            _read_preview(filename)
+            _read_preview(FILES_DIRECTORY / filename)
 
 
 @app.route("/api/printer/command/<command>", methods=["POST"])

@@ -122,15 +122,22 @@ class MarinerServerTest(TestCase):
 
     @patch("mariner.server.os.scandir")
     def test_list_files(self, _scandir_mock: MagicMock) -> None:
+        subdir = Mock(spec=DirEntry)
+        subdir.name = "subdir"
+        subdir.is_file.return_value = False
+        subdir.is_dir.return_value = True
         a_ctb = Mock(spec=DirEntry)
         a_ctb.name = "a.ctb"
         a_ctb.is_file.return_value = True
+        a_ctb.is_dir.return_value = False
         b_ctb = Mock(spec=DirEntry)
         b_ctb.name = "b.ctb"
         b_ctb.is_file.return_value = True
+        a_ctb.is_dir.return_value = False
 
         _scandir_context_manager_mock = MagicMock()
         _scandir_context_manager_mock.__enter__().__iter__.return_value = [
+            subdir,
             a_ctb,
             b_ctb,
         ]
@@ -139,6 +146,7 @@ class MarinerServerTest(TestCase):
         response = self.client.get("/api/list_files")
         expect(response.get_json()).to_equal(
             {
+                "directories": [{"dirname": "subdir"}],
                 "files": [
                     {"filename": "a.ctb", "print_time_secs": 200},
                     {"filename": "b.ctb", "print_time_secs": 200},
