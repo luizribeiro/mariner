@@ -1,5 +1,6 @@
 import hashlib
 import pathlib
+from os import DirEntry
 from unittest import TestCase
 from unittest.mock import patch, MagicMock, Mock
 
@@ -119,8 +120,22 @@ class MarinerServerTest(TestCase):
             }
         )
 
-    @patch("mariner.server.os.listdir", return_value=["a.ctb", "b.ctb"])
-    def test_list_files(self, _list_dir_mock: MagicMock) -> None:
+    @patch("mariner.server.os.scandir")
+    def test_list_files(self, _scandir_mock: MagicMock) -> None:
+        a_ctb = Mock(spec=DirEntry)
+        a_ctb.name = "a.ctb"
+        a_ctb.is_file.return_value = True
+        b_ctb = Mock(spec=DirEntry)
+        b_ctb.name = "b.ctb"
+        b_ctb.is_file.return_value = True
+
+        _scandir_context_manager_mock = MagicMock()
+        _scandir_context_manager_mock.__enter__().__iter__.return_value = [
+            a_ctb,
+            b_ctb,
+        ]
+        _scandir_mock.return_value = _scandir_context_manager_mock
+
         response = self.client.get("/api/list_files")
         expect(response.get_json()).to_equal(
             {

@@ -115,21 +115,20 @@ def list_files() -> str:
     path = (FILES_DIRECTORY / path_parameter).resolve()
     if FILES_DIRECTORY not in path.parents and path != FILES_DIRECTORY:
         abort(400)
-    filename_list = os.listdir(path)
-    files = []
-    for filename in filename_list:
-        ctb_file = _read_ctb_file(filename)
-        files.append(
+    with os.scandir(path) as dir_entries:
+        files = [
             {
-                "filename": filename,
-                "print_time_secs": ctb_file.print_time_secs,
+                "filename": dir_entry.name,
+                "print_time_secs": _read_ctb_file(dir_entry.name).print_time_secs,
+            }
+            for dir_entry in dir_entries
+            if dir_entry.is_file()
+        ]
+        return jsonify(
+            {
+                "files": files,
             }
         )
-    return jsonify(
-        {
-            "files": files,
-        }
-    )
 
 
 @app.route("/api/file_details", methods=["GET"])
