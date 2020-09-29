@@ -142,7 +142,10 @@ def list_files() -> str:
 @app.route("/api/file_details", methods=["GET"])
 def file_details() -> str:
     filename = str(request.args.get("filename"))
-    ctb_file = _read_ctb_file(FILES_DIRECTORY / filename)
+    path = (FILES_DIRECTORY / filename).resolve()
+    if FILES_DIRECTORY not in path.parents:
+        abort(400)
+    ctb_file = _read_ctb_file(path)
     return jsonify(
         {
             "filename": ctb_file.filename,

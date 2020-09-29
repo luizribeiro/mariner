@@ -208,6 +208,10 @@ class MarinerServerTest(TestCase):
                 }
             )
 
+    def test_file_details_with_invalid_path(self) -> None:
+        response = self.client.get("/api/file_details?filename=../../etc/passwd")
+        expect(response.status_code).to_equal(400)
+
     def test_file_preview(self) -> None:
         path = (
             pathlib.Path(__file__).parent.parent.absolute()
