@@ -16,6 +16,7 @@ import FilePreview from "./FilePreview";
 
 interface FileDetailsAPIResponse {
   filename: string;
+  path: string;
   bed_size_mm: [number, number, number];
   height_mm: number;
   layer_count: number;
@@ -26,6 +27,7 @@ interface FileDetailsAPIResponse {
 
 interface FileDetailsProps {
   filename: string;
+  path: string;
 }
 
 interface FileDetailsState {
@@ -41,7 +43,7 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
   async componentDidMount(): Promise<void> {
     const response: AxiosResponse<FileDetailsAPIResponse> = await axios.get(
       "api/file_details",
-      { params: { filename: this.props.filename } }
+      { params: { filename: this.props.path } }
     );
     this.setState({
       isLoading: false,
@@ -75,7 +77,7 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
     }
 
     const data = nullthrows(this.state.data);
-    const imgURL = `api/file_preview?filename=${data.filename}`;
+    const imgURL = `api/file_preview?filename=${data.path}`;
 
     return (
       <React.Fragment>
@@ -100,6 +102,7 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
 export default function FileDetailsDialog(
   props: {
     filename: string;
+    path: string;
     onCancel: () => void;
     onPrint: () => void;
   } & DialogProps
@@ -108,7 +111,7 @@ export default function FileDetailsDialog(
     <Dialog {...props}>
       <DialogTitle>{props.filename}</DialogTitle>
       <DialogContent style={{ padding: 0 }} dividers>
-        <FileDetails filename={props.filename} />
+        <FileDetails filename={props.filename} path={props.path} />
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onCancel} color="primary">

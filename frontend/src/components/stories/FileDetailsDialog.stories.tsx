@@ -38,6 +38,7 @@ const Template: Story = (_args) => {
       <Button onClick={handleClickOpen}>Open</Button>
       <FileDetailsDialog
         filename="stairs.ctb"
+        path="stairs.ctb"
         onCancel={handleClose}
         onClose={handleClose}
         onPrint={handleClose}
@@ -68,6 +69,7 @@ export const Loading = (): React.ReactElement => {
       <Button onClick={handleClickOpen}>Open</Button>
       <FileDetailsDialog
         filename="stairs.ctb"
+        path="stairs.ctb"
         onCancel={handleClose}
         onClose={handleClose}
         onPrint={handleClose}

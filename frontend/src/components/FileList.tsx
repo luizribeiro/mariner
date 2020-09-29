@@ -20,6 +20,7 @@ interface DirectoryAPIResponse {
 
 interface FileAPIResponse {
   filename: string;
+  path: string;
   print_time_secs: number;
 }
 
@@ -63,10 +64,11 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
       </ListItem>
       <FileDetailsDialog
         filename={file.filename}
+        path={file.path}
         onCancel={handleClose}
         onClose={handleClose}
         onPrint={async () => {
-          await startPrint(file.filename);
+          await startPrint(file.path);
           setOpen(false);
           history.push("/");
         }}
