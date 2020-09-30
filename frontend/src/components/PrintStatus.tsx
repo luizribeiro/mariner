@@ -21,10 +21,6 @@ import { renderTime } from "../utils";
 
 const styles = () =>
   createStyles({
-    root: {
-      minWidth: 100,
-      maxWidth: 400,
-    },
     title: {
       fontSize: 16,
       fontWeight: "bold",
@@ -314,7 +310,7 @@ class PrintStatus extends React.Component<
     const { classes } = this.props;
 
     return (
-      <Card className={classes.root}>
+      <Card>
         <CardContent>
           <Typography
             className={classes.title}

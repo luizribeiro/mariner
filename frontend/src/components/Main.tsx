@@ -212,7 +212,7 @@ function Main({ width }: WithWidth): React.ReactElement {
         </SwipeableDrawer>
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
-          <Container maxWidth="lg" className={classes.container}>
+          <Container maxWidth="sm" className={classes.container}>
             <Switch>
               <Route path="/" component={PrintStatus} exact />
               <Route path="/files" component={FileList} />
