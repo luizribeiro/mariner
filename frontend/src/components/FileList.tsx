@@ -1,9 +1,12 @@
+import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import FolderIcon from "@material-ui/icons/Folder";
 import LayersIcon from "@material-ui/icons/Layers";
 import axios, { AxiosResponse } from "axios";
@@ -90,7 +93,16 @@ export interface FileListState {
   data?: FileListAPIResponse;
 }
 
-export default class FileList extends React.Component<{}, FileListState> {
+const styles = () =>
+  createStyles({
+    loadingContainer: {
+      flexGrow: 1,
+      padding: 18,
+      textAlign: "center",
+    },
+  });
+
+class FileList extends React.Component<WithStyles, FileListState> {
   state: FileListState = {
     isLoading: true,
     path: "",
@@ -110,9 +122,13 @@ export default class FileList extends React.Component<{}, FileListState> {
     await this.refresh();
   }
 
-  render(): React.ReactElement | null {
+  _renderContent(): React.ReactElement {
     if (this.state.isLoading) {
-      return null;
+      return (
+        <Box className={this.props.classes.loadingContainer}>
+          <CircularProgress />
+        </Box>
+      );
     }
 
     const { directories, files } = nullthrows(this.state.data);
@@ -155,15 +171,21 @@ export default class FileList extends React.Component<{}, FileListState> {
       ) : null;
 
     return (
+      <List>
+        {parentDirectoryItem}
+        {directoryListItems}
+        {fileListItems}
+      </List>
+    );
+  }
+
+  render(): React.ReactElement {
+    return (
       <Card>
-        <CardContent>
-          <List>
-            {parentDirectoryItem}
-            {directoryListItems}
-            {fileListItems}
-          </List>
-        </CardContent>
+        <CardContent>{this._renderContent()}</CardContent>
       </Card>
     );
   }
 }
+
+export default withStyles(styles)(FileList);
