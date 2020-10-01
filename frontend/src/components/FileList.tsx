@@ -13,7 +13,7 @@ import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { startPrint } from "../commands";
+import { deleteFile, startPrint } from "../commands";
 import { renderTime } from "../utils";
 import FileDetailsDialog from "./FileDetailsDialog";
 
@@ -50,7 +50,13 @@ function DirectoryListItem({
   );
 }
 
-function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
+function FileListItem({
+  file,
+  onDelete,
+}: {
+  file: FileAPIResponse;
+  onDelete: () => void;
+}): React.ReactElement {
   const [open, setOpen] = React.useState(false);
   const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -75,9 +81,10 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
           setOpen(false);
           history.push("/");
         }}
-        onDelete={() => {
+        onDelete={async () => {
+          await deleteFile(file.path);
           setOpen(false);
-          console.log(`KABOOM {file.path}`);
+          await onDelete();
         }}
         open={open}
         scroll="paper"
@@ -153,7 +160,11 @@ class FileList extends React.Component<WithStyles, FileListState> {
       />
     ));
     const fileListItems = files.map((file) => (
-      <FileListItem file={file} key={file.filename} />
+      <FileListItem
+        file={file}
+        key={file.filename}
+        onDelete={async () => await this.refresh()}
+      />
     ));
 
     const parentDirectoryItem =

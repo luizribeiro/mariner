@@ -12,6 +12,14 @@ export async function startPrint(filename: string): Promise<void> {
   );
 }
 
+export async function deleteFile(filename: string): Promise<void> {
+  const _response: AxiosResponse<CommandAPIResponse> = await axios.post(
+    "api/delete_file",
+    null,
+    { params: { filename } }
+  );
+}
+
 export async function cancelPrint(): Promise<void> {
   const _response: AxiosResponse<CommandAPIResponse> = await axios.post(
     "api/printer/command/cancel_print"
