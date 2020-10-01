@@ -6,6 +6,7 @@ from unittest.mock import patch, MagicMock, Mock
 
 from pyexpect import expect
 
+from mariner.config import FILES_DIRECTORY
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState, PrintStatus
 from mariner.server import app, _read_ctb_file
@@ -299,4 +300,25 @@ class MarinerServerTest(TestCase):
 
     def test_file_preview_with_invalid_path(self) -> None:
         response = self.client.get("/api/file_preview?filename=../../etc/passwd")
+        expect(response.status_code).to_equal(400)
+
+    def test_delete_file(self) -> None:
+        with patch("pathlib.PosixPath.is_file", return_value=True), patch(
+            "os.remove"
+        ) as remove_mock:
+            response = self.client.post("/api/delete_file?filename=mariner.ctb")
+        remove_mock.assert_called_once_with(FILES_DIRECTORY / "mariner.ctb")
+        expect(response.status_code).to_equal(200)
+        expect(response.get_json()).to_equal({"success": True})
+
+    def test_delete_file_that_is_not_file(self) -> None:
+        with patch("pathlib.PosixPath.is_file", return_value=False), patch(
+            "os.remove"
+        ) as remove_mock:
+            response = self.client.post("/api/delete_file?filename=mariner")
+        remove_mock.assert_not_called()
+        expect(response.status_code).to_equal(400)
+
+    def test_delete_file_with_invalid_path(self) -> None:
+        response = self.client.post("/api/delete_file?filename=../../etc/passwd")
         expect(response.status_code).to_equal(400)

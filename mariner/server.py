@@ -163,6 +163,18 @@ def file_details() -> str:
     )
 
 
+@app.route("/api/delete_file", methods=["POST"])
+def delete_file() -> str:
+    filename = str(request.args.get("filename"))
+    path = (FILES_DIRECTORY / filename).resolve()
+    if FILES_DIRECTORY not in path.parents:
+        abort(400)
+    if not path.is_file():
+        abort(400)
+    os.remove(path)
+    return jsonify({"success": True})
+
+
 @app.route("/api/file_preview", methods=["GET"])
 def file_preview() -> Response:
     filename = str(request.args.get("filename"))
