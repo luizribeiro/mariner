@@ -75,6 +75,10 @@ function FileListItem({ file }: { file: FileAPIResponse }): React.ReactElement {
           setOpen(false);
           history.push("/");
         }}
+        onDelete={() => {
+          setOpen(false);
+          console.log(`KABOOM {file.path}`);
+        }}
         open={open}
         scroll="paper"
       />

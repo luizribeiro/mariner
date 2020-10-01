@@ -3,11 +3,16 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog, { DialogProps } from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import IconButton from "@material-ui/core/IconButton";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
+import Typography from "@material-ui/core/Typography";
+import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
@@ -99,17 +104,69 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
   }
 }
 
+const useStyles = makeStyles({
+  dialogTitle: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  moreOptionsButton: {
+    padding: 4,
+  },
+});
+
 export default function FileDetailsDialog(
   props: {
     filename: string;
     path: string;
     onCancel: () => void;
     onPrint: () => void;
+    onDelete: () => void;
   } & DialogProps
 ): React.ReactElement {
+  const classes = useStyles();
+  const [
+    isDeleteConfirmationDialogOpen,
+    setDeleteConfirmationDialogOpen,
+  ] = React.useState(false);
+  const handleDeleteDialogClose = () => setDeleteConfirmationDialogOpen(false);
+  const handleDelete = () => {
+    setDeleteConfirmationDialogOpen(false);
+    props.onDelete();
+  };
+
   return (
     <Dialog {...props}>
-      <DialogTitle>{props.filename}</DialogTitle>
+      <DialogTitle className={classes.dialogTitle} disableTypography>
+        <Typography component="h2" variant="h6">
+          {props.filename}
+        </Typography>
+        <IconButton
+          className={classes.moreOptionsButton}
+          onClick={() => setDeleteConfirmationDialogOpen(true)}
+        >
+          <DeleteForeverIcon />
+        </IconButton>
+        <Dialog
+          open={isDeleteConfirmationDialogOpen}
+          onClose={handleDeleteDialogClose}
+        >
+          <DialogContent>
+            <DialogContentText>
+              Are you sure you want to <b>permanently delete</b> the file{" "}
+              <b>{props.filename}</b>?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button color="primary" onClick={handleDeleteDialogClose} autoFocus>
+              Cancel
+            </Button>
+            <Button color="primary" onClick={handleDelete}>
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </DialogTitle>
       <DialogContent style={{ padding: 0 }} dividers>
         <FileDetails filename={props.filename} path={props.path} />
       </DialogContent>

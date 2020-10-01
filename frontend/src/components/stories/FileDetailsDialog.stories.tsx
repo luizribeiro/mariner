@@ -42,6 +42,10 @@ const Template: Story = (_args) => {
         onCancel={handleClose}
         onClose={handleClose}
         onPrint={handleClose}
+        onDelete={() => {
+          handleClose();
+          console.log("KABOOM");
+        }}
         open={open}
         scroll="paper"
       />
@@ -73,6 +77,10 @@ export const Loading = (): React.ReactElement => {
         onCancel={handleClose}
         onClose={handleClose}
         onPrint={handleClose}
+        onDelete={() => {
+          handleClose();
+          console.log("KABOOM");
+        }}
         open={open}
         scroll="paper"
       />
