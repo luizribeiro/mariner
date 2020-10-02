@@ -1,6 +1,7 @@
 import Box from "@material-ui/core/Box";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -197,6 +198,7 @@ class FileList extends React.Component<WithStyles, FileListState> {
   render(): React.ReactElement {
     return (
       <Card>
+        <CardHeader title="Files" subheader={`/${this.state.path}`} />
         <CardContent>{this._renderContent()}</CardContent>
       </Card>
     );

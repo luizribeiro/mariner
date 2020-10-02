@@ -2,6 +2,7 @@ import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
+import CardHeader from "@material-ui/core/CardHeader";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Grid from "@material-ui/core/Grid";
 import LinearProgress from "@material-ui/core/LinearProgress";
@@ -21,11 +22,6 @@ import { renderTime } from "../utils";
 
 const styles = () =>
   createStyles({
-    title: {
-      fontSize: 16,
-      fontWeight: "bold",
-      paddingBottom: 12,
-    },
     playButton: {
       padding: 6,
     },
@@ -307,20 +303,10 @@ class PrintStatus extends React.Component<
   }
 
   render(): React.ReactElement | null {
-    const { classes } = this.props;
-
     return (
       <Card>
-        <CardContent>
-          <Typography
-            className={classes.title}
-            color="textPrimary"
-            gutterBottom
-          >
-            Elegoo Mars Pro
-          </Typography>
-          {this._renderContent()}
-        </CardContent>
+        <CardHeader title="Printer Status" subheader="Elegoo Mars Pro" />
+        <CardContent>{this._renderContent()}</CardContent>
       </Card>
     );
   }
