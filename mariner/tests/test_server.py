@@ -1,10 +1,12 @@
 import hashlib
+import io
 import pathlib
 from os import DirEntry
 from unittest import TestCase
 from unittest.mock import patch, MagicMock, Mock
 
 from pyexpect import expect
+from werkzeug.datastructures import FileStorage
 
 from mariner.config import FILES_DIRECTORY
 from mariner.file_formats.ctb import CTBFile
@@ -301,6 +303,36 @@ class MarinerServerTest(TestCase):
     def test_file_preview_with_invalid_path(self) -> None:
         response = self.client.get("/api/file_preview?filename=../../etc/passwd")
         expect(response.status_code).to_equal(400)
+
+    def test_upload_file_without_a_file(self) -> None:
+        response = self.client.post("/api/upload_file")
+        expect(response.status_code).to_equal(400)
+
+    def test_upload_file_with_an_empty_filename(self) -> None:
+        data = {"file": (io.BytesIO(b"abcdef"), "")}
+        response = self.client.post("/api/upload_file", data=data)
+        expect(response.status_code).to_equal(400)
+
+    def test_upload_file_with_an_unsupported_file_extension(self) -> None:
+        data = {"file": (io.BytesIO(b"abcdef"), "image.jpg")}
+        response = self.client.post("/api/upload_file", data=data)
+        expect(response.status_code).to_equal(400)
+
+    def test_upload_file(self) -> None:
+        data = {"file": (io.BytesIO(b"abcdef"), "myfile.ctb")}
+        with patch.object(FileStorage, "save") as save_file_mock:
+            response = self.client.post("/api/upload_file", data=data)
+        expect(response.status_code).to_equal(200)
+        expect(response.get_json()).to_equal({"success": True})
+        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY), "myfile.ctb")
+
+    def test_upload_file_with_sanitized_file(self) -> None:
+        data = {"file": (io.BytesIO(b"abcdef"), "../../../etc/passwd.ctb")}
+        with patch.object(FileStorage, "save") as save_file_mock:
+            response = self.client.post("/api/upload_file", data=data)
+        expect(response.status_code).to_equal(200)
+        expect(response.get_json()).to_equal({"success": True})
+        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY), "etc_passwd.ctb")
 
     def test_delete_file(self) -> None:
         with patch("pathlib.PosixPath.is_file", return_value=True), patch(

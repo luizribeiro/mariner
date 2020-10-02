@@ -17,6 +17,7 @@ from flask import (
 from flask_caching import Cache
 from pyre_extensions import none_throws
 from waitress import serve
+from werkzeug.utils import secure_filename
 from whitenoise import WhiteNoise
 
 from mariner.config import FILES_DIRECTORY
@@ -161,6 +162,18 @@ def file_details() -> str:
             "print_time_secs": ctb_file.print_time_secs,
         }
     )
+
+
+@app.route("/api/upload_file", methods=["POST"])
+def upload_file() -> str:
+    file = request.files.get("file")
+    if file is None or file.filename == "":
+        abort(400)
+    if os.path.splitext(file.filename)[1] != ".ctb":
+        abort(400)
+    filename = secure_filename(file.filename)
+    file.save(str(FILES_DIRECTORY), filename)
+    return jsonify({"success": True})
 
 
 @app.route("/api/delete_file", methods=["POST"])
