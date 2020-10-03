@@ -202,7 +202,9 @@ class FileList extends React.Component<WithStyles, FileListState> {
         <CardHeader
           title="Files"
           subheader={`/${this.state.path}`}
-          action={<UploadButton onUploadFinished={() => this.setState({})} />}
+          action={
+            <UploadButton onUploadFinished={async () => await this.refresh()} />
+          }
         />
         <CardContent>{this._renderContent()}</CardContent>
       </Card>

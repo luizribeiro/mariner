@@ -40,7 +40,7 @@ class UploadButton extends React.Component<
     await axios.post("api/upload_file", formData);
     await setState(this, { isUploading: false });
 
-    this.props.onUploadFinished();
+    await this.props.onUploadFinished();
   }
 
   render(): React.ReactElement {
