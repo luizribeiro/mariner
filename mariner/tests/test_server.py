@@ -324,7 +324,7 @@ class MarinerServerTest(TestCase):
             response = self.client.post("/api/upload_file", data=data)
         expect(response.status_code).to_equal(200)
         expect(response.get_json()).to_equal({"success": True})
-        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY), "myfile.ctb")
+        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY / "myfile.ctb"))
 
     def test_upload_file_with_sanitized_file(self) -> None:
         data = {"file": (io.BytesIO(b"abcdef"), "../../../etc/passwd.ctb")}
@@ -332,7 +332,7 @@ class MarinerServerTest(TestCase):
             response = self.client.post("/api/upload_file", data=data)
         expect(response.status_code).to_equal(200)
         expect(response.get_json()).to_equal({"success": True})
-        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY), "etc_passwd.ctb")
+        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY / "etc_passwd.ctb"))
 
     def test_delete_file(self) -> None:
         with patch("pathlib.PosixPath.is_file", return_value=True), patch(

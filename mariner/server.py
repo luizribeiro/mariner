@@ -172,7 +172,7 @@ def upload_file() -> str:
     if os.path.splitext(file.filename)[1] != ".ctb":
         abort(400)
     filename = secure_filename(file.filename)
-    file.save(str(FILES_DIRECTORY), filename)
+    file.save(str(FILES_DIRECTORY / filename))
     return jsonify({"success": True})
 
 
