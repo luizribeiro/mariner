@@ -3,7 +3,6 @@ import Card from "@material-ui/core/Card";
 import CardContent from "@material-ui/core/CardContent";
 import CardHeader from "@material-ui/core/CardHeader";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import IconButton from "@material-ui/core/IconButton";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
@@ -11,7 +10,6 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import FolderIcon from "@material-ui/icons/Folder";
 import LayersIcon from "@material-ui/icons/Layers";
-import PublishIcon from "@material-ui/icons/Publish";
 import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
@@ -19,6 +17,7 @@ import { useHistory } from "react-router-dom";
 import { deleteFile, startPrint } from "../commands";
 import { renderTime } from "../utils";
 import FileDetailsDialog from "./FileDetailsDialog";
+import UploadButton from "./UploadButton";
 
 interface DirectoryAPIResponse {
   dirname: string;
@@ -198,18 +197,12 @@ class FileList extends React.Component<WithStyles, FileListState> {
   }
 
   render(): React.ReactElement {
-    const uploadButton = (
-      <IconButton>
-        <PublishIcon />
-      </IconButton>
-    );
-
     return (
       <Card>
         <CardHeader
           title="Files"
           subheader={`/${this.state.path}`}
-          action={uploadButton}
+          action={<UploadButton onUploadFinished={() => this.setState({})} />}
         />
         <CardContent>{this._renderContent()}</CardContent>
       </Card>
