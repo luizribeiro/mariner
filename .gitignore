@@ -9,3 +9,7 @@ __pycache__/
 coverage
 frontend/dist/
 frontend/node_modules/
+
+debian/.debhelper/
+debian/mariner3d.debhelper.log
+debian/mariner3d/

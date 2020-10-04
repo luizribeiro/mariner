@@ -1,0 +1,15 @@
+#!/usr/bin/make -f
+# vim: set noexpandtab:
+
+include /usr/share/dpkg/architecture.mk
+
+%:
+	dh $@ --with python-virtualenv
+
+override_dh_virtualenv:
+	dh_virtualenv \
+		--python python3 \
+		--preinstall poetry==1.1.0 \
+		--preinstall dh-poetry==0.1.2 \
+		--requirements "poetry.lock" \
+		--pip-tool dh-poetry
