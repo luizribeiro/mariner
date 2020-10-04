@@ -2,11 +2,11 @@ Source: mariner3d
 Section: python
 Priority: extra
 Maintainer: Luiz Ribeiro <luizribeiro@gmail.com>
-Build-Depends: debhelper (>= 9), python3 (>= 3.7), dh-virtualenv (>= 1.1), libxslt-dev, libxml2-dev,
+Build-Depends: debhelper (>= 9), python3 (>= 3.7), dh-virtualenv (>= 1.1), libxslt-dev, libxml2-dev, zlib1g-dev
 Standards-Version: 3.9.5
 
 Package: mariner3d
 Architecture: any
 Pre-Depends: dpkg (>= 1.19.1), python3 (>= 3.7), ${misc:Pre-Depends}
-Depends: ${python:Depends}, ${misc:Depends}, libxslt, libxml2
+Depends: ${python:Depends}, ${misc:Depends}, libxslt, libxml2, zlib1g
 Description: An utility for controlling Elegoo Mars 3D printers
