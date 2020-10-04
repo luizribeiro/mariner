@@ -1,0 +1,41 @@
+---
+name: "Package mariner3d as .deb"
+
+# yamllint disable-line rule:truthy
+on: push
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Fetch new list of packages
+        run: sudo apt-get update
+
+      - name: Install qemu
+        run: >-
+          sudo apt-get -y --no-install-recommends install binfmt-support
+          qemu-user-static
+      - name: Setup docker with qemu
+        run: >-
+          docker run --rm --privileged multiarch/qemu-user-static:register
+          --reset
+
+      - name: Build Docker Image
+        run: docker build -f Dockerfile -t packager-image .
+
+      - name: Create docker container
+        run: docker create --name packager packager-image
+      - name: Copy .deb file
+        run: >-
+          docker cp
+          packager:mariner3d_0.0.1-1_armhf.deb
+          mariner3d_0.0.1-1_armhf.deb
+      - name: Shutdown container
+        run: docker rm -v packager
+
+      - uses: actions/upload-artifact@v2
+        with:
+          name: mariner3d_0.0.1-1_armhf.deb
+          path: mariner3d_0.0.1-1_armhf.deb
