@@ -23,9 +23,10 @@ from whitenoise import WhiteNoise
 from mariner.config import FILES_DIRECTORY
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState
+from mariner.server.utils import get_frontend_assets_path
 
 
-frontend_dist_directory: str = os.path.abspath("./frontend/dist/")
+frontend_dist_directory: str = get_frontend_assets_path()
 app = Flask(
     __name__,
     template_folder=frontend_dist_directory,
