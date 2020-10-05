@@ -7,7 +7,8 @@
     "stubs/"
   ],
   "ignore_all_errors": [
-    ".venv/"
+    ".venv/",
+    "dist/"
   ],
   "strict": 1
 }
