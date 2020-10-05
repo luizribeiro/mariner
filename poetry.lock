@@ -1,18 +1,18 @@
 [[package]]
-name = "appdirs"
-version = "1.4.4"
-description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
 category = "dev"
+description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
+name = "appdirs"
 optional = false
 python-versions = "*"
+version = "1.4.4"
 
 [[package]]
-name = "black"
-version = "20.8b1"
-description = "The uncompromising code formatter."
 category = "dev"
+description = "The uncompromising code formatter."
+name = "black"
 optional = false
 python-versions = ">=3.6"
+version = "20.8b1"
 
 [package.dependencies]
 appdirs = "*"
@@ -29,67 +29,70 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.3.2)", "aiohttp-cors"]
 
 [[package]]
-name = "click"
-version = "7.1.2"
-description = "Composable command line interface toolkit"
 category = "main"
+description = "Composable command line interface toolkit"
+name = "click"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "7.1.2"
 
 [[package]]
-name = "colorama"
-version = "0.4.3"
+category = "dev"
 description = "Cross-platform colored terminal text."
-category = "dev"
+name = "colorama"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.4.3"
 
 [[package]]
-name = "coverage"
-version = "5.3"
-description = "Code coverage measurement for Python"
 category = "dev"
+description = "Code coverage measurement for Python"
+name = "coverage"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, <4"
+version = "5.3"
 
 [package.extras]
 toml = ["toml"]
 
 [[package]]
-name = "dataclasses"
-version = "0.6"
-description = "A backport of the dataclasses module for Python 3.6"
 category = "dev"
+description = "A backport of the dataclasses module for Python 3.6"
+name = "dataclasses"
 optional = false
 python-versions = "*"
+version = "0.6"
 
 [[package]]
-name = "flake8"
-version = "3.8.3"
-description = "the modular source code checker: pep8 pyflakes and co"
 category = "dev"
+description = "the modular source code checker: pep8 pyflakes and co"
+name = "flake8"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,>=2.7"
+version = "3.8.4"
 
 [package.dependencies]
-importlib-metadata = {version = "*", markers = "python_version < \"3.8\""}
 mccabe = ">=0.6.0,<0.7.0"
 pycodestyle = ">=2.6.0a1,<2.7.0"
 pyflakes = ">=2.2.0,<2.3.0"
 
+[package.dependencies.importlib-metadata]
+python = "<3.8"
+version = "*"
+
 [[package]]
-name = "flask"
-version = "1.1.2"
-description = "A simple framework for building complex web applications."
 category = "main"
+description = "A simple framework for building complex web applications."
+name = "flask"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "1.1.2"
 
 [package.dependencies]
-click = ">=5.1"
-itsdangerous = ">=0.24"
 Jinja2 = ">=2.10.1"
 Werkzeug = ">=0.15"
+click = ">=5.1"
+itsdangerous = ">=0.24"
 
 [package.extras]
 dev = ["pytest", "coverage", "tox", "sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
@@ -97,23 +100,23 @@ docs = ["sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-
 dotenv = ["python-dotenv"]
 
 [[package]]
-name = "flask-caching"
-version = "1.9.0"
-description = "Adds caching support to your Flask application"
 category = "main"
+description = "Adds caching support to your Flask application"
+name = "flask-caching"
 optional = false
 python-versions = "*"
+version = "1.9.0"
 
 [package.dependencies]
 Flask = "*"
 
 [[package]]
-name = "green"
-version = "3.2.2"
-description = "Green is a clean, colorful, fast python test runner."
 category = "dev"
+description = "Green is a clean, colorful, fast python test runner."
+name = "green"
 optional = false
 python-versions = "*"
+version = "3.2.2"
 
 [package.dependencies]
 colorama = "*"
@@ -122,12 +125,13 @@ lxml = "*"
 unidecode = "*"
 
 [[package]]
-name = "importlib-metadata"
-version = "2.0.0"
-description = "Read metadata from Python packages"
 category = "dev"
+description = "Read metadata from Python packages"
+marker = "python_version < \"3.8\""
+name = "importlib-metadata"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+version = "2.0.0"
 
 [package.dependencies]
 zipp = ">=0.5"
@@ -137,20 +141,20 @@ docs = ["sphinx", "rst.linker"]
 testing = ["packaging", "pep517", "importlib-resources (>=1.3)"]
 
 [[package]]
-name = "itsdangerous"
-version = "1.1.0"
-description = "Various helpers to pass data to untrusted environments and back."
 category = "main"
+description = "Various helpers to pass data to untrusted environments and back."
+name = "itsdangerous"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.1.0"
 
 [[package]]
-name = "jedi"
-version = "0.17.2"
-description = "An autocompletion tool for Python that can be used for text editors."
 category = "dev"
+description = "An autocompletion tool for Python that can be used for text editors."
+name = "jedi"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.17.2"
 
 [package.dependencies]
 parso = ">=0.7.0,<0.8.0"
@@ -160,12 +164,12 @@ qa = ["flake8 (3.7.9)"]
 testing = ["Django (<3.1)", "colorama", "docopt", "pytest (>=3.9.0,<5.0.0)"]
 
 [[package]]
-name = "jinja2"
-version = "2.11.2"
-description = "A very fast and expressive template engine."
 category = "main"
+description = "A very fast and expressive template engine."
+name = "jinja2"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "2.11.2"
 
 [package.dependencies]
 MarkupSafe = ">=0.23"
@@ -174,12 +178,12 @@ MarkupSafe = ">=0.23"
 i18n = ["Babel (>=0.8)"]
 
 [[package]]
-name = "libcst"
-version = "0.3.12"
-description = "A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7 and 3.8 programs."
 category = "dev"
+description = "A concrete syntax tree with AST-like properties for Python 3.5, 3.6, 3.7 and 3.8 programs."
+name = "libcst"
 optional = false
 python-versions = ">=3.6"
+version = "0.3.12"
 
 [package.dependencies]
 pyyaml = ">=5.2"
@@ -190,12 +194,12 @@ typing-inspect = ">=0.4.0"
 dev = ["black (>=19.10b0)", "codecov (>=2.1.4)", "coverage (>=4.5.4)", "fixit (>=0.1.0)", "flake8 (>=3.7.8)", "hypothesis (>=4.36.0)", "hypothesmith (>=0.0.4)", "isort (>=4.3.20)", "jupyter (>=1.0.0)", "nbsphinx (>=0.4.2)", "pyre-check (0.0.41)", "sphinx-rtd-theme (>=0.4.3)", "prompt-toolkit (>=2.0.9)", "tox (>=3.18.1)"]
 
 [[package]]
-name = "lxml"
-version = "4.5.2"
-description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
 category = "dev"
+description = "Powerful and Pythonic XML processing library combining libxml2/libxslt with the ElementTree API."
+name = "lxml"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, != 3.4.*"
+version = "4.5.2"
 
 [package.extras]
 cssselect = ["cssselect (>=0.7)"]
@@ -204,112 +208,114 @@ htmlsoup = ["beautifulsoup4"]
 source = ["Cython (>=0.29.7)"]
 
 [[package]]
-name = "markupsafe"
-version = "1.1.1"
-description = "Safely add untrusted strings to HTML/XML markup."
 category = "main"
+description = "Safely add untrusted strings to HTML/XML markup."
+name = "markupsafe"
 optional = false
 python-versions = ">=2.7,!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*"
+version = "1.1.1"
 
 [[package]]
-name = "mccabe"
-version = "0.6.1"
+category = "dev"
 description = "McCabe checker, plugin for flake8"
-category = "dev"
+name = "mccabe"
 optional = false
 python-versions = "*"
+version = "0.6.1"
 
 [[package]]
-name = "mypy-extensions"
-version = "0.4.3"
-description = "Experimental type system extensions for programs checked with the mypy typechecker."
 category = "main"
+description = "Experimental type system extensions for programs checked with the mypy typechecker."
+name = "mypy-extensions"
 optional = false
 python-versions = "*"
+version = "0.4.3"
 
 [[package]]
-name = "parso"
-version = "0.7.1"
-description = "A Python Parser"
 category = "dev"
+description = "A Python Parser"
+name = "parso"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "0.7.1"
 
 [package.extras]
 testing = ["docopt", "pytest (>=3.0.7)"]
 
 [[package]]
-name = "pathspec"
-version = "0.8.0"
-description = "Utility library for gitignore style pattern matching of file paths."
 category = "dev"
+description = "Utility library for gitignore style pattern matching of file paths."
+name = "pathspec"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "0.8.0"
 
 [[package]]
-name = "pluggy"
-version = "0.13.1"
-description = "plugin and hook calling mechanisms for python"
 category = "dev"
+description = "plugin and hook calling mechanisms for python"
+name = "pluggy"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "0.13.1"
 
 [package.dependencies]
-importlib-metadata = {version = ">=0.12", markers = "python_version < \"3.8\""}
+[package.dependencies.importlib-metadata]
+python = "<3.8"
+version = ">=0.12"
 
 [package.extras]
 dev = ["pre-commit", "tox"]
 
 [[package]]
-name = "psutil"
-version = "5.7.2"
-description = "Cross-platform lib for process and system monitoring in Python."
 category = "dev"
+description = "Cross-platform lib for process and system monitoring in Python."
+name = "psutil"
 optional = false
 python-versions = ">=2.6, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "5.7.2"
 
 [package.extras]
 test = ["ipaddress", "mock", "unittest2", "enum34", "pywin32", "wmi"]
 
 [[package]]
-name = "pycodestyle"
-version = "2.6.0"
+category = "dev"
 description = "Python style guide checker"
-category = "dev"
+name = "pycodestyle"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.6.0"
 
 [[package]]
-name = "pyexpect"
-version = "1.0.20"
+category = "dev"
 description = "Python expectaton library"
-category = "dev"
+name = "pyexpect"
 optional = false
 python-versions = "*"
+version = "1.0.20"
 
 [[package]]
-name = "pyflakes"
-version = "2.2.0"
-description = "passive checker of Python programs"
 category = "dev"
+description = "passive checker of Python programs"
+name = "pyflakes"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "2.2.0"
 
 [[package]]
-name = "pypng"
-version = "0.0.20"
-description = "Pure Python PNG image encoder/decoder"
 category = "main"
+description = "Pure Python PNG image encoder/decoder"
+name = "pypng"
 optional = false
 python-versions = "*"
+version = "0.0.20"
 
 [[package]]
-name = "pyre-check"
-version = "0.0.52"
-description = "A performant type checker for Python"
 category = "dev"
+description = "A performant type checker for Python"
+name = "pyre-check"
 optional = false
 python-versions = ">=3.6"
+version = "0.0.52"
 
 [package.dependencies]
 dataclasses = "*"
@@ -322,32 +328,32 @@ pywatchman = "*"
 sapp = ["click", "click-log", "flask (>=1.1.2,<1.2.0)", "flask-cors (>=3.0.8,<3.1.0)", "flask-graphql (>=2.0.1,<2.1.0)", "graphene (>=2.1.8,<2.2.0)", "graphene-sqlalchemy (>=2.3.0,<2.4.0)", "ipython (7.6.1)", "munch", "pygments", "sqlalchemy", "ujson (>=1.35,<2.0)", "xxhash (>=1.3.0,<1.4.0)", "prompt-toolkit (>=2.0.9,<2.1.0)"]
 
 [[package]]
-name = "pyre-extensions"
-version = "0.0.18"
-description = "Type system extensions for use with the pyre type checker"
 category = "main"
+description = "Type system extensions for use with the pyre type checker"
+name = "pyre-extensions"
 optional = false
 python-versions = "*"
+version = "0.0.18"
 
 [package.dependencies]
 typing-extensions = "*"
 typing-inspect = "*"
 
 [[package]]
-name = "pyserial"
-version = "3.4"
-description = "Python Serial Port Extension"
 category = "main"
+description = "Python Serial Port Extension"
+name = "pyserial"
 optional = false
 python-versions = "*"
+version = "3.4"
 
 [[package]]
-name = "python-jsonrpc-server"
-version = "0.4.0"
-description = "JSON RPC 2.0 server library"
 category = "dev"
+description = "JSON RPC 2.0 server library"
+name = "python-jsonrpc-server"
 optional = false
 python-versions = "*"
+version = "0.4.0"
 
 [package.dependencies]
 ujson = ">=3.0.0"
@@ -356,12 +362,12 @@ ujson = ">=3.0.0"
 test = ["versioneer", "pylint", "pycodestyle", "pyflakes", "pytest", "mock", "pytest-cov", "coverage"]
 
 [[package]]
-name = "python-language-server"
-version = "0.35.1"
-description = "Python Language Server for the Language Server Protocol"
 category = "dev"
+description = "Python Language Server for the Language Server Protocol"
+name = "python-language-server"
 optional = false
 python-versions = "*"
+version = "0.35.1"
 
 [package.dependencies]
 jedi = ">=0.17.0,<0.18.0"
@@ -382,140 +388,141 @@ test = ["versioneer", "pylint (>=2.5.0)", "pytest", "mock", "pytest-cov", "cover
 yapf = ["yapf"]
 
 [[package]]
-name = "pywatchman"
-version = "1.4.1"
-description = "Watchman client for python"
 category = "dev"
+description = "Watchman client for python"
+name = "pywatchman"
 optional = false
 python-versions = "*"
+version = "1.4.1"
 
 [[package]]
-name = "pyyaml"
-version = "5.3.1"
-description = "YAML parser and emitter for Python"
 category = "dev"
+description = "YAML parser and emitter for Python"
+name = "pyyaml"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "5.3.1"
 
 [[package]]
-name = "regex"
-version = "2020.9.27"
+category = "dev"
 description = "Alternative regular expression module, to replace re."
-category = "dev"
+name = "regex"
 optional = false
 python-versions = "*"
+version = "2020.9.27"
 
 [[package]]
-name = "toml"
-version = "0.10.1"
+category = "dev"
 description = "Python Library for Tom's Obvious, Minimal Language"
-category = "dev"
+name = "toml"
 optional = false
 python-versions = "*"
+version = "0.10.1"
 
 [[package]]
-name = "typed-ast"
-version = "1.4.1"
+category = "dev"
 description = "a fork of Python 2 and 3 ast modules with type comment support"
-category = "dev"
+name = "typed-ast"
 optional = false
 python-versions = "*"
+version = "1.4.1"
 
 [[package]]
-name = "typedstruct"
-version = "0.1.0"
-description = "A wrapper around the struct library with support for PEP 484 types."
 category = "main"
+description = "A wrapper around the struct library with support for PEP 484 types."
+name = "typedstruct"
 optional = false
 python-versions = ">=3.7,<4.0"
+version = "0.1.0"
 
 [[package]]
-name = "typing-extensions"
-version = "3.7.4.3"
+category = "main"
 description = "Backported and Experimental Type Hints for Python 3.5+"
-category = "main"
+name = "typing-extensions"
 optional = false
 python-versions = "*"
+version = "3.7.4.3"
 
 [[package]]
-name = "typing-inspect"
-version = "0.6.0"
-description = "Runtime inspection utilities for typing module."
 category = "main"
+description = "Runtime inspection utilities for typing module."
+name = "typing-inspect"
 optional = false
 python-versions = "*"
+version = "0.6.0"
 
 [package.dependencies]
 mypy-extensions = ">=0.3.0"
 typing-extensions = ">=3.7.4"
 
 [[package]]
-name = "ujson"
-version = "3.2.0"
-description = "Ultra fast JSON encoder and decoder for Python"
 category = "dev"
+description = "Ultra fast JSON encoder and decoder for Python"
+name = "ujson"
 optional = false
 python-versions = ">=3.5"
+version = "3.2.0"
 
 [[package]]
-name = "unidecode"
-version = "1.1.1"
-description = "ASCII transliterations of Unicode text"
 category = "dev"
+description = "ASCII transliterations of Unicode text"
+name = "unidecode"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
+version = "1.1.1"
 
 [[package]]
-name = "waitress"
-version = "1.4.4"
-description = "Waitress WSGI server"
 category = "main"
+description = "Waitress WSGI server"
+name = "waitress"
 optional = false
 python-versions = "!=3.0.*,!=3.1.*,!=3.2.*,!=3.3.*,!=3.4.*,>=2.7"
+version = "1.4.4"
 
 [package.extras]
 docs = ["Sphinx (>=1.8.1)", "docutils", "pylons-sphinx-themes (>=1.0.9)"]
 testing = ["pytest", "pytest-cover", "coverage (>=5.0)"]
 
 [[package]]
-name = "werkzeug"
-version = "1.0.1"
-description = "The comprehensive WSGI web application library."
 category = "main"
+description = "The comprehensive WSGI web application library."
+name = "werkzeug"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
+version = "1.0.1"
 
 [package.extras]
 dev = ["pytest", "pytest-timeout", "coverage", "tox", "sphinx", "pallets-sphinx-themes", "sphinx-issues"]
 watchdog = ["watchdog"]
 
 [[package]]
-name = "whitenoise"
-version = "5.2.0"
-description = "Radically simplified static file serving for WSGI applications"
 category = "main"
+description = "Radically simplified static file serving for WSGI applications"
+name = "whitenoise"
 optional = false
 python-versions = ">=3.5, <4"
+version = "5.2.0"
 
 [package.extras]
 brotli = ["brotli"]
 
 [[package]]
-name = "zipp"
-version = "3.3.0"
-description = "Backport of pathlib-compatible object wrapper for zip files"
 category = "dev"
+description = "Backport of pathlib-compatible object wrapper for zip files"
+marker = "python_version < \"3.8\""
+name = "zipp"
 optional = false
 python-versions = ">=3.6"
+version = "3.3.0"
 
 [package.extras]
 docs = ["sphinx", "jaraco.packaging (>=3.2)", "rst.linker (>=1.9)"]
 testing = ["pytest (>=3.5,<3.7.3 || >3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pytest-cov", "jaraco.test (>=3.2.0)", "jaraco.itertools", "func-timeout", "pytest-black (>=0.3.7)", "pytest-mypy"]
 
 [metadata]
-lock-version = "1.1"
+content-hash = "7f99a78ab6c0da867614adb34523d8a3f473eb2e5fc88905dc380e774d654b46"
+lock-version = "1.0"
 python-versions = "^3.7"
-content-hash = "93c27e336920718b1c902e93a1f573555bd1eeca1e04b55f0f587fe86fa1ee49"
 
 [metadata.files]
 appdirs = [
@@ -523,7 +530,6 @@ appdirs = [
     {file = "appdirs-1.4.4.tar.gz", hash = "sha256:7d5d0167b2b1ba821647616af46a749d1c653740dd0d2415100fe26e27afdf41"},
 ]
 black = [
-    {file = "black-20.8b1-py3-none-any.whl", hash = "sha256:70b62ef1527c950db59062cda342ea224d772abdf6adc58b86a45421bab20a6b"},
     {file = "black-20.8b1.tar.gz", hash = "sha256:1c02557aa099101b9d21496f8a914e9ed2222ef70336404eeeac8edba836fbea"},
 ]
 click = [
@@ -575,8 +581,8 @@ dataclasses = [
     {file = "dataclasses-0.6.tar.gz", hash = "sha256:6988bd2b895eef432d562370bb707d540f32f7360ab13da45340101bc2307d84"},
 ]
 flake8 = [
-    {file = "flake8-3.8.3-py2.py3-none-any.whl", hash = "sha256:15e351d19611c887e482fb960eae4d44845013cc142d42896e9862f775d8cf5c"},
-    {file = "flake8-3.8.3.tar.gz", hash = "sha256:f04b9fcbac03b0a3e58c0ab3a0ecc462e023a9faf046d57794184028123aa208"},
+    {file = "flake8-3.8.4-py2.py3-none-any.whl", hash = "sha256:749dbbd6bfd0cf1318af27bf97a14e28e5ff548ef8e5b1566ccfb25a11e7c839"},
+    {file = "flake8-3.8.4.tar.gz", hash = "sha256:aadae8761ec651813c24be05c6f7b4680857ef6afaae4651a4eccaef97ce6c3b"},
 ]
 flask = [
     {file = "Flask-1.1.2-py2.py3-none-any.whl", hash = "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"},
