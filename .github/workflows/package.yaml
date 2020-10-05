@@ -30,7 +30,7 @@ jobs:
       - name: Copy .deb file
         run: >-
           docker cp
-          packager:mariner3d_0.0.1-1_armhf.deb
+          packager:/build/mariner3d_0.0.1-1_armhf.deb
           mariner3d_0.0.1-1_armhf.deb
       - name: Shutdown container
         run: docker rm -v packager

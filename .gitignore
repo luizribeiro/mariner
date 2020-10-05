@@ -11,6 +11,7 @@ frontend/dist/
 frontend/node_modules/
 *.deb
 
-debian/.debhelper/
-debian/mariner3d.debhelper.log
-debian/mariner3d/
+dist/mariner-*
+dist/debian/.debhelper/
+dist/debian/mariner3d.debhelper.log
+dist/debian/mariner3d/
