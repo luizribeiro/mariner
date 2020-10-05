@@ -9,6 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - uses: actions/cache@v2
+        with:
+          path: "**/node_modules"
+          key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
       - name: Fetch new list of packages
         run: sudo apt-get update
@@ -21,6 +25,11 @@ jobs:
         run: >-
           docker run --rm --privileged multiarch/qemu-user-static:register
           --reset
+
+      - name: Install yarn packages
+        run: cd frontend/ && yarn install
+      - name: Build frontend assets
+        run: cd frontend/ && yarn build
 
       - uses: satackey/action-docker-layer-caching@v0.0.8
         continue-on-error: true
