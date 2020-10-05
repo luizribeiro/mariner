@@ -38,6 +38,8 @@ jobs:
 
       - name: Create docker container
         run: docker create --name packager packager-image
+      - name: Prune unused docker images
+        run: docker image prune -af
       - name: Copy .deb file
         run: >-
           docker cp
