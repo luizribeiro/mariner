@@ -2,6 +2,7 @@
 Description=An utility for controlling Elegoo Mars 3D printers
 
 [Service]
+User=mariner
 ExecStart=/usr/bin/mariner
 ExecReload=/bin/kill -HUP $MAINPID
 
