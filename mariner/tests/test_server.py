@@ -17,6 +17,7 @@ from mariner.server import app, _read_ctb_file
 class MarinerServerTest(TestCase):
     def setUp(self) -> None:
         self.client = app.test_client()
+        app.config["WTF_CSRF_ENABLED"] = False
 
         self.printer_mock = Mock(spec=ElegooMars)
         self.printer_patcher = patch("mariner.server.ElegooMars")

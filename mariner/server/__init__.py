@@ -15,6 +15,7 @@ from flask import (
     request,
 )
 from flask_caching import Cache
+from flask_wtf.csrf import CSRFProtect
 from pyre_extensions import none_throws
 from waitress import serve
 from werkzeug.utils import secure_filename
@@ -32,6 +33,7 @@ app = Flask(
     template_folder=frontend_dist_directory,
     static_folder=frontend_dist_directory,
 )
+csrf = CSRFProtect(app)
 # pyre-ignore[8]: incompatible attribute type
 app.wsgi_app = WhiteNoise(app.wsgi_app)
 # pyre-ignore[16]: undefined attribute
@@ -43,6 +45,7 @@ app.config.from_mapping(
         "CACHE_TYPE": "filesystem",
         "CACHE_DIR": "/tmp/mariner/",
         "CACHE_DEFAULT_TIMEOUT": 300,
+        "SECRET_KEY": os.urandom(16),
     }
 )
 cache = Cache(app)
