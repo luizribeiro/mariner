@@ -17,11 +17,26 @@ jobs:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
 
+      - name: Extract Debian full package version
+        run: >-
+          echo "DEBIAN_PKG_FULL_VERSION=$(
+            head -1 dist/debian/changelog | awk -F'[()]' '{print $2}'
+          )" >> $GITHUB_ENV
       - name: Extract Debian package version
         run: >-
           echo "DEBIAN_PKG_VERSION=$(
-            head -1 dist/debian/changelog | awk -F'[()]' '{print $2}'
+            head -1 dist/debian/changelog |
+            awk -F'[()]' '{print $2}' |
+            cut -d '-' -f 1
           )" >> $GITHUB_ENV
+      - name: Extract Python package version
+        run: >-
+          echo "PYTHON_PKG_VERSION=$(
+            cat pyproject.toml | grep version | awk -F'\"' '$0=$2'
+          )" >> $GITHUB_ENV
+      - name: Enforce Python package and Debian package version match
+        if: env.DEBIAN_PKG_VERSION != env.PYTHON_PKG_VERSION
+        run: exit 1
 
       - name: Fetch new list of packages
         run: sudo apt-get update
@@ -40,6 +55,12 @@ jobs:
       - name: Build frontend assets
         run: cd frontend/ && yarn build
 
+      - name: Compute Debian package name
+        run: >-
+          echo "DEBIAN_PKG_FILENAME=mariner3d_${{
+            env.DEBIAN_PKG_FULL_VERSION
+          }}_armhf.deb" >> $GITHUB_ENV
+
       - uses: satackey/action-docker-layer-caching@v0.0.8
         continue-on-error: true
       - name: Build Docker Image
@@ -52,22 +73,22 @@ jobs:
       - name: Copy .deb file
         run: >-
           docker cp
-          packager:/build/mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
-          mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          packager:/build/${{ env.DEBIAN_PKG_FILENAME }}
+          ${{ env.DEBIAN_PKG_FILENAME }}
       - name: Shutdown container
         run: docker rm -v packager
 
       - uses: actions/upload-artifact@v2
         with:
-          name: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
-          path: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          name: ${{ env.DEBIAN_PKG_FILENAME }}
+          path: ${{ env.DEBIAN_PKG_FILENAME }}
 
       - name: Publish release binary
         uses: svenstaro/upload-release-action@v1-release
         if: github.event_name == 'release'
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
-          asset_name: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          file: ${{ env.DEBIAN_PKG_FILENAME }}
+          asset_name: ${{ env.DEBIAN_PKG_FILENAME }}
           tag: ${{ github.ref }}
           overwrite: true
