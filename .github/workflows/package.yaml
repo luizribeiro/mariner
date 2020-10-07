@@ -2,7 +2,10 @@
 name: "Package mariner3d as .deb"
 
 # yamllint disable-line rule:truthy
-on: push
+on:
+  push:
+  release:
+    types: [published]
 
 jobs:
   build:
@@ -13,6 +16,12 @@ jobs:
         with:
           path: "**/node_modules"
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Extract Debian package version
+        run: >-
+          echo "DEBIAN_PKG_VERSION=$(
+            head -1 dist/debian/changelog | awk -F'[()]' '{print $2}'
+          )" >> $GITHUB_ENV
 
       - name: Fetch new list of packages
         run: sudo apt-get update
@@ -43,12 +52,22 @@ jobs:
       - name: Copy .deb file
         run: >-
           docker cp
-          packager:/build/mariner3d_0.0.1-1_armhf.deb
-          mariner3d_0.0.1-1_armhf.deb
+          packager:/build/mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
       - name: Shutdown container
         run: docker rm -v packager
 
       - uses: actions/upload-artifact@v2
         with:
-          name: mariner3d_0.0.1-1_armhf.deb
-          path: mariner3d_0.0.1-1_armhf.deb
+          name: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          path: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+
+      - name: Publish release binary
+        uses: svenstaro/upload-release-action@v1-release
+        if: github.event_name == 'release'
+        with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          asset_name: mariner3d_${{ env.DEBIAN_PKG_VERSION }}_armhf.deb
+          tag: ${{ github.ref }}
+          overwrite: true
