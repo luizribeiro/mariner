@@ -8,7 +8,7 @@ from typing import Optional, Type
 import serial
 from pyre_extensions import none_throws
 
-from mariner.exceptions import UnexpectedResponse
+from mariner.exceptions import UnexpectedPrinterResponse
 
 
 class PrinterState(Enum):
@@ -115,14 +115,14 @@ class ElegooMars:
     def select_file(self, filename: str) -> None:
         response = self._send_and_read((f"M23 /{filename}").encode())
         if "File opened" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def move_by(self, z_dist_mm: float, mm_per_min: int = 600) -> None:
         response = self._send_and_read(
             (f"G0 Z{z_dist_mm:.1f} F{mm_per_min} I0").encode()
         )
         if "ok" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def move_to(self, z_pos: float) -> str:
         return self._send_and_read((f"G0 Z{z_pos:.1f}").encode())
@@ -130,7 +130,7 @@ class ElegooMars:
     def move_to_home(self) -> None:
         response = self._send_and_read(b"G28")
         if "ok" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def start_printing(self, filename: str) -> None:
         # the printer's firmware is weird when the file is in a subdirectory. we need to
@@ -144,27 +144,27 @@ class ElegooMars:
             timeout_secs=2.0,
         )
         if "ok" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def pause_printing(self) -> None:
         response = self._send_and_read(b"M25")
         if "ok" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def resume_printing(self) -> None:
         response = self._send_and_read(b"M24")
         if "ok" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def stop_printing(self) -> None:
         response = self._send_and_read(b"M33")
         if "Error" in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def stop_motors(self) -> None:
         response = self._send_and_read(b"M112")
         if "ok" not in response:
-            raise UnexpectedResponse(response)
+            raise UnexpectedPrinterResponse(response)
 
     def reboot(self, delay_in_ms: int = 0) -> None:
         self._send((f"M6040 I{delay_in_ms}").encode())

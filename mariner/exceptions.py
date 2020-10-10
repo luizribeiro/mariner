@@ -2,5 +2,5 @@ class MarinerException(Exception):
     pass
 
 
-class UnexpectedResponse(MarinerException):
+class UnexpectedPrinterResponse(MarinerException):
     pass

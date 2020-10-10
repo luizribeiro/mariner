@@ -5,7 +5,7 @@ from unittest.mock import MagicMock, Mock, call, patch
 import serial
 from pyexpect import expect
 
-from mariner.exceptions import UnexpectedResponse
+from mariner.exceptions import UnexpectedPrinterResponse
 from mariner.mars import ElegooMars, PrinterState
 
 
@@ -177,7 +177,7 @@ class ElegooMarsTest(TestCase):
             + b"ok N:0\r\n"
         )
         self.printer.open()
-        with self.assertRaises(UnexpectedResponse):
+        with self.assertRaises(UnexpectedPrinterResponse):
             self.printer.select_file("foobar.ctb")
         self.printer.close()
         self.serial_port_mock.write.assert_called_once_with(b"M23 /foobar.ctb")
@@ -195,7 +195,7 @@ class ElegooMarsTest(TestCase):
             b"Error:It's not printing now!\r\nok N:0\r\n"
         )
         self.printer.open()
-        with self.assertRaises(UnexpectedResponse):
+        with self.assertRaises(UnexpectedPrinterResponse):
             self.printer.stop_printing()
         self.printer.close()
         self.serial_port_mock.write.assert_called_once_with(b"M33")
@@ -236,7 +236,7 @@ class ElegooMarsTest(TestCase):
             b"foobar\r\n",
         ]
         self.printer.open()
-        with self.assertRaises(UnexpectedResponse):
+        with self.assertRaises(UnexpectedPrinterResponse):
             self.printer.start_printing("benchy.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
