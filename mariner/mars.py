@@ -3,10 +3,9 @@ import re
 from dataclasses import dataclass
 from enum import Enum
 from types import TracebackType
-from typing import Optional, Type
+from typing import Match, Optional, Type
 
 import serial
-from pyre_extensions import none_throws
 
 from mariner.exceptions import UnexpectedPrinterResponse
 
@@ -34,6 +33,12 @@ class ElegooMars:
             timeout=0.1,
         )
 
+    def _extract_response_with_regex(self, regex: str, data: str) -> Match[str]:
+        match = re.search(regex, data)
+        if match is None:
+            raise UnexpectedPrinterResponse(data)
+        return match
+
     def open(self) -> None:
         self._serial_port.port = "/dev/serial0"
         self._serial_port.open()
@@ -56,20 +61,16 @@ class ElegooMars:
 
     def get_firmware_version(self) -> str:
         data = self._send_and_read(b"M4002")
-        return none_throws(
-            re.search("^ok ([a-zA-Z0-9_.]+)\n$", data),
-            "Received invalid status response from printer",
-        ).group(1)
+        return self._extract_response_with_regex("^ok ([a-zA-Z0-9_.]+)\n$", data).group(
+            1
+        )
 
     def get_state(self) -> str:
         return self._send_and_read(b"M4000")
 
     def get_print_status(self) -> PrintStatus:
         data = self._send_and_read(b"M4000")
-        match = none_throws(
-            re.search("D:([0-9]+)/([0-9]+)/([0-9]+)", data),
-            "Received invalid status response from printer",
-        )
+        match = self._extract_response_with_regex("D:([0-9]+)/([0-9]+)/([0-9]+)", data)
 
         current_byte = int(match.group(1))
         total_bytes = int(match.group(2))
@@ -93,20 +94,12 @@ class ElegooMars:
 
     def get_z_pos(self) -> float:
         data = self._send_and_read(b"M114")
-        return float(
-            none_throws(
-                re.search("Z:([0-9.]+)", data),
-                "Received invalid status response from printer",
-            ).group(1)
-        )
+        return float(self._extract_response_with_regex("Z:([0-9.]+)", data).group(1))
 
     def get_selected_file(self) -> str:
         data = self._send_and_read(b"M4006")
         selected_file = str(
-            none_throws(
-                re.search("ok '([^']+)'\r\n", data),
-                "Received invalid status response from printer",
-            ).group(1)
+            self._extract_response_with_regex("ok '([^']+)'\r\n", data).group(1)
         )
         # normalize the selected file by removing the leading slash, which is
         # sometimes returned by the printer
