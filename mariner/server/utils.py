@@ -1,15 +1,27 @@
-from pathlib import Path
-from typing import Sequence
+import io
+import os
+
+import png
+from flask_caching import Cache
+
+from mariner.config import FILES_DIRECTORY
+from mariner.file_formats.ctb import CTBFile
+from mariner.server.app import app
 
 
-def get_frontend_assets_path() -> str:
-    potential_paths: Sequence[Path] = [
-        Path("./frontend/dist/"),
-        Path("/opt/venvs/mariner3d/dist/"),
-    ]
-    try:
-        path = next(path for path in potential_paths if path.exists() and path.is_dir())
-    except StopIteration:
-        # fallback to potential_paths. we're likely running from tests
-        path = potential_paths[0]
-    return str(path.absolute())
+cache = Cache(app)
+
+
+@cache.memoize(timeout=0)
+def read_cached_ctb_file(filename: str) -> CTBFile:
+    assert os.path.isabs(filename)
+    return CTBFile.read(FILES_DIRECTORY / filename)
+
+
+@cache.memoize(timeout=0)
+def read_cached_preview(filename: str) -> bytes:
+    assert os.path.isabs(filename)
+    bytes = io.BytesIO()
+    preview_image: png.Image = CTBFile.read_preview(FILES_DIRECTORY / filename)
+    preview_image.write(bytes)
+    return bytes.getvalue()

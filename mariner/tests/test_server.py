@@ -16,7 +16,8 @@ from mariner.mars import (
     PrinterState,
     PrintStatus,
 )
-from mariner.server import app, _read_ctb_file
+from mariner.server.app import app
+from mariner.server.utils import read_cached_ctb_file
 
 
 class MarinerServerTest(TestCase):
@@ -25,7 +26,7 @@ class MarinerServerTest(TestCase):
         app.config["WTF_CSRF_ENABLED"] = False
 
         self.printer_mock = Mock(spec=ElegooMars)
-        self.printer_patcher = patch("mariner.server.ElegooMars")
+        self.printer_patcher = patch("mariner.server.api.ElegooMars")
         printer_constructor_mock = self.printer_patcher.start()
         printer_constructor_mock.return_value = self.printer_mock
         self.printer_mock.__enter__ = Mock(return_value=self.printer_mock)
@@ -37,7 +38,7 @@ class MarinerServerTest(TestCase):
         self.ctb_file_mock.end_byte_offset_by_layer = [
             (i + 1) * 6 for i in range(0, self.ctb_file_mock.layer_count)
         ]
-        self.ctb_file_patcher = patch("mariner.server.CTBFile")
+        self.ctb_file_patcher = patch("mariner.server.utils.CTBFile")
         ctb_file_class_mock = self.ctb_file_patcher.start()
         ctb_file_class_mock.read.return_value = self.ctb_file_mock
 
@@ -45,7 +46,8 @@ class MarinerServerTest(TestCase):
         # tests. this is important because during tests this function returns a Mock,
         # which pickle cannot serialize.
         self._read_ctb_file_patcher = patch(
-            "mariner.server._read_ctb_file", side_effect=_read_ctb_file.__wrapped__
+            "mariner.server.api.read_cached_ctb_file",
+            side_effect=read_cached_ctb_file.__wrapped__,
         )
         self._read_ctb_file_patcher.start()
 
@@ -261,7 +263,7 @@ class MarinerServerTest(TestCase):
         )
         ctb_file = CTBFile.read(path)
 
-        with patch("mariner.server.CTBFile.read", return_value=ctb_file):
+        with patch("mariner.server.utils.CTBFile.read", return_value=ctb_file):
             response = self.client.get("/api/file_details?filename=stairs.ctb")
             expect(response.get_json()).to_equal(
                 {
@@ -285,7 +287,7 @@ class MarinerServerTest(TestCase):
         )
         ctb_file = CTBFile.read(path)
 
-        with patch("mariner.server.CTBFile.read", return_value=ctb_file):
+        with patch("mariner.server.utils.CTBFile.read", return_value=ctb_file):
             response = self.client.get(
                 "/api/file_details?filename=functional/stairs.ctb"
             )
@@ -315,7 +317,9 @@ class MarinerServerTest(TestCase):
         )
         ctb_preview = CTBFile.read_preview(path)
 
-        with patch("mariner.server.CTBFile.read_preview", return_value=ctb_preview):
+        with patch(
+            "mariner.server.utils.CTBFile.read_preview", return_value=ctb_preview
+        ):
             response = self.client.get("/api/file_preview?filename=stairs.ctb")
             expect(response.content_type).to_equal("image/png")
             expect(hashlib.md5(response.get_data()).hexdigest()).to_equal(
