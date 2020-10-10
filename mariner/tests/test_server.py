@@ -9,12 +9,12 @@ from pyexpect import expect
 from werkzeug.datastructures import FileStorage
 
 from mariner.config import FILES_DIRECTORY
+from mariner.exceptions import UnexpectedPrinterResponse
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import (
     ElegooMars,
     PrinterState,
     PrintStatus,
-    UnexpectedPrinterResponse,
 )
 from mariner.server import app, _read_ctb_file
 
