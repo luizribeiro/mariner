@@ -185,11 +185,3 @@ class ElegooMars:
 
     def _send(self, data: bytes) -> None:
         self._serial_port.write(data)
-
-    # M20: list files
-
-    # M25: pause printing
-    # M24: resume printing
-    # M33: stop printing
-
-    # M6030: start printing
