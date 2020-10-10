@@ -3,14 +3,19 @@ import io
 import pathlib
 from os import DirEntry
 from unittest import TestCase
-from unittest.mock import patch, MagicMock, Mock
+from unittest.mock import patch, ANY, MagicMock, Mock
 
 from pyexpect import expect
 from werkzeug.datastructures import FileStorage
 
 from mariner.config import FILES_DIRECTORY
 from mariner.file_formats.ctb import CTBFile
-from mariner.mars import ElegooMars, PrinterState, PrintStatus
+from mariner.mars import (
+    ElegooMars,
+    PrinterState,
+    PrintStatus,
+    UnexpectedPrinterResponse,
+)
 from mariner.server import app, _read_ctb_file
 
 
@@ -224,6 +229,22 @@ class MarinerServerTest(TestCase):
     def test_command_cancel_print(self) -> None:
         response = self.client.post("/api/printer/command/cancel_print")
         expect(response.get_json()).to_equal({"success": True})
+        self.printer_mock.stop_printing.assert_called_once_with()
+
+    def test_error_handling_while_stopping_print(self) -> None:
+        self.printer_mock.stop_printing.side_effect = UnexpectedPrinterResponse(
+            "foobar\r\n"
+        )
+        response = self.client.post("/api/printer/command/cancel_print")
+        expect(response.status_code).to_equal(500)
+        expect(response.get_json()).to_equal(
+            {
+                "title": "Unexpected Printer Response",
+                "description": "The printer returned an unexpected response: "
+                + "'foobar\\r\\n'",
+                "traceback": ANY,
+            }
+        )
         self.printer_mock.stop_printing.assert_called_once_with()
 
     def test_command_reboot(self) -> None:

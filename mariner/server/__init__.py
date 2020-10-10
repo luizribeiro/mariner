@@ -2,7 +2,9 @@ import io
 import logging
 import multiprocessing
 import os
+import traceback
 from enum import Enum
+from typing import Tuple
 
 import png
 from flask import (
@@ -22,6 +24,7 @@ from werkzeug.utils import secure_filename
 from whitenoise import WhiteNoise
 
 from mariner.config import FILES_DIRECTORY
+from mariner.exceptions import MarinerException
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState
 from mariner.server.utils import get_frontend_assets_path
@@ -69,6 +72,21 @@ def _read_preview(filename: str) -> bytes:
 @app.route("/", methods=["GET"])
 def index() -> str:
     return render_template("index.html")
+
+
+@app.errorhandler(MarinerException)
+def handle_mariner_exception(exception: MarinerException) -> Tuple[str, int]:
+    tb = traceback.TracebackException.from_exception(exception)
+    return (
+        jsonify(
+            {
+                "title": exception.get_title(),
+                "description": exception.get_description(),
+                "traceback": "".join(tb.format()),
+            }
+        ),
+        500,
+    )
 
 
 @app.route("/api/print_status", methods=["GET"])
