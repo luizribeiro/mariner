@@ -25,5 +25,5 @@ There's very little documentation as of now. Here's some instructions:
 
 * **[Installing](docs/install.md)**: how to setup mariner on a Raspberry
   Pi Zero W and an Elegoo Mars Pro.
-* **[Contributing](docs/contributing.md)***: how to setup your development
+* **[Contributing](docs/contributing.md)**: how to setup your development
   environment and contribute to the project.
