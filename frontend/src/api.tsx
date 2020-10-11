@@ -32,6 +32,17 @@ export interface FileListAPIResponse {
   files: [FileAPIResponse];
 }
 
+export interface FileDetailsAPIResponse {
+  filename: string;
+  path: string;
+  bed_size_mm: [number, number, number];
+  height_mm: number;
+  layer_count: number;
+  layer_height_mm: number;
+  resolution: [number, number];
+  print_time_secs: number;
+}
+
 function isAxiosError(error: Error): error is AxiosError {
   return (error as AxiosError).isAxiosError !== undefined;
 }
@@ -54,6 +65,18 @@ export class API {
     try {
       const response: AxiosResponse<FileListAPIResponse> = await axios.get(
         `api/list_files?path=${path}`
+      );
+      return response.data;
+    } catch (error) {
+      this._handleError(error);
+    }
+  }
+
+  async fileDetails(path: string): Promise<FileDetailsAPIResponse | undefined> {
+    try {
+      const response: AxiosResponse<FileDetailsAPIResponse> = await axios.get(
+        "api/file_details",
+        { params: { filename: path } }
       );
       return response.data;
     } catch (error) {

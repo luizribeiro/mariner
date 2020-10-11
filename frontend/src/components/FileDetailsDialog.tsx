@@ -13,24 +13,13 @@ import TableCell from "@material-ui/core/TableCell";
 import TableRow from "@material-ui/core/TableRow";
 import Typography from "@material-ui/core/Typography";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
+import { FileDetailsAPIResponse, withAPI, WithAPIProps } from "../api";
 import { renderTime } from "../utils";
 import FilePreview from "./FilePreview";
 
-interface FileDetailsAPIResponse {
-  filename: string;
-  path: string;
-  bed_size_mm: [number, number, number];
-  height_mm: number;
-  layer_count: number;
-  layer_height_mm: number;
-  resolution: [number, number];
-  print_time_secs: number;
-}
-
-interface FileDetailsProps {
+interface FileDetailsProps extends WithAPIProps {
   filename: string;
   path: string;
 }
@@ -46,14 +35,13 @@ class FileDetails extends React.Component<FileDetailsProps, FileDetailsState> {
   };
 
   async componentDidMount(): Promise<void> {
-    const response: AxiosResponse<FileDetailsAPIResponse> = await axios.get(
-      "api/file_details",
-      { params: { filename: this.props.path } }
-    );
-    this.setState({
-      isLoading: false,
-      data: response.data,
-    });
+    const response = await this.props.api.fileDetails(this.props.path);
+    if (response) {
+      this.setState({
+        isLoading: false,
+        data: response,
+      });
+    }
   }
 
   _getTableContent(data: FileDetailsAPIResponse): Array<[string, string]> {
@@ -115,6 +103,8 @@ const useStyles = makeStyles({
   },
 });
 
+const FileDetailsWithAPI = withAPI(FileDetails);
+
 export default function FileDetailsDialog(
   props: {
     filename: string;
@@ -168,7 +158,7 @@ export default function FileDetailsDialog(
         </Dialog>
       </DialogTitle>
       <DialogContent style={{ padding: 0 }} dividers>
-        <FileDetails filename={props.filename} path={props.path} />
+        <FileDetailsWithAPI filename={props.filename} path={props.path} />
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onCancel} color="primary">
