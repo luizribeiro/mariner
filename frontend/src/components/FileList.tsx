@@ -15,7 +15,7 @@ import nullthrows from "nullthrows";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { deleteFile, startPrint } from "../commands";
-import { handleError, renderTime } from "../utils";
+import { handleError, renderTime, sleep } from "../utils";
 import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 import FileDetailsDialog from "./FileDetailsDialog";
 import UploadButton from "./UploadButton";
@@ -129,7 +129,7 @@ class FileList extends React.Component<
     // FIXME: this is kind of nasty, it's just here because FileList sometimes
     // fails to render on storybook, which makes the storyshot tests for this
     // component fail when they run
-    await new Promise((resolve) => setTimeout(resolve, 0));
+    await sleep(0);
     try {
       const response: AxiosResponse<FileListAPIResponse> = await axios.get(
         `api/list_files?path=${this.state.path}`

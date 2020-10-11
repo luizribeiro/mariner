@@ -45,3 +45,7 @@ export async function handleError(
     }
   }
 }
+
+export async function sleep(waitInMilliseconds: number): Promise<void> {
+  await new Promise((resolve) => setTimeout(resolve, waitInMilliseconds));
+}

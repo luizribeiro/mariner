@@ -18,7 +18,7 @@ import nullthrows from "nullthrows";
 import React from "react";
 import { Link } from "react-router-dom";
 import { cancelPrint, pausePrint, resumePrint } from "../commands";
-import { handleError, renderTime } from "../utils";
+import { handleError, renderTime, sleep } from "../utils";
 import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 
 const styles = () =>
@@ -94,9 +94,9 @@ class PrintStatus extends React.Component<
   };
 
   async _refresh(
-    wait_ms: number = WAIT_BEFORE_REFRESHING_STATUS_MS
+    waitMs: number = WAIT_BEFORE_REFRESHING_STATUS_MS
   ): Promise<void> {
-    await new Promise((resolve) => setTimeout(resolve, wait_ms));
+    await sleep(waitMs);
     try {
       const response: AxiosResponse<PrintStatusAPIResponse> = await axios.get(
         "api/print_status"
