@@ -61,6 +61,20 @@ export class API {
     }
   }
 
+  async uploadFile(file: File): Promise<CommandAPIResponse | undefined> {
+    try {
+      const formData = new FormData();
+      formData.append("file", file);
+      const response: AxiosResponse<CommandAPIResponse> = await axios.post(
+        "api/upload_file",
+        formData
+      );
+      return response.data;
+    } catch (error) {
+      this._handleError(error);
+    }
+  }
+
   async startPrint(filename: string): Promise<CommandAPIResponse | undefined> {
     try {
       const response: AxiosResponse<CommandAPIResponse> = await axios.post(

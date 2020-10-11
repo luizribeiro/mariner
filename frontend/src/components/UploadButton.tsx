@@ -2,9 +2,9 @@ import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import PublishIcon from "@material-ui/icons/Publish";
-import axios from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
+import { withAPI, WithAPIProps } from "../api";
 import { setState } from "../utils";
 
 const styles = () =>
@@ -14,7 +14,7 @@ const styles = () =>
     },
   });
 
-export interface UploadButtonProps extends WithStyles {
+export interface UploadButtonProps extends WithStyles, WithAPIProps {
   onUploadFinished: () => void;
 }
 
@@ -33,11 +33,9 @@ class UploadButton extends React.Component<
 
   async _onUploadStart(): Promise<void> {
     const files = nullthrows(this.uploadButtonRef.current?.files);
-    const formData = new FormData();
-    formData.append("file", files[0]);
 
     await setState(this, { isUploading: true });
-    await axios.post("api/upload_file", formData);
+    await this.props.api.uploadFile(files[0]);
     await setState(this, { isUploading: false });
 
     await this.props.onUploadFinished();
@@ -77,4 +75,4 @@ class UploadButton extends React.Component<
   }
 }
 
-export default withStyles(styles)(UploadButton);
+export default withStyles(styles)(withAPI(UploadButton));
