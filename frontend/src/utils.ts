@@ -26,7 +26,7 @@ export async function handleError(
   alertFn: AlertFunction
 ): Promise<void> {
   if (isAxiosError(error)) {
-    if (error.response && error.response.data) {
+    if (error.response && error.response.data instanceof Object) {
       await alertFn({
         title: error.response.data.title,
         description: error.response.data.description,

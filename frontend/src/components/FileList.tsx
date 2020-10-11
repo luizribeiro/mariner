@@ -139,7 +139,7 @@ class FileList extends React.Component<
         data: response.data,
       });
     } catch (error) {
-      handleError(error, this.props.alertDialog);
+      await handleError(error, this.props.alertDialog);
     }
   }
 

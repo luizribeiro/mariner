@@ -114,7 +114,7 @@ class PrintStatus extends React.Component<
         },
       });
     } catch (error) {
-      handleError(error, this.props.alertDialog);
+      await handleError(error, this.props.alertDialog);
     }
   }
 
