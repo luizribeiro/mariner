@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "mariner"
-version = "0.0.1"
-description = "An utility for controlling Elegoo Mars 3D printers"
+version = "0.1.0"
+description = "Web application for controlling Elegoo Mars 3D printers"
 license = "MIT"
 readme = "README.md"
 authors = [

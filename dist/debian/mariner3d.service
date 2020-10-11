@@ -1,5 +1,5 @@
 [Unit]
-Description=An utility for controlling Elegoo Mars 3D printers
+Description=mariner3d Printer Controller
 
 [Service]
 User=mariner
