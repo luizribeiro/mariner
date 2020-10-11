@@ -100,3 +100,13 @@ export const Error = (): React.ReactElement => {
     </MemoryRouter>
   );
 };
+
+export const UnknownError = (): React.ReactElement => {
+  axiosMock.onGet("api/print_status").reply(500);
+
+  return (
+    <MemoryRouter>
+      <PrintStatus />
+    </MemoryRouter>
+  );
+};

@@ -1,3 +1,4 @@
+import { AxiosError } from "axios";
 import React from "react";
 
 export function renderTime(time_secs: number): string {
@@ -13,4 +14,8 @@ export function setState<TProps, TState>(
   newState: TState
 ): Promise<void> {
   return new Promise((resolve) => component.setState(newState, resolve));
+}
+
+export function isAxiosError(error: Error): error is AxiosError {
+  return (error as AxiosError).isAxiosError !== undefined;
 }
