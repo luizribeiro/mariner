@@ -4,6 +4,7 @@ import nullthrows from "nullthrows";
 import React from "react";
 import ReactDOM from "react-dom";
 import { HashRouter } from "react-router-dom";
+import { AlertServiceProvider } from "./components/AlertServiceProvider";
 import Main from "./components/Main";
 
 const csrfToken: HTMLMetaElement = nullthrows(
@@ -16,7 +17,9 @@ const wrapper = document.getElementById("container");
 wrapper
   ? ReactDOM.render(
       <HashRouter>
-        <Main />
+        <AlertServiceProvider>
+          <Main />
+        </AlertServiceProvider>
       </HashRouter>,
       wrapper
     )
