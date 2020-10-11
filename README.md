@@ -23,7 +23,7 @@ later:
    not connect the 5V line. You can put some tape on the connector to
    isolate the 5V line of the USB cable.
 4. Connect Pi's USB PWR port to a power supply. You can also use a 12V to 5V
-   converter from the power supply.
+   converter from the printer's power supply.
 
 ### Installing package
 
