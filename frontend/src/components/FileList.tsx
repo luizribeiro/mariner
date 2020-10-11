@@ -15,7 +15,8 @@ import nullthrows from "nullthrows";
 import React from "react";
 import { useHistory } from "react-router-dom";
 import { deleteFile, startPrint } from "../commands";
-import { renderTime } from "../utils";
+import { handleError, renderTime } from "../utils";
+import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 import FileDetailsDialog from "./FileDetailsDialog";
 import UploadButton from "./UploadButton";
 
@@ -115,20 +116,31 @@ const styles = () =>
     },
   });
 
-class FileList extends React.Component<WithStyles, FileListState> {
+class FileList extends React.Component<
+  WithStyles & WithAlertProps,
+  FileListState
+> {
   state: FileListState = {
     isLoading: true,
     path: "",
   };
 
   async refresh(): Promise<void> {
-    const response: AxiosResponse<FileListAPIResponse> = await axios.get(
-      `api/list_files?path=${this.state.path}`
-    );
-    this.setState({
-      isLoading: false,
-      data: response.data,
-    });
+    // FIXME: this is kind of nasty, it's just here because FileList sometimes
+    // fails to render on storybook, which makes the storyshot tests for this
+    // component fail when they run
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    try {
+      const response: AxiosResponse<FileListAPIResponse> = await axios.get(
+        `api/list_files?path=${this.state.path}`
+      );
+      this.setState({
+        isLoading: false,
+        data: response.data,
+      });
+    } catch (error) {
+      handleError(error, this.props.alertDialog);
+    }
   }
 
   async componentDidMount(): Promise<void> {
@@ -212,4 +224,4 @@ class FileList extends React.Component<WithStyles, FileListState> {
   }
 }
 
-export default withStyles(styles)(FileList);
+export default withStyles(styles)(withAlert(FileList));
