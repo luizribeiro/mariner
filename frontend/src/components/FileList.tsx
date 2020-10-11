@@ -10,25 +10,20 @@ import ListItemText from "@material-ui/core/ListItemText";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import FolderIcon from "@material-ui/icons/Folder";
 import LayersIcon from "@material-ui/icons/Layers";
-import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { useAPI } from "../api";
-import { handleError, renderTime, sleep } from "../utils";
-import { withAlert, WithAlertProps } from "./AlertServiceProvider";
+import {
+  DirectoryAPIResponse,
+  FileAPIResponse,
+  FileListAPIResponse,
+  useAPI,
+  withAPI,
+  WithAPIProps,
+} from "../api";
+import { renderTime, sleep } from "../utils";
 import FileDetailsDialog from "./FileDetailsDialog";
 import UploadButton from "./UploadButton";
-
-interface DirectoryAPIResponse {
-  dirname: string;
-}
-
-interface FileAPIResponse {
-  filename: string;
-  path: string;
-  print_time_secs: number;
-}
 
 function DirectoryListItem({
   directory,
@@ -97,11 +92,6 @@ function FileListItem({
   );
 }
 
-interface FileListAPIResponse {
-  directories: [DirectoryAPIResponse];
-  files: [FileAPIResponse];
-}
-
 export interface FileListState {
   isLoading: boolean;
   path: string;
@@ -118,7 +108,7 @@ const styles = () =>
   });
 
 class FileList extends React.Component<
-  WithStyles & WithAlertProps,
+  WithStyles & WithAPIProps,
   FileListState
 > {
   state: FileListState = {
@@ -131,16 +121,12 @@ class FileList extends React.Component<
     // fails to render on storybook, which makes the storyshot tests for this
     // component fail when they run
     await sleep(0);
-    try {
-      const response: AxiosResponse<FileListAPIResponse> = await axios.get(
-        `api/list_files?path=${this.state.path}`
-      );
+    const response = await this.props.api.listFiles(this.state.path);
+    if (response) {
       this.setState({
         isLoading: false,
-        data: response.data,
+        data: response,
       });
-    } catch (error) {
-      await handleError(error, this.props.alertDialog);
     }
   }
 
@@ -225,4 +211,4 @@ class FileList extends React.Component<
   }
 }
 
-export default withStyles(styles)(withAlert(FileList));
+export default withStyles(styles)(withAPI(FileList));

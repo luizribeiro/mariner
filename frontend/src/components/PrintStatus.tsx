@@ -13,13 +13,11 @@ import FolderIcon from "@material-ui/icons/Folder";
 import PauseIcon from "@material-ui/icons/Pause";
 import PlayArrowIcon from "@material-ui/icons/PlayArrow";
 import StopIcon from "@material-ui/icons/Stop";
-import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { Link } from "react-router-dom";
 import { withAPI, WithAPIProps } from "../api";
-import { handleError, renderTime, sleep } from "../utils";
-import { withAlert, WithAlertProps } from "./AlertServiceProvider";
+import { renderTime, sleep } from "../utils";
 
 const styles = () =>
   createStyles({
@@ -71,20 +69,10 @@ export interface PrintStatusState {
   };
 }
 
-interface PrintStatusAPIResponse {
-  state: string;
-  selected_file: string;
-  progress: number;
-  current_layer?: number;
-  layer_count?: number;
-  print_time_secs?: number;
-  time_left_secs?: number;
-}
-
 const WAIT_BEFORE_REFRESHING_STATUS_MS = 250;
 
 class PrintStatus extends React.Component<
-  WithStyles<typeof styles> & WithAlertProps & WithAPIProps,
+  WithStyles<typeof styles> & WithAPIProps,
   PrintStatusState
 > {
   intervalID: number | undefined;
@@ -97,24 +85,20 @@ class PrintStatus extends React.Component<
     waitMs: number = WAIT_BEFORE_REFRESHING_STATUS_MS
   ): Promise<void> {
     await sleep(waitMs);
-    try {
-      const response: AxiosResponse<PrintStatusAPIResponse> = await axios.get(
-        "api/print_status"
-      );
+    const response = await this.props.api.printStatus();
+    if (response) {
       this.setState({
         isLoading: false,
         data: {
-          state: toPrinterState(response.data.state),
-          progress: response.data.progress,
-          selectedFile: response.data.selected_file,
-          currentLayer: response.data.current_layer,
-          layerCount: response.data.layer_count,
-          printTimeSecs: response.data.print_time_secs,
-          timeLeftSecs: response.data.time_left_secs,
+          state: toPrinterState(response.state),
+          progress: response.progress,
+          selectedFile: response.selected_file,
+          currentLayer: response.current_layer,
+          layerCount: response.layer_count,
+          printTimeSecs: response.print_time_secs,
+          timeLeftSecs: response.time_left_secs,
         },
       });
-    } catch (error) {
-      await handleError(error, this.props.alertDialog);
     }
   }
 
@@ -317,4 +301,4 @@ class PrintStatus extends React.Component<
   }
 }
 
-export default withStyles(styles)(withAPI(withAlert(PrintStatus)));
+export default withStyles(styles)(withAPI(PrintStatus));
