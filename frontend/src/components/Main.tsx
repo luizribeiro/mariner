@@ -14,11 +14,8 @@ import Typography from "@material-ui/core/Typography";
 import withWidth, { WithWidth } from "@material-ui/core/withWidth";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import FolderIcon from "@material-ui/icons/Folder";
-import HelpIcon from "@material-ui/icons/Help";
-import HistoryIcon from "@material-ui/icons/History";
 import HomeIcon from "@material-ui/icons/Home";
 import MenuIcon from "@material-ui/icons/Menu";
-import SettingsIcon from "@material-ui/icons/Settings";
 import clsx from "clsx";
 import React from "react";
 import { Link, Route, Switch } from "react-router-dom";
@@ -186,27 +183,6 @@ function Main({ width }: WithWidth): React.ReactElement {
                 <FolderIcon />
               </ListItemIcon>
               <ListItemText primary="Files" />
-            </ListItem>
-            <ListItem button key="history" onClick={handleDrawerItemClick}>
-              <ListItemIcon>
-                <HistoryIcon />
-              </ListItemIcon>
-              <ListItemText primary="History" />
-            </ListItem>
-            <ListItem button key="settings" onClick={handleDrawerItemClick}>
-              <ListItemIcon>
-                <SettingsIcon />
-              </ListItemIcon>
-              <ListItemText primary="Settings" />
-            </ListItem>
-          </List>
-          <Divider />
-          <List>
-            <ListItem button key="help" onClick={handleDrawerItemClick}>
-              <ListItemIcon>
-                <HelpIcon />
-              </ListItemIcon>
-              <ListItemText primary="Help" />
             </ListItem>
           </List>
         </SwipeableDrawer>
