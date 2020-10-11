@@ -18,7 +18,7 @@ import nullthrows from "nullthrows";
 import React from "react";
 import { Link } from "react-router-dom";
 import { cancelPrint, pausePrint, resumePrint } from "../commands";
-import { isAxiosError, renderTime } from "../utils";
+import { handleError, renderTime } from "../utils";
 import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 
 const styles = () =>
@@ -114,25 +114,7 @@ class PrintStatus extends React.Component<
         },
       });
     } catch (error) {
-      if (isAxiosError(error)) {
-        if (error.response && error.response.data) {
-          await this.props.alertDialog({
-            title: error.response.data.title,
-            description: error.response.data.description,
-            traceback: error.response.data.traceback,
-          });
-        } else if (error.response) {
-          await this.props.alertDialog({
-            title: "Something went wrong",
-            description: `The server replied with a ${error.response.status} HTTP status code.`,
-          });
-        } else {
-          await this.props.alertDialog({
-            title: "Something went wrong",
-            description: "Sorry, I don't know what happened.",
-          });
-        }
-      }
+      handleError(error, this.props.alertDialog);
     }
   }
 

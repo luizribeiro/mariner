@@ -6,7 +6,7 @@ const AlertServiceContext = React.createContext<
   (options: AlertOptions) => Promise<void>
 >(Promise.resolve);
 
-type AlertFunction = (options: AlertOptions) => Promise<void>;
+export type AlertFunction = (options: AlertOptions) => Promise<void>;
 
 export const useAlert = (): AlertFunction =>
   React.useContext(AlertServiceContext);
