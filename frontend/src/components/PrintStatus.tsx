@@ -19,6 +19,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { cancelPrint, pausePrint, resumePrint } from "../commands";
 import { renderTime } from "../utils";
+import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 
 const styles = () =>
   createStyles({
@@ -83,7 +84,7 @@ interface PrintStatusAPIResponse {
 const WAIT_BEFORE_REFRESHING_STATUS_MS = 250;
 
 class PrintStatus extends React.Component<
-  WithStyles<typeof styles>,
+  WithStyles<typeof styles> & WithAlertProps,
   PrintStatusState
 > {
   intervalID: number | undefined;
@@ -96,21 +97,31 @@ class PrintStatus extends React.Component<
     wait_ms: number = WAIT_BEFORE_REFRESHING_STATUS_MS
   ): Promise<void> {
     await new Promise((resolve) => setTimeout(resolve, wait_ms));
-    const response: AxiosResponse<PrintStatusAPIResponse> = await axios.get(
-      "api/print_status"
-    );
-    this.setState({
-      isLoading: false,
-      data: {
-        state: toPrinterState(response.data.state),
-        progress: response.data.progress,
-        selectedFile: response.data.selected_file,
-        currentLayer: response.data.current_layer,
-        layerCount: response.data.layer_count,
-        printTimeSecs: response.data.print_time_secs,
-        timeLeftSecs: response.data.time_left_secs,
-      },
-    });
+    try {
+      const response: AxiosResponse<PrintStatusAPIResponse> = await axios.get(
+        "api/print_status"
+      );
+      this.setState({
+        isLoading: false,
+        data: {
+          state: toPrinterState(response.data.state),
+          progress: response.data.progress,
+          selectedFile: response.data.selected_file,
+          currentLayer: response.data.current_layer,
+          layerCount: response.data.layer_count,
+          printTimeSecs: response.data.print_time_secs,
+          timeLeftSecs: response.data.time_left_secs,
+        },
+      });
+    } catch (error) {
+      if (error.response && error.response.data && error.response.data.title) {
+        await this.props.alertDialog({
+          title: error.response.data.title,
+          description: error.response.data.description,
+          traceback: error.response.data.traceback,
+        });
+      }
+    }
   }
 
   async componentDidMount(): Promise<void> {
@@ -312,4 +323,4 @@ class PrintStatus extends React.Component<
   }
 }
 
-export default withStyles(styles)(PrintStatus);
+export default withStyles(styles)(withAlert(PrintStatus));

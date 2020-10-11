@@ -1,12 +1,31 @@
 import React from "react";
+import { Subtract } from "utility-types";
 import { AlertDialog, AlertOptions } from "./AlertDialog";
 
 const AlertServiceContext = React.createContext<
   (options: AlertOptions) => Promise<void>
 >(Promise.resolve);
 
-export const useAlert = (): ((options: AlertOptions) => Promise<void>) =>
+type AlertFunction = (options: AlertOptions) => Promise<void>;
+
+export const useAlert = (): AlertFunction =>
   React.useContext(AlertServiceContext);
+
+export interface WithAlertProps {
+  alertDialog: AlertFunction;
+}
+
+export const withAlert = <Props extends WithAlertProps>(
+  Component: React.ComponentType<Props>
+): ((props: Subtract<Props, WithAlertProps>) => React.ReactElement) => {
+  const WithAlert = (
+    props: Subtract<Props, WithAlertProps>
+  ): React.ReactElement => {
+    const alertDialog = useAlert();
+    return <Component {...(props as Props)} alertDialog={alertDialog} />;
+  };
+  return WithAlert;
+};
 
 export const AlertServiceProvider = ({
   children,

@@ -87,3 +87,16 @@ export const Loading = (): React.ReactElement => {
     </MemoryRouter>
   );
 };
+
+export const Error = (): React.ReactElement => {
+  axiosMock.onGet("api/print_status").reply(500, {
+    title: "Unexpected Printer Response",
+    description: "The printer returned an unexpected response: 'foobar\\r\\n'",
+  });
+
+  return (
+    <MemoryRouter>
+      <PrintStatus />
+    </MemoryRouter>
+  );
+};
