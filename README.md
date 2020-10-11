@@ -72,7 +72,7 @@ mounted on boot:
 Finally, make `/etc/rc.local` load the `g_mass_storage` module by adding
 this to it:
 
-```
+```sh
 #!/bin/sh -e
 
 modprobe g_mass_storage file=/piusb.bin stall=0 ro=1
