@@ -62,7 +62,7 @@ export const AlertDialog: React.FC<AlertDialogProps> = ({
         {details}
       </DialogContent>
       <DialogActions>
-        <Button color="primary" onClick={onClose} autoFocus>
+        <Button color="primary" onClick={onClose}>
           OK
         </Button>
       </DialogActions>
