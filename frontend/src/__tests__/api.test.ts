@@ -1,15 +1,10 @@
 import "@babel/polyfill";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
-import {
-  cancelPrint,
-  pausePrint,
-  rebootPrinter,
-  resumePrint,
-  startPrint,
-} from "../commands";
+import { API } from "../api";
 
 const axiosMock = new MockAdapter(axios);
+const api = new API();
 
 describe("commands.startPrint", () => {
   axiosMock.reset();
@@ -18,7 +13,7 @@ describe("commands.startPrint", () => {
     axiosMock
       .onPost("api/printer/command/start_print")
       .reply(200, { success: true });
-    await startPrint("monster.ctb");
+    await api.startPrint("monster.ctb");
     expect(axiosMock.history.post.length).toBe(1);
     expect(axiosMock.history.post[0].params).toEqual({
       filename: "monster.ctb",
@@ -33,7 +28,7 @@ describe("commands.cancelPrint", () => {
     axiosMock
       .onPost("api/printer/command/cancel_print")
       .reply(200, { success: true });
-    await cancelPrint();
+    await api.cancelPrint();
   });
 });
 
@@ -44,7 +39,7 @@ describe("commands.cancelPrint", () => {
     axiosMock
       .onPost("api/printer/command/cancel_print")
       .reply(200, { success: true });
-    await cancelPrint();
+    await api.cancelPrint();
   });
 });
 
@@ -55,7 +50,7 @@ describe("commands.pausePrint", () => {
     axiosMock
       .onPost("api/printer/command/pause_print")
       .reply(200, { success: true });
-    await pausePrint();
+    await api.pausePrint();
   });
 });
 
@@ -66,7 +61,7 @@ describe("commands.resumePrint", () => {
     axiosMock
       .onPost("api/printer/command/resume_print")
       .reply(200, { success: true });
-    await resumePrint();
+    await api.resumePrint();
   });
 });
 
@@ -77,6 +72,6 @@ describe("commands.rebootPrinter", () => {
     axiosMock
       .onPost("api/printer/command/reboot")
       .reply(200, { success: true });
-    await rebootPrinter();
+    await api.rebootPrinter();
   });
 });

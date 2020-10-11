@@ -14,7 +14,7 @@ import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { useHistory } from "react-router-dom";
-import { deleteFile, startPrint } from "../commands";
+import { useAPI } from "../api";
 import { handleError, renderTime, sleep } from "../utils";
 import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 import FileDetailsDialog from "./FileDetailsDialog";
@@ -66,6 +66,7 @@ function FileListItem({
 
   const printTime = renderTime(file.print_time_secs);
   const history = useHistory();
+  const api = useAPI();
   return (
     <React.Fragment>
       <ListItem button key={file.filename} onClick={handleClickOpen}>
@@ -80,12 +81,12 @@ function FileListItem({
         onCancel={handleClose}
         onClose={handleClose}
         onPrint={async () => {
-          await startPrint(file.path);
+          await api.startPrint(file.path);
           setOpen(false);
           history.push("/");
         }}
         onDelete={async () => {
-          await deleteFile(file.path);
+          await api.deleteFile(file.path);
           setOpen(false);
           await onDelete();
         }}

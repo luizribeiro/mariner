@@ -17,7 +17,7 @@ import axios, { AxiosResponse } from "axios";
 import nullthrows from "nullthrows";
 import React from "react";
 import { Link } from "react-router-dom";
-import { cancelPrint, pausePrint, resumePrint } from "../commands";
+import { withAPI, WithAPIProps } from "../api";
 import { handleError, renderTime, sleep } from "../utils";
 import { withAlert, WithAlertProps } from "./AlertServiceProvider";
 
@@ -84,7 +84,7 @@ interface PrintStatusAPIResponse {
 const WAIT_BEFORE_REFRESHING_STATUS_MS = 250;
 
 class PrintStatus extends React.Component<
-  WithStyles<typeof styles> & WithAlertProps,
+  WithStyles<typeof styles> & WithAlertProps & WithAPIProps,
   PrintStatusState
 > {
   intervalID: number | undefined;
@@ -151,7 +151,7 @@ class PrintStatus extends React.Component<
             size="small"
             startIcon={<PlayArrowIcon />}
             onClick={async () => {
-              await resumePrint();
+              await this.props.api.resumePrint();
               await this._refresh();
             }}
             disabled={state !== "PAUSED"}
@@ -166,7 +166,7 @@ class PrintStatus extends React.Component<
             size="small"
             startIcon={<PauseIcon />}
             onClick={async () => {
-              await pausePrint();
+              await this.props.api.pausePrint();
               await this._refresh();
             }}
             disabled={state === "PAUSED" || state === "STARTING_PRINT"}
@@ -181,7 +181,7 @@ class PrintStatus extends React.Component<
             size="small"
             startIcon={<StopIcon />}
             onClick={async () => {
-              await cancelPrint();
+              await this.props.api.cancelPrint();
               await this._refresh();
             }}
           >
@@ -317,4 +317,4 @@ class PrintStatus extends React.Component<
   }
 }
 
-export default withStyles(styles)(withAlert(PrintStatus));
+export default withStyles(styles)(withAPI(withAlert(PrintStatus)));
