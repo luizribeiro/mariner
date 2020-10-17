@@ -1,7 +1,7 @@
 import os
 import traceback
 from enum import Enum
-from typing import Tuple
+from typing import Any, Dict, Optional, Tuple
 
 from flask import (
     Blueprint,
@@ -16,6 +16,7 @@ from werkzeug.utils import secure_filename
 
 from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import MarinerException
+from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState
 from mariner.server.utils import read_cached_ctb_file, read_cached_preview
 
@@ -94,16 +95,28 @@ def list_files() -> str:
         directories = []
         for dir_entry in dir_entries:
             if dir_entry.is_file():
-                ctb_file = read_cached_ctb_file(path / dir_entry.name)
-                files.append(
-                    {
-                        "filename": dir_entry.name,
-                        "path": str(
-                            (path / dir_entry.name).relative_to(FILES_DIRECTORY)
-                        ),
+                ctb_file: Optional[CTBFile] = None
+                if dir_entry.name.endswith(".ctb"):
+                    ctb_file = read_cached_ctb_file(path / dir_entry.name)
+
+                file_data: Dict[str, Any] = {
+                    "filename": dir_entry.name,
+                    "path": str((path / dir_entry.name).relative_to(FILES_DIRECTORY)),
+                }
+
+                if ctb_file:
+                    file_data = {
                         "print_time_secs": ctb_file.print_time_secs,
+                        "can_be_printed": True,
+                        **file_data,
                     }
-                )
+                else:
+                    file_data = {
+                        "can_be_printed": False,
+                        **file_data,
+                    }
+
+                files.append(file_data)
             else:
                 directories.append({"dirname": dir_entry.name})
         return jsonify(

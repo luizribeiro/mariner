@@ -144,13 +144,18 @@ class MarinerServerTest(TestCase):
         b_ctb = Mock(spec=DirEntry)
         b_ctb.name = "b.ctb"
         b_ctb.is_file.return_value = True
-        a_ctb.is_dir.return_value = False
+        b_ctb.is_dir.return_value = False
+        random_file_txt = Mock(spec=DirEntry)
+        random_file_txt.name = "random_file.txt"
+        random_file_txt.is_file.return_value = True
+        random_file_txt.is_dir.return_value = False
 
         _scandir_context_manager_mock = MagicMock()
         _scandir_context_manager_mock.__enter__().__iter__.return_value = [
             subdir,
             a_ctb,
             b_ctb,
+            random_file_txt,
         ]
         _scandir_mock.return_value = _scandir_context_manager_mock
 
@@ -159,8 +164,23 @@ class MarinerServerTest(TestCase):
             {
                 "directories": [{"dirname": "subdir"}],
                 "files": [
-                    {"filename": "a.ctb", "path": "a.ctb", "print_time_secs": 200},
-                    {"filename": "b.ctb", "path": "b.ctb", "print_time_secs": 200},
+                    {
+                        "filename": "a.ctb",
+                        "path": "a.ctb",
+                        "print_time_secs": 200,
+                        "can_be_printed": True,
+                    },
+                    {
+                        "filename": "b.ctb",
+                        "path": "b.ctb",
+                        "print_time_secs": 200,
+                        "can_be_printed": True,
+                    },
+                    {
+                        "filename": "random_file.txt",
+                        "path": "random_file.txt",
+                        "can_be_printed": False,
+                    },
                 ],
             }
         )
@@ -197,11 +217,13 @@ class MarinerServerTest(TestCase):
                         "filename": "a.ctb",
                         "path": "foo/bar/a.ctb",
                         "print_time_secs": 200,
+                        "can_be_printed": True,
                     },
                     {
                         "filename": "b.ctb",
                         "path": "foo/bar/b.ctb",
                         "print_time_secs": 200,
+                        "can_be_printed": True,
                     },
                 ],
             }
