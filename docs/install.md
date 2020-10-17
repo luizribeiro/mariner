@@ -55,6 +55,7 @@ Setup a container file for storing uploaded files:
 
 ```
 $ sudo dd bs=1M if=/dev/zero of=/piusb.bin count=2048
+$ sudo mkdosfs /piusb.bin -F 32 -I
 ```
 
 Create the mount point for the container file:
