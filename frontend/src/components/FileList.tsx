@@ -9,6 +9,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import { createStyles, WithStyles, withStyles } from "@material-ui/core/styles";
 import FolderIcon from "@material-ui/icons/Folder";
+import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import LayersIcon from "@material-ui/icons/Layers";
 import nullthrows from "nullthrows";
 import React from "react";
@@ -56,17 +57,23 @@ function FileListItem({
   onDelete: () => void;
 }): React.ReactElement {
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => setOpen(true);
+  const handleClickOpen = () => file.can_be_printed && setOpen(true);
   const handleClose = () => setOpen(false);
 
-  const printTime = renderTime(file.print_time_secs);
+  const printTime = file.print_time_secs
+    ? renderTime(file.print_time_secs)
+    : null;
   const history = useHistory();
   const api = useAPI();
   return (
     <React.Fragment>
-      <ListItem button key={file.filename} onClick={handleClickOpen}>
+      <ListItem
+        button
+        key={file.filename}
+        onClick={file.can_be_printed ? handleClickOpen : undefined}
+      >
         <ListItemIcon>
-          <LayersIcon />
+          {file.can_be_printed ? <LayersIcon /> : <InsertDriveFileIcon />}
         </ListItemIcon>
         <ListItemText primary={file.filename} secondary={printTime} />
       </ListItem>

@@ -24,7 +24,8 @@ export interface DirectoryAPIResponse {
 export interface FileAPIResponse {
   filename: string;
   path: string;
-  print_time_secs: number;
+  print_time_secs?: number;
+  can_be_printed: boolean;
 }
 
 export interface FileListAPIResponse {
