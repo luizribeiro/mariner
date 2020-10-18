@@ -1,3 +1,4 @@
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Dialog, { DialogProps } from "@material-ui/core/Dialog";
@@ -108,6 +109,7 @@ const FileDetailsWithAPI = withAPI(FileDetails);
 export default function FileDetailsDialog(
   props: {
     filename: string;
+    canBePrinted: boolean;
     path: string;
     onCancel: () => void;
     onPrint: () => void;
@@ -124,6 +126,25 @@ export default function FileDetailsDialog(
     setDeleteConfirmationDialogOpen(false);
     props.onDelete();
   };
+
+  let fileDetails: React.ReactElement;
+  if (props.canBePrinted) {
+    fileDetails = (
+      <FileDetailsWithAPI filename={props.filename} path={props.path} />
+    );
+  } else {
+    fileDetails = (
+      <Box
+        display="flex"
+        width={350}
+        height={80}
+        alignItems="center"
+        justifyContent="center"
+      >
+        <Typography>This file cannot be printed.</Typography>
+      </Box>
+    );
+  }
 
   return (
     <Dialog {...props}>
@@ -158,13 +179,17 @@ export default function FileDetailsDialog(
         </Dialog>
       </DialogTitle>
       <DialogContent style={{ padding: 0 }} dividers>
-        <FileDetailsWithAPI filename={props.filename} path={props.path} />
+        {fileDetails}
       </DialogContent>
       <DialogActions>
         <Button onClick={props.onCancel} color="primary">
           Cancel
         </Button>
-        <Button onClick={props.onPrint} color="primary">
+        <Button
+          onClick={props.onPrint}
+          color="primary"
+          disabled={!props.canBePrinted}
+        >
           Print
         </Button>
       </DialogActions>

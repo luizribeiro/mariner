@@ -38,6 +38,7 @@ const Template: Story = (_args) => {
       <Button onClick={handleClickOpen}>Open</Button>
       <FileDetailsDialog
         filename="stairs.ctb"
+        canBePrinted={true}
         path="stairs.ctb"
         onCancel={handleClose}
         onClose={handleClose}
@@ -73,6 +74,7 @@ export const Loading = (): React.ReactElement => {
       <Button onClick={handleClickOpen}>Open</Button>
       <FileDetailsDialog
         filename="stairs.ctb"
+        canBePrinted={true}
         path="stairs.ctb"
         onCancel={handleClose}
         onClose={handleClose}
@@ -81,6 +83,35 @@ export const Loading = (): React.ReactElement => {
           handleClose();
           console.log("KABOOM");
         }}
+        open={open}
+        scroll="paper"
+      />
+    </div>
+  );
+};
+
+export const UnprintableFile = (): React.ReactElement => {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleClickOpen}>Open</Button>
+      <FileDetailsDialog
+        filename="some_file.txt"
+        canBePrinted={false}
+        path="some_file.txt"
+        onCancel={handleClose}
+        onClose={handleClose}
+        onPrint={handleClose}
+        onDelete={handleClose}
         open={open}
         scroll="paper"
       />

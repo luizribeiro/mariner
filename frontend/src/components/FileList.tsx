@@ -57,7 +57,7 @@ function FileListItem({
   onDelete: () => void;
 }): React.ReactElement {
   const [open, setOpen] = React.useState(false);
-  const handleClickOpen = () => file.can_be_printed && setOpen(true);
+  const handleClickOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const printTime = file.print_time_secs
@@ -67,11 +67,7 @@ function FileListItem({
   const api = useAPI();
   return (
     <React.Fragment>
-      <ListItem
-        button
-        key={file.filename}
-        onClick={file.can_be_printed ? handleClickOpen : undefined}
-      >
+      <ListItem button key={file.filename} onClick={handleClickOpen}>
         <ListItemIcon>
           {file.can_be_printed ? <LayersIcon /> : <InsertDriveFileIcon />}
         </ListItemIcon>
@@ -79,6 +75,7 @@ function FileListItem({
       </ListItem>
       <FileDetailsDialog
         filename={file.filename}
+        canBePrinted={file.can_be_printed}
         path={file.path}
         onCancel={handleClose}
         onClose={handleClose}
