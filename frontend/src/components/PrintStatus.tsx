@@ -294,7 +294,7 @@ class PrintStatus extends React.Component<
   render(): React.ReactElement | null {
     return (
       <Card>
-        <CardHeader title="Printer Status" subheader="Elegoo Mars Pro" />
+        <CardHeader title="Printer Status" />
         <CardContent>{this._renderContent()}</CardContent>
       </Card>
     );
