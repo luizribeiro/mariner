@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mariner"
-version = "0.1.0"
+version = "0.1.1"
 description = "Web application for controlling Elegoo Mars 3D printers"
 license = "MIT"
 readme = "README.md"
