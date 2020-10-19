@@ -21,7 +21,11 @@ Web interface for controlling Elegoo Mars Pro 3D Printers.
 
 ## Documentation
 
-There's very little documentation as of now. Here's some instructions:
+[This blog post](https://l9o.dev/posts/controlling-an-elegoo-mars-pro-remotely/)
+explains the setup end to end with pictures of the modifications done to
+an Elegoo Mars Pro.
+
+Alternatively, the documentation is hosted on this repository itself:
 
 * **[Installing](docs/install.md)**: how to setup mariner on a Raspberry
   Pi Zero W and an Elegoo Mars Pro.
