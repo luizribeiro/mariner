@@ -10,5 +10,5 @@
     ".venv/",
     "dist/"
   ],
-  "strict": 1
+  "strict": true
 }
