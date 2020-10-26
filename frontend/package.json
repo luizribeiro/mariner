@@ -25,7 +25,7 @@
     "@types/storybook-react-router": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
     "@typescript-eslint/parser": "^4.5.0",
-    "axios-mock-adapter": "^1.18.2",
+    "axios-mock-adapter": "^1.19.0",
     "babel-jest": "^26.6.1",
     "babel-loader": "^8.1.0",
     "babel-plugin-transform-class-properties": "^6.24.1",
