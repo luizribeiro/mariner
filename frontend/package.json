@@ -20,7 +20,7 @@
     "@storybook/cli": "^6.0.27",
     "@storybook/react": "^6.0.27",
     "@types/jest": "^26.0.15",
-    "@types/react-dom": "^16.9.8",
+    "@types/react-dom": "^16.9.9",
     "@types/react-router-dom": "^5.1.5",
     "@types/storybook-react-router": "^1.0.1",
     "@typescript-eslint/eslint-plugin": "^4.5.0",
