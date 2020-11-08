@@ -370,14 +370,14 @@ test = ["versioneer", "pylint", "pycodestyle", "pyflakes", "pytest", "mock", "py
 
 [[package]]
 name = "python-language-server"
-version = "0.35.1"
+version = "0.36.0"
 description = "Python Language Server for the Language Server Protocol"
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-jedi = ">=0.17.0,<0.18.0"
+jedi = ">=0.17.2,<0.18.0"
 pluggy = "*"
 python-jsonrpc-server = ">=0.4.0"
 
@@ -544,7 +544,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "8023c4da8e8e8e66f21c1c6cc9891e78a38b756ca395cd42a02eedf030557879"
+content-hash = "6047db746f827ad1e0a5e8637dfe44564492f269054d9a048214a1ed3f154079"
 
 [metadata.files]
 appdirs = [
@@ -781,8 +781,8 @@ python-jsonrpc-server = [
     {file = "python_jsonrpc_server-0.4.0-py3-none-any.whl", hash = "sha256:e5a908ff182e620aac07db5f57887eeb0afe33993008f57dc1b85b594cea250c"},
 ]
 python-language-server = [
-    {file = "python-language-server-0.35.1.tar.gz", hash = "sha256:6e0c9a3b2ae98e0eb22e98ed6b3c4e190a6bf9e27af53efd2396da60cd92b221"},
-    {file = "python_language_server-0.35.1-py2.py3-none-any.whl", hash = "sha256:7051090259e3e81c0cdb140de8e32b8f11219808cda4427e6faf61f9ff9a3bf4"},
+    {file = "python-language-server-0.36.0.tar.gz", hash = "sha256:a0fab3c37e3f61e4ee0a721418bf753b66b188a163b3ec04df7efac35599411b"},
+    {file = "python_language_server-0.36.0-py2.py3-none-any.whl", hash = "sha256:d8939491ff5af1af2a89d4c3ceb84981e6ca6176ea7f4168ec8eb01ccce60651"},
 ]
 pywatchman = [
     {file = "pywatchman-1.4.1.tar.gz", hash = "sha256:d0047eb275deafb0011eda0a1a815fbd9742478c3d2b5ad6956d300e447dc2f9"},
