@@ -336,7 +336,7 @@ sapp = ["click", "click-log", "flask (>=1.1.2,<1.2.0)", "flask-cors (>=3.0.8,<3.
 
 [[package]]
 name = "pyre-extensions"
-version = "0.0.18"
+version = "0.0.19"
 description = "Type system extensions for use with the pyre type checker"
 category = "main"
 optional = false
@@ -544,7 +544,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "eb67fb4596911bb40aa0cfaee80d963517b67f7e0a489c2b3e61db5ed63bfb24"
+content-hash = "8023c4da8e8e8e66f21c1c6cc9891e78a38b756ca395cd42a02eedf030557879"
 
 [metadata.files]
 appdirs = [
@@ -769,8 +769,8 @@ pyre-check = [
     {file = "pyre_check-0.0.52-py3-none-manylinux1_x86_64.whl", hash = "sha256:2bf97fa0aa4a932d1ce03aa24a4999a6b8e5c89f15eca52e773efb6a1f7f8520"},
 ]
 pyre-extensions = [
-    {file = "pyre-extensions-0.0.18.tar.gz", hash = "sha256:60e0411e91ecbeaf1fd5d8851ffce42baf6a74ec7ccd01db545c7a97f15aac30"},
-    {file = "pyre_extensions-0.0.18-py3-none-any.whl", hash = "sha256:e6ad1facef54c982d9c0d9780b1aee9faf5cf53b3c7860a087062a206d1598c8"},
+    {file = "pyre-extensions-0.0.19.tar.gz", hash = "sha256:dd76371ee33fa359edc7b79ada30af8f66419a59ad54cf75428d89e4038c56aa"},
+    {file = "pyre_extensions-0.0.19-py3-none-any.whl", hash = "sha256:03bfe5c585d8cac941cac38bfb70ff4cc88289f4715a1fe1a356a012a966f7df"},
 ]
 pyserial = [
     {file = "pyserial-3.4-py2.py3-none-any.whl", hash = "sha256:e0770fadba80c31013896c7e6ef703f72e7834965954a78e71a3049488d4d7d8"},
