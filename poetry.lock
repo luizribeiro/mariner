@@ -294,7 +294,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
 
 [[package]]
 name = "pyexpect"
-version = "1.0.20"
+version = "1.0.21"
 description = "Python expectaton library"
 category = "dev"
 optional = false
@@ -544,7 +544,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "8023c4da8e8e8e66f21c1c6cc9891e78a38b756ca395cd42a02eedf030557879"
+content-hash = "5ea76d32a08f628db8fb04df4d11e5facc0fde662cdedce8ea2a8391655d8d7b"
 
 [metadata.files]
 appdirs = [
@@ -753,8 +753,8 @@ pycodestyle = [
     {file = "pycodestyle-2.6.0.tar.gz", hash = "sha256:c58a7d2815e0e8d7972bf1803331fb0152f867bd89adf8a01dfd55085434192e"},
 ]
 pyexpect = [
-    {file = "pyexpect-1.0.20-py2-none-any.whl", hash = "sha256:3310b1b26b7dc233ddf9bd5e78fa594e275d8a2607be905a786e63c0d9df7926"},
-    {file = "pyexpect-1.0.20.tar.gz", hash = "sha256:acaaa6f96de315dc99cac3da810156bf3829d1eb5c49180f00a4fdde82eabc76"},
+    {file = "pyexpect-1.0.21-py2-none-any.whl", hash = "sha256:1653b1a34b420e891d104f4d5ebac6ba313aec5bbf0feb0700c73f96a1384f8b"},
+    {file = "pyexpect-1.0.21.tar.gz", hash = "sha256:96e900d6af928a94c2a75b4935ddda44872c218121d0467c549ae19e7608a9a2"},
 ]
 pyflakes = [
     {file = "pyflakes-2.2.0-py2.py3-none-any.whl", hash = "sha256:0d94e0e05a19e57a99444b6ddcf9a6eb2e5c68d3ca1e98e90707af8152c90a92"},
