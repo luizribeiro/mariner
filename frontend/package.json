@@ -18,7 +18,7 @@
     "@storybook/addon-links": "^6.0.27",
     "@storybook/addon-storyshots": "^6.0.27",
     "@storybook/cli": "^6.0.27",
-    "@storybook/react": "^6.0.27",
+    "@storybook/react": "^6.1.7",
     "@types/jest": "^26.0.15",
     "@types/react-dom": "^16.9.8",
     "@types/react-router-dom": "^5.1.5",
