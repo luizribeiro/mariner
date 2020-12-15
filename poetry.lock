@@ -370,14 +370,14 @@ test = ["versioneer", "pylint", "pycodestyle", "pyflakes", "pytest", "mock", "py
 
 [[package]]
 name = "python-language-server"
-version = "0.35.1"
+version = "0.36.2"
 description = "Python Language Server for the Language Server Protocol"
 category = "dev"
 optional = false
 python-versions = "*"
 
 [package.dependencies]
-jedi = ">=0.17.0,<0.18.0"
+jedi = ">=0.17.2,<0.18.0"
 pluggy = "*"
 python-jsonrpc-server = ">=0.4.0"
 
@@ -544,7 +544,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "8023c4da8e8e8e66f21c1c6cc9891e78a38b756ca395cd42a02eedf030557879"
+content-hash = "a383cec8b2a5b57b73e2201dfe9c3e97cbbfcc7485bd2a5c2ab294aa5133ba5a"
 
 [metadata.files]
 appdirs = [
@@ -781,8 +781,8 @@ python-jsonrpc-server = [
     {file = "python_jsonrpc_server-0.4.0-py3-none-any.whl", hash = "sha256:e5a908ff182e620aac07db5f57887eeb0afe33993008f57dc1b85b594cea250c"},
 ]
 python-language-server = [
-    {file = "python-language-server-0.35.1.tar.gz", hash = "sha256:6e0c9a3b2ae98e0eb22e98ed6b3c4e190a6bf9e27af53efd2396da60cd92b221"},
-    {file = "python_language_server-0.35.1-py2.py3-none-any.whl", hash = "sha256:7051090259e3e81c0cdb140de8e32b8f11219808cda4427e6faf61f9ff9a3bf4"},
+    {file = "python-language-server-0.36.2.tar.gz", hash = "sha256:9984c84a67ee2c5102c8e703215f407fcfa5e62b0ae86c9572d0ada8c4b417b0"},
+    {file = "python_language_server-0.36.2-py2.py3-none-any.whl", hash = "sha256:a0ad0aca03f4a20c1c40f4f230c6773eac82c9b7cdb026cb09ba10237f4815d5"},
 ]
 pywatchman = [
     {file = "pywatchman-1.4.1.tar.gz", hash = "sha256:d0047eb275deafb0011eda0a1a815fbd9742478c3d2b5ad6956d300e447dc2f9"},
@@ -798,6 +798,8 @@ pyyaml = [
     {file = "PyYAML-5.3.1-cp37-cp37m-win_amd64.whl", hash = "sha256:73f099454b799e05e5ab51423c7bcf361c58d3206fa7b0d555426b1f4d9a3eaf"},
     {file = "PyYAML-5.3.1-cp38-cp38-win32.whl", hash = "sha256:06a0d7ba600ce0b2d2fe2e78453a470b5a6e000a985dd4a4e54e436cc36b0e97"},
     {file = "PyYAML-5.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:95f71d2af0ff4227885f7a6605c37fd53d3a106fcab511b8860ecca9fcf400ee"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win32.whl", hash = "sha256:ad9c67312c84def58f3c04504727ca879cb0013b2517c85a9a253f0cb6380c0a"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:6034f55dab5fea9e53f436aa68fa3ace2634918e8b5994d82f3621c04ff5ed2e"},
     {file = "PyYAML-5.3.1.tar.gz", hash = "sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d"},
 ]
 regex = [
