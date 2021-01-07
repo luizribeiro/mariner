@@ -336,7 +336,7 @@ sapp = ["click", "click-log", "flask (>=1.1.2,<1.2.0)", "flask-cors (>=3.0.8,<3.
 
 [[package]]
 name = "pyre-extensions"
-version = "0.0.19"
+version = "0.0.20"
 description = "Type system extensions for use with the pyre type checker"
 category = "main"
 optional = false
@@ -544,7 +544,7 @@ testing = ["pytest (>=3.5,!=3.7.3)", "pytest-checkdocs (>=1.2.3)", "pytest-flake
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "8023c4da8e8e8e66f21c1c6cc9891e78a38b756ca395cd42a02eedf030557879"
+content-hash = "7a8918ee7ba50c6f2fd7d6c86bfa1033577a7fe9b4bcc08a76ad451c063d370a"
 
 [metadata.files]
 appdirs = [
@@ -769,8 +769,8 @@ pyre-check = [
     {file = "pyre_check-0.0.52-py3-none-manylinux1_x86_64.whl", hash = "sha256:2bf97fa0aa4a932d1ce03aa24a4999a6b8e5c89f15eca52e773efb6a1f7f8520"},
 ]
 pyre-extensions = [
-    {file = "pyre-extensions-0.0.19.tar.gz", hash = "sha256:dd76371ee33fa359edc7b79ada30af8f66419a59ad54cf75428d89e4038c56aa"},
-    {file = "pyre_extensions-0.0.19-py3-none-any.whl", hash = "sha256:03bfe5c585d8cac941cac38bfb70ff4cc88289f4715a1fe1a356a012a966f7df"},
+    {file = "pyre-extensions-0.0.20.tar.gz", hash = "sha256:3d07f81d28a46ae662b1f56cc73e801fb9bd024c18441ab0db11aa8cc0c2e7ac"},
+    {file = "pyre_extensions-0.0.20-py3-none-any.whl", hash = "sha256:ce621e5594be1fc88aebd4bc35395a93ebfbcacb2b8d6ed43958f540cab2a820"},
 ]
 pyserial = [
     {file = "pyserial-3.4-py2.py3-none-any.whl", hash = "sha256:e0770fadba80c31013896c7e6ef703f72e7834965954a78e71a3049488d4d7d8"},
@@ -798,6 +798,8 @@ pyyaml = [
     {file = "PyYAML-5.3.1-cp37-cp37m-win_amd64.whl", hash = "sha256:73f099454b799e05e5ab51423c7bcf361c58d3206fa7b0d555426b1f4d9a3eaf"},
     {file = "PyYAML-5.3.1-cp38-cp38-win32.whl", hash = "sha256:06a0d7ba600ce0b2d2fe2e78453a470b5a6e000a985dd4a4e54e436cc36b0e97"},
     {file = "PyYAML-5.3.1-cp38-cp38-win_amd64.whl", hash = "sha256:95f71d2af0ff4227885f7a6605c37fd53d3a106fcab511b8860ecca9fcf400ee"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win32.whl", hash = "sha256:ad9c67312c84def58f3c04504727ca879cb0013b2517c85a9a253f0cb6380c0a"},
+    {file = "PyYAML-5.3.1-cp39-cp39-win_amd64.whl", hash = "sha256:6034f55dab5fea9e53f436aa68fa3ace2634918e8b5994d82f3621c04ff5ed2e"},
     {file = "PyYAML-5.3.1.tar.gz", hash = "sha256:b8eac752c5e14d3eca0e6dd9199cd627518cb5ec06add0de9d32baeee6fe645d"},
 ]
 regex = [
