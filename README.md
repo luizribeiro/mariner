@@ -17,7 +17,18 @@ Web interface for controlling Elegoo Mars Pro 3D Printers.
 * Remotely control the printer: start prints, pause/resume and stop.
 * Browse files available for printing.
 * Inspect `.ctb` files: image preview, print time and slicing settings.
-* Only supports the Elegoo Mars Pro printer right now.
+
+## Supported Printers
+
+The following printers have been tested by the community and work with
+Mariner:
+
+* Elegoo Mars
+* Elegoo Mars Pro
+* Elegoo Mars 2 Pro
+
+If you have access to other models and want to contribute, please open an
+issue. We're happy to support more printers!
 
 ## Documentation
 
