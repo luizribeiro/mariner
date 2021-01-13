@@ -9,8 +9,8 @@ later:
 
 ## Requirements
 
-* Raspberry Pi Zero W (may work with others, untested)
-* Elegoo Mars Pro (again, may work with other similar printers)
+* Raspberry Pi Zero W
+* One of the [supported 3D Printers](https://github.com/luizribeiro/mariner#supported-printers)
 * Micro USB to USB-A cable to connect between Pi and printer mainboard.
 * Power Supply for the Pi, or a 12V to 5V converter to power it from
   printer's power supply.
