@@ -11,6 +11,8 @@ from mariner.mars import ElegooMars, PrinterState
 
 class ElegooMarsTest(TestCase):
     printer: ElegooMars
+    # pyre-ignore[24]: Generic type `unittest.mock._patch` expects
+    # 1 type parameter
     serial_port_patcher: unittest.mock._patch
     serial_port_mock: MagicMock
 

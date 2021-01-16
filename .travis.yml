@@ -8,17 +8,10 @@ _backend_build: &backend_build
     - pip install poetry
   install:
     - poetry install -vv
-  before_script:
-    # for some reason poetry is still setting up the venv somewhere else
-    # despite the settings on poetry.toml
-    - sed -i "/.venv\\/lib\\//d" .pyre_configuration
-    - sed -i "s#.venv#$(poetry env info --path)#g" .pyre_configuration
   script:
     - poetry run flake8
     - poetry run black --check .
-    - >-
-      poetry run pyre --noninteractive
-      --search-path "$(poetry env info --path)/lib/"python*/site-packages
+    - poetry run pyre --noninteractive
     - poetry run green --run-coverage
 
 _frontend_build: &frontend_build

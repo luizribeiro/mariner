@@ -1,14 +1,10 @@
 {
   "source_directories": [
-    "."
-  ],
-  "search_path": [
-    ".venv/lib/python3.8/site-packages/",
+    ".",
     "stubs/"
   ],
-  "ignore_all_errors": [
-    ".venv/",
-    "dist/"
+  "exclude": [
+    ".*\/dist\/.*"
   ],
   "strict": true
 }
