@@ -36,14 +36,10 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: syphar/restore-virtualenv@v1
         id: venv-cache
-      - name: flake8
-        run: poetry run flake8
-      - name: black
-        run: poetry run black --check .
-      - name: pyre
-        run: poetry run pyre --noninteractive
-      - name: green
-        run: poetry run green --run-coverage
+      - run: poetry run flake8
+      - run: poetry run black --check .
+      - run: poetry run pyre --noninteractive
+      - run: poetry run green --run-coverage
 
   frontend-build:
     runs-on: ubuntu-latest
