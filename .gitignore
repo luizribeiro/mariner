@@ -7,6 +7,7 @@
 .venv/
 __pycache__/
 coverage
+coverage.xml
 frontend/dist/
 frontend/node_modules/
 *.deb
