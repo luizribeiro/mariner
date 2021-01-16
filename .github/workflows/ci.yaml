@@ -52,21 +52,9 @@ jobs:
         working-directory: frontend
     steps:
       - uses: actions/checkout@v2
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: install
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: lint
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: prettier --check src/
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: run tsc
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: build
-      - uses: borales/actions-yarn@v2.0.0
-        with:
-          cmd: test --coverage --collectCoverageFrom "src/**/*"
+      - uses: actions/setup-node@v2
+      - run: yarn lint
+      - run: yarn run prettier --check src/
+      - run: yarn run tsc
+      - run: yarn build
+      - run: yarn test --coverage --collectCoverageFrom "src/**/*"
