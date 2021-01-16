@@ -40,12 +40,12 @@ jobs:
       - run: poetry run black --check .
       - run: poetry run pyre --noninteractive
       - run: poetry run green --run-coverage
-      - run: poetry run coverage xml
+      - run: poetry run coverage xml -o backend-coverage.xml
       - uses: actions/upload-artifact@v2
         if: matrix.python-version == '3.8'
         with:
           name: backend-coverage
-          path: coverage.xml
+          path: backend-coverage.xml
 
   frontend-build:
     runs-on: ubuntu-latest
@@ -61,10 +61,11 @@ jobs:
       - run: yarn run tsc
       - run: yarn build
       - run: yarn test --coverage --collectCoverageFrom "src/**/*"
+      - run: mv coverage/coverage-final.json ../frontend-coverage.json
       - uses: actions/upload-artifact@v2
         with:
           name: frontend-coverage
-          path: frontend/coverage/coverage-final.json
+          path: frontend-coverage.json
 
   codecov:
     runs-on: ubuntu-latest
@@ -75,12 +76,10 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: backend-coverage
-          path: backend-coverage.xml
       - name: Retrieve frontend test coverage
         uses: actions/download-artifact@v2
         with:
           name: frontend-coverage
-          path: frontend-coverage.json
       - run: ls -R
       - uses: codecov/codecov-action@v1
         with:
