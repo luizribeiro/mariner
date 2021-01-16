@@ -42,6 +42,7 @@ jobs:
       - run: poetry run green --run-coverage
       - run: poetry run coverage xml
       - uses: actions/upload-artifact@v2
+        if: matrix.python-version == '3.8'
         with:
           name: backend-coverage
           path: coverage.xml
@@ -80,6 +81,7 @@ jobs:
         with:
           name: frontend-coverage
           path: frontend-coverage.json
+      - run: ls -R
       - uses: codecov/codecov-action@v1
         with:
           files: ./backend-coverage.xml,./frontend-coverage.json
