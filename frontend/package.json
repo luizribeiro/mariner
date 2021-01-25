@@ -17,7 +17,7 @@
     "@storybook/addon-essentials": "^6.1.14",
     "@storybook/addon-links": "^6.1.14",
     "@storybook/addon-storyshots": "^6.1.14",
-    "@storybook/cli": "^6.1.14",
+    "@storybook/cli": "^6.1.15",
     "@storybook/react": "^6.1.14",
     "@types/jest": "^26.0.15",
     "@types/react-dom": "^17.0.0",
