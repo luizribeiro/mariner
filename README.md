@@ -2,7 +2,7 @@
 
 ![CI](https://github.com/luizribeiro/mariner/workflows/CI/badge.svg)
 [![codecov](https://codecov.io/gh/luizribeiro/mariner/branch/master/graph/badge.svg)](https://codecov.io/gh/luizribeiro/mariner)
-[![Python 3.6 | 3.8](https://img.shields.io/badge/python-3.7%20%7C%203.8-blue)](https://www.python.org/downloads/)
+[![Python 3.6 | 3.8 | 3.9](https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9-blue)](https://www.python.org/downloads/)
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
 
 Web interface for controlling MSLA 3D Printers based on Chitu controllers,
