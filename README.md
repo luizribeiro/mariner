@@ -28,6 +28,7 @@ Mariner:
 * Elegoo Mars Pro
 * Elegoo Mars 2 Pro
 * Phrozen Sonic Mini 4K
+* Creality LD-002H
 
 If you have access to other models and want to contribute, please open an
 issue. We're happy to support more printers!
