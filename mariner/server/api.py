@@ -17,6 +17,7 @@ from werkzeug.utils import secure_filename
 from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import MarinerException
 from mariner.file_formats.ctb import CTBFile
+from mariner.file_formats.cbddlp import CBDDLPFile
 from mariner.mars import ElegooMars, PrinterState
 from mariner.server.utils import read_cached_cbddlp_file, read_cached_ctb_file, read_cached_cbddlp_preview, read_cached_ctb_preview
 
@@ -161,7 +162,6 @@ def file_details() -> str:
 def upload_file() -> str:
     file = request.files.get("file")
     file_extension = os.path.splitext(file.filename)[1]
-    print("file_extension: " + file_extension)
     if file is None or file.filename == "":
         abort(400)
     if file_extension not in [".cbddlp", ".ctb"]:

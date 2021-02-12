@@ -8,7 +8,7 @@ from typedstruct import LittleEndianStruct, StructType
 
 
 @dataclass(frozen=True)
-class CTBHeader(LittleEndianStruct):
+class CBDDLPHeader(LittleEndianStruct):
     magic: int = StructType.uint32()
     version: int = StructType.uint32()
     bed_size_x_mm: float = StructType.float32()
@@ -41,7 +41,7 @@ class CTBHeader(LittleEndianStruct):
 
 
 @dataclass(frozen=True)
-class CTBSlicer(LittleEndianStruct):
+class CBDDLPSlicer(LittleEndianStruct):
     skip_0: int = StructType.uint32()
     skip_1: int = StructType.uint32()
     skip_2: int = StructType.uint32()
@@ -67,7 +67,7 @@ class CTBSlicer(LittleEndianStruct):
 
 
 @dataclass(frozen=True)
-class CTBLayerDef(LittleEndianStruct):
+class CBDDLPLayerDef(LittleEndianStruct):
     layer_height_mm: float = StructType.float32()
     layer_exposure: float = StructType.float32()
     layer_off_time: float = StructType.float32()
@@ -80,7 +80,7 @@ class CTBLayerDef(LittleEndianStruct):
 
 
 @dataclass(frozen=True)
-class CTBPreview(LittleEndianStruct):
+class CBDDLPPreview(LittleEndianStruct):
     resolution_x: int = StructType.uint32()
     resolution_y: int = StructType.uint32()
     image_offset: int = StructType.uint32()
@@ -138,18 +138,18 @@ class CBDDLPFile:
     @classmethod
     def read(self, path: pathlib.Path) -> "CBDDLPFile":
         with open(str(path), "rb") as file:
-            ctb_header = CTBHeader.unpack(file.read(CTBHeader.get_size()))
+            CBDDLP_header = CBDDLPHeader.unpack(file.read(CBDDLPHeader.get_size()))
 
-            file.seek(ctb_header.slicer_offset)
-            ctb_slicer = CTBSlicer.unpack(file.read(CTBSlicer.get_size()))
+            file.seek(CBDDLP_header.slicer_offset)
+            CBDDLP_slicer = CBDDLPSlicer.unpack(file.read(CBDDLPSlicer.get_size()))
 
-            file.seek(ctb_slicer.machine_offset)
-            printer_name = file.read(ctb_slicer.machine_size).decode()
+            file.seek(CBDDLP_slicer.machine_offset)
+            printer_name = file.read(CBDDLP_slicer.machine_size).decode()
 
             end_byte_offset_by_layer = []
-            for layer in range(0, ctb_header.layer_count):
-                file.seek(ctb_header.layer_defs_offset + layer * CTBLayerDef.get_size())
-                layer_def = CTBLayerDef.unpack(file.read(CTBLayerDef.get_size()))
+            for layer in range(0, CBDDLP_header.layer_count):
+                file.seek(CBDDLP_header.layer_defs_offset + layer * CBDDLPLayerDef.get_size())
+                layer_def = CBDDLPLayerDef.unpack(file.read(CBDDLPLayerDef.get_size()))
                 end_byte_offset_by_layer.append(
                     layer_def.image_offset + layer_def.image_length
                 )
@@ -157,22 +157,22 @@ class CBDDLPFile:
             return CBDDLPFile(
                 filename=path.name,
                 bed_size_mm=(
-                    round(ctb_header.bed_size_x_mm, 4),
-                    round(ctb_header.bed_size_y_mm, 4),
-                    round(ctb_header.bed_size_z_mm, 4),
+                    round(CBDDLP_header.bed_size_x_mm, 4),
+                    round(CBDDLP_header.bed_size_y_mm, 4),
+                    round(CBDDLP_header.bed_size_z_mm, 4),
                 ),
-                height_mm=ctb_header.height_mm,
-                layer_height_mm=ctb_header.layer_height_mm,
-                layer_count=ctb_header.layer_count,
-                resolution=(ctb_header.resolution_x, ctb_header.resolution_y),
-                print_time_secs=ctb_header.print_time,
+                height_mm=CBDDLP_header.height_mm,
+                layer_height_mm=CBDDLP_header.layer_height_mm,
+                layer_count=CBDDLP_header.layer_count,
+                resolution=(CBDDLP_header.resolution_x, CBDDLP_header.resolution_y),
+                print_time_secs=CBDDLP_header.print_time,
                 end_byte_offset_by_layer=end_byte_offset_by_layer,
                 slicer_version=".".join(
                     [
-                        str(ctb_slicer.version_release),
-                        str(ctb_slicer.version_major),
-                        str(ctb_slicer.version_minor),
-                        str(ctb_slicer.version_patch),
+                        str(CBDDLP_slicer.version_release),
+                        str(CBDDLP_slicer.version_major),
+                        str(CBDDLP_slicer.version_minor),
+                        str(CBDDLP_slicer.version_patch),
                     ]
                 ),
                 printer_name=printer_name,
@@ -181,10 +181,10 @@ class CBDDLPFile:
     @classmethod
     def read_preview(cls, path: pathlib.Path) -> png.Image:
         with open(str(path), "rb") as file:
-            ctb_header = CTBHeader.unpack(file.read(CTBHeader.get_size()))
+            CBDDLP_header = CBDDLPHeader.unpack(file.read(CBDDLPHeader.get_size()))
 
-            file.seek(ctb_header.high_res_preview_offset)
-            preview = CTBPreview.unpack(file.read(CTBPreview.get_size()))
+            file.seek(CBDDLP_header.high_res_preview_offset)
+            preview = CBDDLPPreview.unpack(file.read(CBDDLPPreview.get_size()))
 
             file.seek(preview.image_offset)
             data = file.read(preview.image_length)
