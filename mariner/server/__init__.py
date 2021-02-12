@@ -10,7 +10,9 @@ from mariner.server.api import api as api_blueprint
 from mariner.server.app import app as flask_app
 from mariner.server.utils import (
     read_cached_ctb_file,
-    read_cached_preview,
+    read_cached_cbddlp_file,
+    read_cached_ctb_preview,
+    read_cached_cbddlp_preview,
 )
 
 

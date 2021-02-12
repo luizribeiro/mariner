@@ -18,7 +18,7 @@ from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import MarinerException
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState
-from mariner.server.utils import read_cached_cbddlp_file, read_cached_ctb_file, read_cached_preview
+from mariner.server.utils import read_cached_cbddlp_file, read_cached_ctb_file, read_cached_cbddlp_preview, read_cached_ctb_preview
 
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -97,7 +97,9 @@ def list_files() -> str:
             if dir_entry.is_file():
                 ctb_file: Optional[CTBFile] = None
                 cbddlp_file: Optional[CBDDLPFile] = None
-                if dir_entry.name.endswith(".cbddlp" or ".ctb"):
+                if dir_entry.name.endswith(".cbddlp"):
+                    cbddlp_file = read_cached_cbddlp_file(path / dir_entry.name)
+                elif dir_entry.name.endswith(".ctb"):
                     ctb_file = read_cached_ctb_file(path / dir_entry.name)
 
                 file_data: Dict[str, Any] = {
@@ -158,9 +160,11 @@ def file_details() -> str:
 @api.route("/upload_file", methods=["POST"])
 def upload_file() -> str:
     file = request.files.get("file")
+    file_extension = os.path.splitext(file.filename)[1]
+    print("file_extension: " + file_extension)
     if file is None or file.filename == "":
         abort(400)
-    if os.path.splitext(file.filename)[1] != (".cbddlp" or ".ctb"):
+    if file_extension not in [".cbddlp", ".ctb"]:
         abort(400)
     filename = secure_filename(file.filename)
     file.save(str(FILES_DIRECTORY / filename))
@@ -182,11 +186,15 @@ def delete_file() -> str:
 @api.route("/file_preview", methods=["GET"])
 def file_preview() -> Response:
     filename = str(request.args.get("filename"))
+    file_extension = os.path.splitext(filename)[1]
     path = (FILES_DIRECTORY / filename).resolve()
     if FILES_DIRECTORY not in path.parents:
         abort(400)
 
-    preview_bytes = read_cached_preview(path)
+    if file_extension == ".ctb":
+        preview_bytes = read_cached_ctb_preview(path)
+    elif file_extension == ".cbddlp":
+        preview_bytes = read_cached_cbddlp_preview(path)
 
     response = make_response(preview_bytes)
     response.headers.set("Content-Type", "image/png")

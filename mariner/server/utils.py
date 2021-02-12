@@ -24,7 +24,15 @@ def read_cached_cbddlp_file(filename: str) -> CBDDLPFile:
     return CBDDLPFile.read(FILES_DIRECTORY / filename)
 
 @cache.memoize(timeout=0)
-def read_cached_preview(filename: str) -> bytes:
+def read_cached_cbddlp_preview(filename: str) -> bytes:
+    assert os.path.isabs(filename)
+    bytes = io.BytesIO()
+    preview_image: png.Image = CBDDLPFile.read_preview(FILES_DIRECTORY / filename)
+    preview_image.write(bytes)
+    return bytes.getvalue()
+
+@cache.memoize(timeout=0)
+def read_cached_ctb_preview(filename: str) -> bytes:
     assert os.path.isabs(filename)
     bytes = io.BytesIO()
     preview_image: png.Image = CBDDLPFile.read_preview(FILES_DIRECTORY / filename)
