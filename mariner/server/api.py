@@ -18,7 +18,7 @@ from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import MarinerException
 from mariner.file_formats.ctb import CTBFile
 from mariner.mars import ElegooMars, PrinterState
-from mariner.server.utils import read_cached_ctb_file, read_cached_preview
+from mariner.server.utils import read_cached_cbddlp_file, read_cached_ctb_file, read_cached_preview
 
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -96,7 +96,8 @@ def list_files() -> str:
         for dir_entry in dir_entries:
             if dir_entry.is_file():
                 ctb_file: Optional[CTBFile] = None
-                if dir_entry.name.endswith(".ctb"):
+                cbddlp_file: Optional[CBDDLPFile] = None
+                if dir_entry.name.endswith(".cbddlp" or ".ctb"):
                     ctb_file = read_cached_ctb_file(path / dir_entry.name)
 
                 file_data: Dict[str, Any] = {
@@ -107,6 +108,12 @@ def list_files() -> str:
                 if ctb_file:
                     file_data = {
                         "print_time_secs": ctb_file.print_time_secs,
+                        "can_be_printed": True,
+                        **file_data,
+                    }
+                elif cbddlp_file:
+                    file_data = {
+                        "print_time_secs": cbddlp_file.print_time_secs,
                         "can_be_printed": True,
                         **file_data,
                     }
@@ -153,7 +160,7 @@ def upload_file() -> str:
     file = request.files.get("file")
     if file is None or file.filename == "":
         abort(400)
-    if os.path.splitext(file.filename)[1] != ".ctb":
+    if os.path.splitext(file.filename)[1] != (".cbddlp" or ".ctb"):
         abort(400)
     filename = secure_filename(file.filename)
     file.save(str(FILES_DIRECTORY / filename))
