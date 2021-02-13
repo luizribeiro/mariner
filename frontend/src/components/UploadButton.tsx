@@ -47,7 +47,7 @@ class UploadButton extends React.Component<
       <React.Fragment>
         <input
           ref={this.uploadButtonRef}
-          accept=".ctb"
+          accept=".cbddlp,.ctb"
           className={classes.input}
           id="upload-button"
           multiple
