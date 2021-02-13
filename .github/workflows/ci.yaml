@@ -2,7 +2,7 @@
 name: CI
 
 # yamllint disable-line rule:truthy
-on: [push]
+on: [push, pull_request]
 
 jobs:
   setup-venv:
