@@ -10,24 +10,24 @@ from mariner.file_formats.ctb import CTBFile
 
 
 class CTBFileTest(TestCase):
-    def test_loading_ctb_file(self) -> None:
+    def test_loading_cbddlp_file(self) -> None:
         path = pathlib.Path(__file__).parent.absolute() / "pyramid.cbddlp"
-        ctb_file = CTBFile.read(path)
-        expect(ctb_file.filename).to_equal("pyramid.cbddlp")
-        expect(ctb_file.bed_size_mm).to_equal((68.04, 120.96, 150.0))
-        expect(ctb_file.height_mm).close_to(2.5, max_delta=1e-9)
-        expect(ctb_file.layer_height_mm).close_to(0.05, max_delta=1e-9)
-        expect(ctb_file.layer_count).to_equal(50)
-        expect(ctb_file.resolution).to_equal((1440, 2560))
-        expect(ctb_file.print_time_secs).to_equal(931)
-        expect(ctb_file.end_byte_offset_by_layer[:5]).to_equal(
+        cbddlp_file = CTBFile.read(path)
+        expect(cbddlp_file.filename).to_equal("pyramid.cbddlp")
+        expect(cbddlp_file.bed_size_mm).to_equal((68.04, 120.96, 150.0))
+        expect(cbddlp_file.height_mm).close_to(2.5, max_delta=1e-9)
+        expect(cbddlp_file.layer_height_mm).close_to(0.05, max_delta=1e-9)
+        expect(cbddlp_file.layer_count).to_equal(50)
+        expect(cbddlp_file.resolution).to_equal((1440, 2560))
+        expect(cbddlp_file.print_time_secs).to_equal(931)
+        expect(cbddlp_file.end_byte_offset_by_layer[:5]).to_equal(
             [42047, 161261, 280467, 399665, 518853]
         )
-        expect(ctb_file.end_byte_offset_by_layer[-5:]).to_equal(
+        expect(cbddlp_file.end_byte_offset_by_layer[-5:]).to_equal(
             [5389468, 5507868, 5626244, 5744596, 5862924]
         )
-        expect(ctb_file.slicer_version).to_equal("1.7.0.0")
-        expect(ctb_file.printer_name).to_equal("ELEGOO MARS")
+        expect(cbddlp_file.slicer_version).to_equal("1.7.0.0")
+        expect(cbddlp_file.printer_name).to_equal("ELEGOO MARS")
 
     def test_preview_rendering(self) -> None:
         path = pathlib.Path(__file__).parent.absolute() / "pyramid.cbddlp"
