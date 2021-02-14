@@ -9,7 +9,7 @@ from pyexpect import expect
 from mariner.file_formats.ctb import CTBFile
 
 
-class CTBFileTest(TestCase):
+class CBDDLPFileTest(TestCase):
     def test_loading_cbddlp_file(self) -> None:
         path = pathlib.Path(__file__).parent.absolute() / "pyramid.cbddlp"
         cbddlp_file = CTBFile.read(path)
