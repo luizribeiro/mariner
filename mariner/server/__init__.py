@@ -13,6 +13,8 @@ from mariner.server.utils import (
     read_cached_preview,
 )
 
+from itertools import chain
+
 
 flask_app.register_blueprint(api_blueprint)
 
@@ -25,9 +27,13 @@ def index() -> str:
 class CacheBootstrapper(multiprocessing.Process):
     def run(self) -> None:
         os.nice(5)
-        for file in FILES_DIRECTORY.rglob("*.ctb"):
+        for file in chain(
+            FILES_DIRECTORY.rglob("*.ctb"), FILES_DIRECTORY.rglob("*.cbddlp")
+        ):
             read_cached_ctb_file(file.absolute())
-        for file in FILES_DIRECTORY.rglob("*.ctb"):
+        for file in chain(
+            FILES_DIRECTORY.rglob("*.ctb"), FILES_DIRECTORY.rglob("*.cbddlp")
+        ):
             read_cached_preview(file.absolute())
 
 
