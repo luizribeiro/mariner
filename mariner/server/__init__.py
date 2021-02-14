@@ -25,9 +25,9 @@ def index() -> str:
 class CacheBootstrapper(multiprocessing.Process):
     def run(self) -> None:
         os.nice(5)
-        for file in FILES_DIRECTORY.rglob("*.ctb"):
+        for file in FILES_DIRECTORY.rglob("*.ctb" or "*.cbddlp"):
             read_cached_ctb_file(file.absolute())
-        for file in FILES_DIRECTORY.rglob("*.ctb"):
+        for file in FILES_DIRECTORY.rglob("*.ctb" or "*.cbddlp"):
             read_cached_preview(file.absolute())
 
 

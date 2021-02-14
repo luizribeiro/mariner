@@ -96,7 +96,7 @@ def list_files() -> str:
         for dir_entry in dir_entries:
             if dir_entry.is_file():
                 ctb_file: Optional[CTBFile] = None
-                if dir_entry.name.endswith(".ctb"):
+                if dir_entry.name.endswith((".ctb", ".cbddlp")):
                     ctb_file = read_cached_ctb_file(path / dir_entry.name)
 
                 file_data: Dict[str, Any] = {
@@ -153,7 +153,7 @@ def upload_file() -> str:
     file = request.files.get("file")
     if file is None or file.filename == "":
         abort(400)
-    if os.path.splitext(file.filename)[1] != ".ctb":
+    if os.path.splitext(file.filename)[1] not in (".ctb", ".cbddlp"):
         abort(400)
     filename = secure_filename(file.filename)
     file.save(str(FILES_DIRECTORY / filename))
