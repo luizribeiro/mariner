@@ -31,8 +31,8 @@ later:
 Download and install the latest release of `mariner3d`:
 
 ```
-$ wget https://github.com/luizribeiro/mariner/releases/download/v0.1.0-1/mariner3d_0.1.0-1_armhf.deb
-$ sudo dpkg -i mariner3d_0.1.0-1_armhf.deb
+$ wget https://github.com/luizribeiro/mariner/releases/latest/download/mariner3d_0.1.1-1_armhf.deb
+$ sudo dpkg -i mariner3d_0.1.1-1_armhf.deb
 ```
 
 ## Allowing printer to see uploaded files
