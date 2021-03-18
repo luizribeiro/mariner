@@ -13,7 +13,7 @@ mariner = 'mariner.server:main'
 
 [tool.poetry.dependencies]
 flask = "1.1.2"
-flask-caching = "1.9.0"
+flask-caching = "1.10.1"
 Flask-WTF = "0.14.3"
 pypng = "0.0.20"
 pyre-extensions = "0.0.20"
