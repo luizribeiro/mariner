@@ -61,7 +61,7 @@ jobs:
             env.DEBIAN_PKG_FULL_VERSION
           }}_armhf.deb" >> $GITHUB_ENV
 
-      - uses: satackey/action-docker-layer-caching@v0.0.8
+      - uses: satackey/action-docker-layer-caching@v0.0.11
         continue-on-error: true
       - name: Build Docker Image
         run: docker build -f Dockerfile -t packager-image .
