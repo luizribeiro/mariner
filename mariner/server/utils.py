@@ -1,6 +1,6 @@
 import io
 import os
-from typing import Type
+from typing import Mapping, Type
 
 import png
 from flask_caching import Cache
@@ -9,6 +9,7 @@ from mariner.config import FILES_DIRECTORY
 from mariner.file_formats import SlicedModelFile
 from mariner.file_formats.ctb import CTBFile
 from mariner.file_formats.cbddlp import CBDDLPFile
+from mariner.file_formats.fdg import FDGFile
 from mariner.server.app import app
 
 
@@ -34,11 +35,15 @@ def read_cached_preview(filename: str) -> bytes:
 
 def _get_file_format(filename: str) -> Type[SlicedModelFile]:
     (_, extension) = os.path.splitext(filename)
-    extension = extension.lower()
 
-    if extension == ".ctb":
-        return CTBFile
-    if extension == ".cbddlp":
-        return CBDDLPFile
+    # only reason this is in here is because it makes mocking on
+    # mariner.tests.test_server simpler
+    EXTENSION_TO_FILE_FORMAT: Mapping[str, Type[SlicedModelFile]] = {
+        ".ctb": CTBFile,
+        ".cbddlp": CBDDLPFile,
+        ".fdg": FDGFile,
+    }
+    file_format = EXTENSION_TO_FILE_FORMAT.get(extension.lower())
 
-    raise Exception(f"Unsupported file format {extension}")
+    assert file_format is not None
+    return file_format
