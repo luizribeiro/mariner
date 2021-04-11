@@ -6,13 +6,13 @@ from unittest import TestCase
 import png
 from pyexpect import expect
 
-from mariner.file_formats.ctb import CTBFile
+from mariner.file_formats.cbddlp import CBDDLPFile
 
 
 class CBDDLPFileTest(TestCase):
     def test_loading_cbddlp_file(self) -> None:
         path = pathlib.Path(__file__).parent.absolute() / "pyramid.cbddlp"
-        cbddlp_file = CTBFile.read(path)
+        cbddlp_file = CBDDLPFile.read(path)
         expect(cbddlp_file.filename).to_equal("pyramid.cbddlp")
         expect(cbddlp_file.bed_size_mm).to_equal((68.04, 120.96, 150.0))
         expect(cbddlp_file.height_mm).close_to(2.5, max_delta=1e-9)
@@ -32,7 +32,7 @@ class CBDDLPFileTest(TestCase):
     def test_preview_rendering(self) -> None:
         path = pathlib.Path(__file__).parent.absolute() / "pyramid.cbddlp"
         bytes = io.BytesIO()
-        preview_image: png.Image = CTBFile.read_preview(path)
+        preview_image: png.Image = CBDDLPFile.read_preview(path)
         preview_image.write(bytes)
         expect(preview_image.info["width"]).to_equal(400)
         expect(preview_image.info["height"]).to_equal(300)

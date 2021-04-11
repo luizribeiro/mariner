@@ -17,7 +17,7 @@ from mariner.mars import (
     PrintStatus,
 )
 from mariner.server.app import app
-from mariner.server.utils import read_cached_ctb_file
+from mariner.server.utils import read_cached_sliced_model_file
 
 
 class MarinerServerTest(TestCase):
@@ -46,8 +46,8 @@ class MarinerServerTest(TestCase):
         # tests. this is important because during tests this function returns a Mock,
         # which pickle cannot serialize.
         self._read_ctb_file_patcher = patch(
-            "mariner.server.api.read_cached_ctb_file",
-            side_effect=read_cached_ctb_file.__wrapped__,
+            "mariner.server.api.read_cached_sliced_model_file",
+            side_effect=read_cached_sliced_model_file.__wrapped__,
         )
         self._read_ctb_file_patcher.start()
 

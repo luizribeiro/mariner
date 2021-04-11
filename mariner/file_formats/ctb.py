@@ -6,6 +6,8 @@ from typing import List, Sequence, Tuple
 import png
 from typedstruct import LittleEndianStruct, StructType
 
+from mariner.file_formats import SlicedModelFile
+
 
 @dataclass(frozen=True)
 class CTBHeader(LittleEndianStruct):
@@ -123,7 +125,7 @@ def _read_image(width: int, height: int, data: bytes) -> png.Image:
 
 
 @dataclass(frozen=True)
-class CTBFile:
+class CTBFile(SlicedModelFile):
     filename: str
     bed_size_mm: Tuple[float, float, float]
     height_mm: float

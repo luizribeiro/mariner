@@ -16,9 +16,9 @@ from werkzeug.utils import secure_filename
 
 from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import MarinerException
-from mariner.file_formats.ctb import CTBFile
+from mariner.file_formats import SlicedModelFile
 from mariner.mars import ElegooMars, PrinterState
-from mariner.server.utils import read_cached_ctb_file, read_cached_preview
+from mariner.server.utils import read_cached_preview, read_cached_sliced_model_file
 
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -49,28 +49,32 @@ def print_status() -> str:
             progress = 0.0
             print_details = {}
         else:
-            ctb_file = read_cached_ctb_file(FILES_DIRECTORY / selected_file)
+            sliced_model_file = read_cached_sliced_model_file(
+                FILES_DIRECTORY / selected_file
+            )
 
             if print_status.current_byte == 0:
                 current_layer = 1
             else:
                 current_layer = (
-                    ctb_file.end_byte_offset_by_layer.index(print_status.current_byte)
+                    sliced_model_file.end_byte_offset_by_layer.index(
+                        print_status.current_byte
+                    )
                     + 1
                 )
 
             progress = (
                 100.0
                 * none_throws(current_layer - 1)
-                / none_throws(ctb_file.layer_count)
+                / none_throws(sliced_model_file.layer_count)
             )
 
             print_details = {
                 "current_layer": current_layer,
-                "layer_count": ctb_file.layer_count,
-                "print_time_secs": ctb_file.print_time_secs,
+                "layer_count": sliced_model_file.layer_count,
+                "print_time_secs": sliced_model_file.print_time_secs,
                 "time_left_secs": round(
-                    ctb_file.print_time_secs * (100.0 - progress) / 100.0
+                    sliced_model_file.print_time_secs * (100.0 - progress) / 100.0
                 ),
             }
 
@@ -95,18 +99,20 @@ def list_files() -> str:
         directories = []
         for dir_entry in dir_entries:
             if dir_entry.is_file():
-                ctb_file: Optional[CTBFile] = None
+                sliced_model_file: Optional[SlicedModelFile] = None
                 if dir_entry.name.endswith((".ctb", ".cbddlp")):
-                    ctb_file = read_cached_ctb_file(path / dir_entry.name)
+                    sliced_model_file = read_cached_sliced_model_file(
+                        path / dir_entry.name
+                    )
 
                 file_data: Dict[str, Any] = {
                     "filename": dir_entry.name,
                     "path": str((path / dir_entry.name).relative_to(FILES_DIRECTORY)),
                 }
 
-                if ctb_file:
+                if sliced_model_file:
                     file_data = {
-                        "print_time_secs": ctb_file.print_time_secs,
+                        "print_time_secs": sliced_model_file.print_time_secs,
                         "can_be_printed": True,
                         **file_data,
                     }
@@ -133,17 +139,17 @@ def file_details() -> str:
     path = (FILES_DIRECTORY / filename).resolve()
     if FILES_DIRECTORY not in path.parents:
         abort(400)
-    ctb_file = read_cached_ctb_file(path)
+    sliced_model_file = read_cached_sliced_model_file(path)
     return jsonify(
         {
-            "filename": ctb_file.filename,
+            "filename": sliced_model_file.filename,
             "path": filename,
-            "bed_size_mm": list(ctb_file.bed_size_mm),
-            "height_mm": round(ctb_file.height_mm, 4),
-            "layer_count": ctb_file.layer_count,
-            "layer_height_mm": round(ctb_file.layer_height_mm, 4),
-            "resolution": list(ctb_file.resolution),
-            "print_time_secs": ctb_file.print_time_secs,
+            "bed_size_mm": list(sliced_model_file.bed_size_mm),
+            "height_mm": round(sliced_model_file.height_mm, 4),
+            "layer_count": sliced_model_file.layer_count,
+            "layer_height_mm": round(sliced_model_file.layer_height_mm, 4),
+            "resolution": list(sliced_model_file.resolution),
+            "print_time_secs": sliced_model_file.print_time_secs,
         }
     )
 

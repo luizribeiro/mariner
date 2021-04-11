@@ -9,8 +9,8 @@ from mariner.config import FILES_DIRECTORY
 from mariner.server.api import api as api_blueprint
 from mariner.server.app import app as flask_app
 from mariner.server.utils import (
-    read_cached_ctb_file,
     read_cached_preview,
+    read_cached_sliced_model_file,
 )
 
 from itertools import chain
@@ -30,7 +30,7 @@ class CacheBootstrapper(multiprocessing.Process):
         for file in chain(
             FILES_DIRECTORY.rglob("*.ctb"), FILES_DIRECTORY.rglob("*.cbddlp")
         ):
-            read_cached_ctb_file(file.absolute())
+            read_cached_sliced_model_file(file.absolute())
         for file in chain(
             FILES_DIRECTORY.rglob("*.ctb"), FILES_DIRECTORY.rglob("*.cbddlp")
         ):
