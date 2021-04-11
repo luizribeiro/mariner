@@ -27,4 +27,5 @@ Running frontend tests:
 
 ```
 $ yarn --cwd frontend test
-```
+``
+Hellow i need work in other models Like Anycubic Photon Mono, please
