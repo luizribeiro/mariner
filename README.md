@@ -28,6 +28,7 @@ Mariner:
 * Elegoo Mars Pro
 * Elegoo Mars 2 Pro
 * Elegoo Saturn
+* Phrozen Sonic Mighty 4K
 * Phrozen Sonic Mini 4K
 * Creality LD-002H
 * Creality LD-002R
