@@ -1,7 +1,7 @@
 import pathlib
 import struct
 from dataclasses import dataclass
-from typing import List, Sequence, Tuple
+from typing import List
 
 import png
 from typedstruct import LittleEndianStruct, StructType
@@ -126,17 +126,6 @@ def _read_image(width: int, height: int, data: bytes) -> png.Image:
 
 @dataclass(frozen=True)
 class CTBFile(SlicedModelFile):
-    filename: str
-    bed_size_mm: Tuple[float, float, float]
-    height_mm: float
-    layer_height_mm: float
-    layer_count: int
-    resolution: Tuple[int, int]
-    print_time_secs: int
-    end_byte_offset_by_layer: Sequence[int]
-    slicer_version: str
-    printer_name: str
-
     @classmethod
     def read(self, path: pathlib.Path) -> "CTBFile":
         with open(str(path), "rb") as file:
