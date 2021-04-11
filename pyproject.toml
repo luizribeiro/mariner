@@ -20,7 +20,7 @@ pyre-extensions = "0.0.21"
 pyserial = "3.5"
 python = "^3.7, !=3.9"
 typedstruct = "0.1.0"
-waitress = "1.4.4"
+waitress = "2.0.0"
 whitenoise = "5.2.0"
 
 [tool.poetry.dev-dependencies]
