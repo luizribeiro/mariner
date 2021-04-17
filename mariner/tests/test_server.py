@@ -1,16 +1,15 @@
 import hashlib
 import io
+import os
 import pathlib
-from os import DirEntry
-from unittest import TestCase
-from unittest.mock import patch, ANY, MagicMock, Mock
+from unittest.mock import patch, ANY, Mock
 
 from pyexpect import expect
+from pyfakefs.fake_filesystem_unittest import TestCase
 from werkzeug.datastructures import FileStorage
 
 from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import UnexpectedPrinterResponse
-from mariner.file_formats.ctb import CTBFile
 from mariner.mars import (
     ElegooMars,
     PrinterState,
@@ -22,6 +21,19 @@ from mariner.server.utils import read_cached_sliced_model_file
 
 class MarinerServerTest(TestCase):
     def setUp(self) -> None:
+        path = (
+            pathlib.Path(__file__).parent.parent.absolute()
+            / "file_formats"
+            / "tests"
+            / "stairs.ctb"
+        )
+        with open(path, "rb") as file:
+            self.ctb_file_contents = file.read()
+        self.setUpPyfakefs()
+        self.fs.create_file(
+            "/mnt/usb_share/foobar.ctb", contents=self.ctb_file_contents
+        )
+
         self.client = app.test_client()
         app.config["WTF_CSRF_ENABLED"] = False
 
@@ -31,16 +43,6 @@ class MarinerServerTest(TestCase):
         printer_constructor_mock.return_value = self.printer_mock
         self.printer_mock.__enter__ = Mock(return_value=self.printer_mock)
         self.printer_mock.__exit__ = Mock(return_value=None)
-
-        self.ctb_file_mock = Mock(spec=CTBFile)
-        self.ctb_file_mock.layer_count = 19
-        self.ctb_file_mock.print_time_secs = 200
-        self.ctb_file_mock.end_byte_offset_by_layer = [
-            (i + 1) * 6 for i in range(0, self.ctb_file_mock.layer_count)
-        ]
-        self.ctb_file_patcher = patch("mariner.server.utils.CTBFile")
-        ctb_file_class_mock = self.ctb_file_patcher.start()
-        ctb_file_class_mock.read.return_value = self.ctb_file_mock
 
         # this is so we don't try caching the values returned by this function during
         # tests. this is important because during tests this function returns a Mock,
@@ -53,25 +55,24 @@ class MarinerServerTest(TestCase):
 
     def tearDown(self) -> None:
         self.printer_patcher.stop()
-        self.ctb_file_patcher.stop()
 
     def test_print_status_while_printing(self) -> None:
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
             state=PrinterState.PRINTING,
-            current_byte=42,
-            total_bytes=120,
+            current_byte=256537,
+            total_bytes=832745,
         )
         response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
             {
                 "state": "PRINTING",
                 "selected_file": "foobar.ctb",
-                "progress": 31.57894736842105,
-                "layer_count": 19,
-                "current_layer": 7,
-                "print_time_secs": 200,
-                "time_left_secs": 137,
+                "progress": 32.25,
+                "layer_count": 400,
+                "current_layer": 130,
+                "print_time_secs": 5621,
+                "time_left_secs": 3808,
             }
         )
 
@@ -79,19 +80,19 @@ class MarinerServerTest(TestCase):
         self.printer_mock.get_selected_file.return_value = "foobar.ctb"
         self.printer_mock.get_print_status.return_value = PrintStatus(
             state=PrinterState.PAUSED,
-            current_byte=42,
-            total_bytes=120,
+            current_byte=256537,
+            total_bytes=832745,
         )
         response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
             {
                 "state": "PAUSED",
                 "selected_file": "foobar.ctb",
-                "progress": 31.57894736842105,
-                "layer_count": 19,
-                "current_layer": 7,
-                "print_time_secs": 200,
-                "time_left_secs": 137,
+                "progress": 32.25,
+                "layer_count": 400,
+                "current_layer": 130,
+                "print_time_secs": 5621,
+                "time_left_secs": 3808,
             }
         )
 
@@ -100,7 +101,7 @@ class MarinerServerTest(TestCase):
         self.printer_mock.get_print_status.return_value = PrintStatus(
             state=PrinterState.STARTING_PRINT,
             current_byte=0,
-            total_bytes=120,
+            total_bytes=832745,
         )
         response = self.client.get("/api/print_status")
         expect(response.get_json()).to_equal(
@@ -108,10 +109,10 @@ class MarinerServerTest(TestCase):
                 "state": "STARTING_PRINT",
                 "selected_file": "foobar.ctb",
                 "progress": 0.0,
-                "layer_count": 19,
+                "layer_count": 400,
                 "current_layer": 1,
-                "print_time_secs": 200,
-                "time_left_secs": 200,
+                "print_time_secs": 5621,
+                "time_left_secs": 5621,
             }
         )
 
@@ -131,33 +132,11 @@ class MarinerServerTest(TestCase):
             }
         )
 
-    @patch("mariner.server.os.scandir")
-    def test_list_files(self, _scandir_mock: MagicMock) -> None:
-        subdir = Mock(spec=DirEntry)
-        subdir.name = "subdir"
-        subdir.is_file.return_value = False
-        subdir.is_dir.return_value = True
-        a_ctb = Mock(spec=DirEntry)
-        a_ctb.name = "a.ctb"
-        a_ctb.is_file.return_value = True
-        a_ctb.is_dir.return_value = False
-        b_ctb = Mock(spec=DirEntry)
-        b_ctb.name = "b.ctb"
-        b_ctb.is_file.return_value = True
-        b_ctb.is_dir.return_value = False
-        random_file_txt = Mock(spec=DirEntry)
-        random_file_txt.name = "random_file.txt"
-        random_file_txt.is_file.return_value = True
-        random_file_txt.is_dir.return_value = False
-
-        _scandir_context_manager_mock = MagicMock()
-        _scandir_context_manager_mock.__enter__().__iter__.return_value = [
-            subdir,
-            a_ctb,
-            b_ctb,
-            random_file_txt,
-        ]
-        _scandir_mock.return_value = _scandir_context_manager_mock
+    def test_list_files(self) -> None:
+        self.fs.create_dir("/mnt/usb_share/subdir/")
+        self.fs.create_file("/mnt/usb_share/a.ctb", contents=self.ctb_file_contents)
+        self.fs.create_file("/mnt/usb_share/b.ctb", contents=self.ctb_file_contents)
+        self.fs.create_file("/mnt/usb_share/random_file.txt", contents="dummy content")
 
         response = self.client.get("/api/list_files")
         expect(response.get_json()).to_equal(
@@ -165,15 +144,21 @@ class MarinerServerTest(TestCase):
                 "directories": [{"dirname": "subdir"}],
                 "files": [
                     {
+                        "filename": "foobar.ctb",
+                        "path": "foobar.ctb",
+                        "print_time_secs": 5621,
+                        "can_be_printed": True,
+                    },
+                    {
                         "filename": "a.ctb",
                         "path": "a.ctb",
-                        "print_time_secs": 200,
+                        "print_time_secs": 5621,
                         "can_be_printed": True,
                     },
                     {
                         "filename": "b.ctb",
                         "path": "b.ctb",
-                        "print_time_secs": 200,
+                        "print_time_secs": 5621,
                         "can_be_printed": True,
                     },
                     {
@@ -185,28 +170,14 @@ class MarinerServerTest(TestCase):
             }
         )
 
-    @patch("mariner.server.os.scandir")
-    def test_list_files_under_subdirectory(self, _scandir_mock: MagicMock) -> None:
-        subdir = Mock(spec=DirEntry)
-        subdir.name = "subdir"
-        subdir.is_file.return_value = False
-        subdir.is_dir.return_value = True
-        a_ctb = Mock(spec=DirEntry)
-        a_ctb.name = "a.ctb"
-        a_ctb.is_file.return_value = True
-        a_ctb.is_dir.return_value = False
-        b_ctb = Mock(spec=DirEntry)
-        b_ctb.name = "b.ctb"
-        b_ctb.is_file.return_value = True
-        a_ctb.is_dir.return_value = False
-
-        _scandir_context_manager_mock = MagicMock()
-        _scandir_context_manager_mock.__enter__().__iter__.return_value = [
-            subdir,
-            a_ctb,
-            b_ctb,
-        ]
-        _scandir_mock.return_value = _scandir_context_manager_mock
+    def test_list_files_under_subdirectory(self) -> None:
+        self.fs.create_dir("/mnt/usb_share/foo/bar/subdir/")
+        self.fs.create_file(
+            "/mnt/usb_share/foo/bar/a.ctb", contents=self.ctb_file_contents
+        )
+        self.fs.create_file(
+            "/mnt/usb_share/foo/bar/b.ctb", contents=self.ctb_file_contents
+        )
 
         response = self.client.get("/api/list_files?path=foo/bar/")
         expect(response.get_json()).to_equal(
@@ -216,13 +187,13 @@ class MarinerServerTest(TestCase):
                     {
                         "filename": "a.ctb",
                         "path": "foo/bar/a.ctb",
-                        "print_time_secs": 200,
+                        "print_time_secs": 5621,
                         "can_be_printed": True,
                     },
                     {
                         "filename": "b.ctb",
                         "path": "foo/bar/b.ctb",
-                        "print_time_secs": 200,
+                        "print_time_secs": 5621,
                         "can_be_printed": True,
                     },
                 ],
@@ -277,76 +248,49 @@ class MarinerServerTest(TestCase):
         self.printer_mock.reboot.assert_called_once_with()
 
     def test_file_details(self) -> None:
-        path = (
-            pathlib.Path(__file__).parent.parent.absolute()
-            / "file_formats"
-            / "tests"
-            / "stairs.ctb"
+        response = self.client.get("/api/file_details?filename=foobar.ctb")
+        expect(response.get_json()).to_equal(
+            {
+                "filename": "foobar.ctb",
+                "path": "foobar.ctb",
+                "bed_size_mm": [68.04, 120.96, 150.0],
+                "height_mm": 20.0,
+                "layer_count": 400,
+                "layer_height_mm": 0.05,
+                "resolution": [1440, 2560],
+                "print_time_secs": 5621,
+            }
         )
-        ctb_file = CTBFile.read(path)
-
-        with patch("mariner.server.utils.CTBFile.read", return_value=ctb_file):
-            response = self.client.get("/api/file_details?filename=stairs.ctb")
-            expect(response.get_json()).to_equal(
-                {
-                    "filename": "stairs.ctb",
-                    "path": "stairs.ctb",
-                    "bed_size_mm": [68.04, 120.96, 150.0],
-                    "height_mm": 20.0,
-                    "layer_count": 400,
-                    "layer_height_mm": 0.05,
-                    "resolution": [1440, 2560],
-                    "print_time_secs": 5621,
-                }
-            )
 
     def test_file_details_in_subdirectory(self) -> None:
-        path = (
-            pathlib.Path(__file__).parent.parent.absolute()
-            / "file_formats"
-            / "tests"
-            / "stairs.ctb"
+        self.fs.create_file(
+            "/mnt/usb_share/functional/stairs.ctb", contents=self.ctb_file_contents
         )
-        ctb_file = CTBFile.read(path)
 
-        with patch("mariner.server.utils.CTBFile.read", return_value=ctb_file):
-            response = self.client.get(
-                "/api/file_details?filename=functional/stairs.ctb"
-            )
-            expect(response.get_json()).to_equal(
-                {
-                    "filename": "stairs.ctb",
-                    "path": "functional/stairs.ctb",
-                    "bed_size_mm": [68.04, 120.96, 150.0],
-                    "height_mm": 20.0,
-                    "layer_count": 400,
-                    "layer_height_mm": 0.05,
-                    "resolution": [1440, 2560],
-                    "print_time_secs": 5621,
-                }
-            )
+        response = self.client.get("/api/file_details?filename=functional/stairs.ctb")
+        expect(response.get_json()).to_equal(
+            {
+                "filename": "stairs.ctb",
+                "path": "functional/stairs.ctb",
+                "bed_size_mm": [68.04, 120.96, 150.0],
+                "height_mm": 20.0,
+                "layer_count": 400,
+                "layer_height_mm": 0.05,
+                "resolution": [1440, 2560],
+                "print_time_secs": 5621,
+            }
+        )
 
     def test_file_details_with_invalid_path(self) -> None:
         response = self.client.get("/api/file_details?filename=../../etc/passwd")
         expect(response.status_code).to_equal(400)
 
     def test_file_preview(self) -> None:
-        path = (
-            pathlib.Path(__file__).parent.parent.absolute()
-            / "file_formats"
-            / "tests"
-            / "stairs.ctb"
+        response = self.client.get("/api/file_preview?filename=foobar.ctb")
+        expect(response.content_type).to_equal("image/png")
+        expect(hashlib.md5(response.get_data()).hexdigest()).to_equal(
+            "ca98c806d42898ba70626e556f714928"
         )
-        ctb_preview = CTBFile.read_preview(path)
-
-        with patch(
-            "mariner.server.utils.CTBFile.read_preview", return_value=ctb_preview
-        ):
-            response = self.client.get("/api/file_preview?filename=stairs.ctb")
-            expect(response.content_type).to_equal("image/png")
-            expect(hashlib.md5(response.get_data()).hexdigest()).to_equal(
-                "ca98c806d42898ba70626e556f714928"
-            )
 
     def test_file_preview_with_invalid_path(self) -> None:
         response = self.client.get("/api/file_preview?filename=../../etc/passwd")
@@ -383,18 +327,19 @@ class MarinerServerTest(TestCase):
         save_file_mock.assert_called_once_with(str(FILES_DIRECTORY / "etc_passwd.ctb"))
 
     def test_delete_file(self) -> None:
-        with patch("pathlib.PosixPath.is_file", return_value=True), patch(
-            "os.remove"
-        ) as remove_mock:
-            response = self.client.post("/api/delete_file?filename=mariner.ctb")
-        remove_mock.assert_called_once_with(FILES_DIRECTORY / "mariner.ctb")
+        expect(os.path.exists(FILES_DIRECTORY / "mariner.ctb")).to_equal(False)
+        self.fs.create_file(
+            "/mnt/usb_share/mariner.ctb", contents=self.ctb_file_contents
+        )
+        expect(os.path.exists(FILES_DIRECTORY / "mariner.ctb")).to_equal(True)
+
+        response = self.client.post("/api/delete_file?filename=mariner.ctb")
         expect(response.status_code).to_equal(200)
         expect(response.get_json()).to_equal({"success": True})
+        expect(os.path.exists(FILES_DIRECTORY / "mariner.ctb")).to_equal(False)
 
     def test_delete_file_that_is_not_file(self) -> None:
-        with patch("pathlib.PosixPath.is_file", return_value=False), patch(
-            "os.remove"
-        ) as remove_mock:
+        with patch("os.remove") as remove_mock:
             response = self.client.post("/api/delete_file?filename=mariner")
         remove_mock.assert_not_called()
         expect(response.status_code).to_equal(400)

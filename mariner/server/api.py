@@ -172,7 +172,9 @@ def delete_file() -> str:
     path = (FILES_DIRECTORY / filename).resolve()
     if FILES_DIRECTORY not in path.parents:
         abort(400)
-    if not path.is_file():
+    # we use os.path.isfile instead of Path.is_file here because pyfakefs doesn't
+    # seem to properly mock Path.is_file as of pyfakefs 4.4.0
+    if not os.path.isfile(path):
         abort(400)
     os.remove(path)
     return jsonify({"success": True})
