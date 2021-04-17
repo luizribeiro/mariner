@@ -26,6 +26,7 @@ whitenoise = "5.2.0"
 [tool.poetry.dev-dependencies]
 black = "20.8b1"
 flake8 = "3.9.0"
+freezegun = "1.1.0"
 green = "3.2.5"
 pyexpect = "1.0.21"
 pyfakefs = "4.4.0"

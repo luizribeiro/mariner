@@ -98,7 +98,9 @@ def list_files() -> str:
     with os.scandir(path) as dir_entries:
         files = []
         directories = []
-        for dir_entry in dir_entries:
+        for dir_entry in sorted(
+            dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
+        ):
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
                 if dir_entry.name.endswith(tuple(get_supported_extensions())):

@@ -4,6 +4,7 @@ import os
 import pathlib
 from unittest.mock import patch, ANY, Mock
 
+from freezegun import freeze_time
 from pyexpect import expect
 from pyfakefs.fake_filesystem_unittest import TestCase
 from werkzeug.datastructures import FileStorage
@@ -134,9 +135,14 @@ class MarinerServerTest(TestCase):
 
     def test_list_files(self) -> None:
         self.fs.create_dir("/mnt/usb_share/subdir/")
-        self.fs.create_file("/mnt/usb_share/a.ctb", contents=self.ctb_file_contents)
-        self.fs.create_file("/mnt/usb_share/b.ctb", contents=self.ctb_file_contents)
-        self.fs.create_file("/mnt/usb_share/random_file.txt", contents="dummy content")
+        with freeze_time("2020-03-15"):
+            self.fs.create_file("/mnt/usb_share/a.ctb", contents=self.ctb_file_contents)
+        with freeze_time("2020-03-17"):
+            self.fs.create_file("/mnt/usb_share/b.ctb", contents=self.ctb_file_contents)
+        with freeze_time("2020-03-16"):
+            self.fs.create_file(
+                "/mnt/usb_share/random_file.txt", contents="dummy content"
+            )
 
         response = self.client.get("/api/list_files")
         expect(response.get_json()).to_equal(
@@ -150,12 +156,6 @@ class MarinerServerTest(TestCase):
                         "can_be_printed": True,
                     },
                     {
-                        "filename": "a.ctb",
-                        "path": "a.ctb",
-                        "print_time_secs": 5621,
-                        "can_be_printed": True,
-                    },
-                    {
                         "filename": "b.ctb",
                         "path": "b.ctb",
                         "print_time_secs": 5621,
@@ -165,6 +165,12 @@ class MarinerServerTest(TestCase):
                         "filename": "random_file.txt",
                         "path": "random_file.txt",
                         "can_be_printed": False,
+                    },
+                    {
+                        "filename": "a.ctb",
+                        "path": "a.ctb",
+                        "print_time_secs": 5621,
+                        "can_be_printed": True,
                     },
                 ],
             }
@@ -185,14 +191,14 @@ class MarinerServerTest(TestCase):
                 "directories": [{"dirname": "subdir"}],
                 "files": [
                     {
-                        "filename": "a.ctb",
-                        "path": "foo/bar/a.ctb",
+                        "filename": "b.ctb",
+                        "path": "foo/bar/b.ctb",
                         "print_time_secs": 5621,
                         "can_be_printed": True,
                     },
                     {
-                        "filename": "b.ctb",
-                        "path": "foo/bar/b.ctb",
+                        "filename": "a.ctb",
+                        "path": "foo/bar/a.ctb",
                         "print_time_secs": 5621,
                         "can_be_printed": True,
                     },
