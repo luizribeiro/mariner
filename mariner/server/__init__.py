@@ -34,7 +34,6 @@ class CacheBootstrapper(multiprocessing.Process):
         ]
         for file in chain.from_iterable(globs):
             read_cached_sliced_model_file(file.absolute())
-        for file in chain.from_iterable(globs):
             read_cached_preview(file.absolute())
 
 
