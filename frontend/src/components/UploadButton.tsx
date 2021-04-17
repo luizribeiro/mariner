@@ -5,7 +5,7 @@ import PublishIcon from "@material-ui/icons/Publish";
 import nullthrows from "nullthrows";
 import React from "react";
 import { withAPI, WithAPIProps } from "../api";
-import { setState } from "../utils";
+import { getSupportedExtensions, setState } from "../utils";
 
 const styles = () =>
   createStyles({
@@ -47,7 +47,7 @@ class UploadButton extends React.Component<
       <React.Fragment>
         <input
           ref={this.uploadButtonRef}
-          accept=".ctb, .cbddlp, .fdg"
+          accept={getSupportedExtensions()}
           className={classes.input}
           id="upload-button"
           multiple

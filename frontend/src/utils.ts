@@ -18,3 +18,11 @@ export function setState<TProps, TState>(
 export async function sleep(waitInMilliseconds: number): Promise<void> {
   await new Promise((resolve) => setTimeout(resolve, waitInMilliseconds));
 }
+
+export function getSupportedExtensions(): string {
+  const element: HTMLMetaElement | null = document.head.querySelector(
+    'meta[name="supported-extensions"]'
+  );
+
+  return element?.content ?? "";
+}

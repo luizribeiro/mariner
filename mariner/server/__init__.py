@@ -22,7 +22,9 @@ flask_app.register_blueprint(api_blueprint)
 
 @flask_app.route("/", methods=["GET"])
 def index() -> str:
-    return render_template("index.html")
+    return render_template(
+        "index.html", supported_extensions=",".join(get_supported_extensions())
+    )
 
 
 class CacheBootstrapper(multiprocessing.Process):
