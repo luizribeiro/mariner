@@ -6,6 +6,7 @@ from flask import render_template
 from waitress import serve
 
 from mariner.config import FILES_DIRECTORY
+from mariner.file_formats.utils import get_supported_extensions
 from mariner.server.api import api as api_blueprint
 from mariner.server.app import app as flask_app
 from mariner.server.utils import (
@@ -27,13 +28,13 @@ def index() -> str:
 class CacheBootstrapper(multiprocessing.Process):
     def run(self) -> None:
         os.nice(5)
-        for file in chain(
-            FILES_DIRECTORY.rglob("*.ctb"), FILES_DIRECTORY.rglob("*.cbddlp")
-        ):
+        globs = [
+            FILES_DIRECTORY.rglob(f"*{extension}")
+            for extension in get_supported_extensions()
+        ]
+        for file in chain.from_iterable(globs):
             read_cached_sliced_model_file(file.absolute())
-        for file in chain(
-            FILES_DIRECTORY.rglob("*.ctb"), FILES_DIRECTORY.rglob("*.cbddlp")
-        ):
+        for file in chain.from_iterable(globs):
             read_cached_preview(file.absolute())
 
 
