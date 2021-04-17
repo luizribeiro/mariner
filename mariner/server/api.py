@@ -164,6 +164,7 @@ def upload_file() -> str:
         abort(400)
     filename = secure_filename(file.filename)
     file.save(str(FILES_DIRECTORY / filename))
+    os.sync()
     return jsonify({"success": True})
 
 
