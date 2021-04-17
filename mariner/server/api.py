@@ -17,6 +17,7 @@ from werkzeug.utils import secure_filename
 from mariner.config import FILES_DIRECTORY
 from mariner.exceptions import MarinerException
 from mariner.file_formats import SlicedModelFile
+from mariner.file_formats.utils import get_supported_extensions
 from mariner.mars import ElegooMars, PrinterState
 from mariner.server.utils import read_cached_preview, read_cached_sliced_model_file
 
@@ -100,7 +101,7 @@ def list_files() -> str:
         for dir_entry in dir_entries:
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
-                if dir_entry.name.endswith((".ctb", ".cbddlp", ".fdg")):
+                if dir_entry.name.endswith(tuple(get_supported_extensions())):
                     sliced_model_file = read_cached_sliced_model_file(
                         path / dir_entry.name
                     )
@@ -159,7 +160,7 @@ def upload_file() -> str:
     file = request.files.get("file")
     if file is None or file.filename == "":
         abort(400)
-    if os.path.splitext(file.filename)[1] not in (".ctb", ".cbddlp", ".fdg"):
+    if os.path.splitext(file.filename)[1] not in get_supported_extensions():
         abort(400)
     filename = secure_filename(file.filename)
     file.save(str(FILES_DIRECTORY / filename))
