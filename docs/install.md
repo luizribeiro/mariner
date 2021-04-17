@@ -28,11 +28,16 @@ later:
 
 ## Installing package
 
-Download and install the latest release of `mariner3d`:
+First, enable the repository:
+```
+$ curl -sL gpg.l9o.dev | sudo apt-key add -
+$ echo "deb https://ppa.l9o.dev/raspbian ./" | sudo tee /etc/apt/sources.list.d/l9o.list
+```
+
+Then install mariner:
 
 ```
-$ wget https://github.com/luizribeiro/mariner/releases/latest/download/mariner3d_0.1.1-1_armhf.deb
-$ sudo dpkg -i mariner3d_0.1.1-1_armhf.deb
+$ sudo apt install mariner3d
 ```
 
 ## Allowing printer to see uploaded files
