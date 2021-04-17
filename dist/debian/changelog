@@ -1,3 +1,15 @@
+mariner3d (0.2.0-1) unstable; urgency=low
+
+  * Added support for more printers (see README.md)
+  * .cbddlp and .fdg files are now supported in addition to .ctb, which
+    enables printers like Voxelab Proxima to be used
+  * Fixed bugs related to write buffers not being flushed after file upload
+    (see #311)
+  * Most recently uploaded files are now listed first
+  * Other small bug fixes and upgrades of dependencies
+
+ -- Luiz Ribeiro <luizribeiro@gmail.com>  Sat, 17 Apr 2021 14:12:03 -0500
+
 mariner3d (0.1.1-1) unstable; urgency=low
 
   * Fixed bug when a non-ctb file was under /mnt/usb_share
