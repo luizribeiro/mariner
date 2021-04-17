@@ -29,14 +29,15 @@ later:
 ## Installing package
 
 First, enable the repository:
-```
+```bash
 $ curl -sL gpg.l9o.dev | sudo apt-key add -
 $ echo "deb https://ppa.l9o.dev/raspbian ./" | sudo tee /etc/apt/sources.list.d/l9o.list
+$ sudo apt update
 ```
 
 Then install mariner:
 
-```
+```bash
 $ sudo apt install mariner3d
 ```
 
@@ -58,14 +59,14 @@ modules-load=dwc2
 
 Setup a container file for storing uploaded files:
 
-```
+```bash
 $ sudo dd bs=1M if=/dev/zero of=/piusb.bin count=2048
 $ sudo mkdosfs /piusb.bin -F 32 -I
 ```
 
 Create the mount point for the container file:
 
-```
+```bash
 $ sudo mkdir -p /mnt/usb_share
 ```
 
@@ -101,7 +102,7 @@ enable_uart=1
 In order for the Pi to communicate with the printer's mainboard over
 serial, you also need to disable the Pi's console over the serial port:
 
-```
+```bash
 $ sudo systemctl stop serial-getty@ttyS0
 $ sudo systemctl disable serial-getty@ttyS0
 ```
@@ -119,7 +120,7 @@ instructions for now :)
 
 You can check that `mariner` is running first by running:
 
-```
+```bash
 $ sudo systemctl status mariner3d
 ```
 
