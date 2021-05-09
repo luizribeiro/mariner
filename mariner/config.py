@@ -59,3 +59,19 @@ def get_printer_baudrate() -> int:
     if not isinstance(printer_config, dict):
         return default_baudrate
     return int(printer_config.get("baudrate", default_baudrate))
+
+
+def get_http_host() -> str:
+    default_host = "0.0.0.0"
+    http_config = _get_config().get("http")
+    if not isinstance(http_config, dict):
+        return default_host
+    return str(http_config.get("host", default_host))
+
+
+def get_http_port() -> int:
+    default_port = 5050
+    http_config = _get_config().get("http")
+    if not isinstance(http_config, dict):
+        return default_port
+    return int(http_config.get("port", default_port))

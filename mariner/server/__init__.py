@@ -46,4 +46,4 @@ def main() -> None:
 
     logger = logging.getLogger("waitress")
     logger.setLevel(logging.INFO)
-    serve(flask_app, host="0.0.0.0", port=5000)
+    serve(flask_app, host=config.get_http_host(), port=config.get_http_port())

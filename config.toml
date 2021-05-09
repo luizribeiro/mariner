@@ -25,3 +25,11 @@ files_directory = "/mnt/usb_share"
 # or if you are running with a printer that uses a different baud rate.
 serial_port = "/dev/serial0"
 baudrate = 115200
+
+[http]
+# Hostname or IP address (string) on which to listen. Default is 0.0.0.0, which
+# means "all IP addresses on this host". Note that listening on 0.0.0.0 assumes
+# that your mariner instance is running on a trusted network.
+host = "0.0.0.0"
+# TCP port on which to listen
+port = 5000

@@ -18,6 +18,9 @@ class ConfigurationTest(TestCase):
         expect(config.get_printer_serial_port()).to_equal("/dev/serial0")
         expect(config.get_printer_baudrate()).to_equal(115200)
 
+        expect(config.get_http_host()).to_equal("0.0.0.0")
+        expect(config.get_http_port()).to_equal(5050)
+
     def test_can_customize_files_directory(self) -> None:
         self.fs.create_file(
             "/etc/mariner/config.toml",
@@ -40,3 +43,15 @@ baudrate = 9600
         expect(config.get_printer_display_name()).to_equal("Elegoo Mars")
         expect(config.get_printer_serial_port()).to_equal("/dev/ttyUSB0")
         expect(config.get_printer_baudrate()).to_equal(9600)
+
+    def test_can_customize_http_settings(self) -> None:
+        self.fs.create_file(
+            "/etc/mariner/config.toml",
+            contents="""
+[http]
+host = "127.0.0.1"
+port = 80
+            """,
+        )
+        expect(config.get_http_host()).to_equal("127.0.0.1")
+        expect(config.get_http_port()).to_equal(80)
