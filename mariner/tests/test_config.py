@@ -14,6 +14,7 @@ class ConfigurationTest(TestCase):
     def test_default_values(self) -> None:
         expect(config.get_files_directory()).to_equal(Path("/mnt/usb_share"))
 
+        expect(config.get_printer_display_name()).to_equal(None)
         expect(config.get_printer_serial_port()).to_equal("/dev/serial0")
         expect(config.get_printer_baudrate()).to_equal(115200)
 
@@ -31,9 +32,11 @@ files_directory = "/var/mariner"
             "/etc/mariner/config.toml",
             contents="""
 [printer]
+display_name = "Elegoo Mars"
 serial_port = "/dev/ttyUSB0"
 baudrate = 9600
             """,
         )
+        expect(config.get_printer_display_name()).to_equal("Elegoo Mars")
         expect(config.get_printer_serial_port()).to_equal("/dev/ttyUSB0")
         expect(config.get_printer_baudrate()).to_equal(9600)

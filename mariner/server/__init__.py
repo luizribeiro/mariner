@@ -23,7 +23,9 @@ flask_app.register_blueprint(api_blueprint)
 @flask_app.route("/", methods=["GET"])
 def index() -> str:
     return render_template(
-        "index.html", supported_extensions=",".join(get_supported_extensions())
+        "index.html",
+        supported_extensions=",".join(get_supported_extensions()),
+        printer_display_name=config.get_printer_display_name(),
     )
 
 

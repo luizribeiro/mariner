@@ -17,7 +17,7 @@ import nullthrows from "nullthrows";
 import React from "react";
 import { Link } from "react-router-dom";
 import { withAPI, WithAPIProps } from "../api";
-import { renderTime, sleep } from "../utils";
+import { getPrinterDisplayName, renderTime, sleep } from "../utils";
 
 const styles = () =>
   createStyles({
@@ -294,7 +294,10 @@ class PrintStatus extends React.Component<
   render(): React.ReactElement | null {
     return (
       <Card>
-        <CardHeader title="Printer Status" />
+        <CardHeader
+          title="Printer Status"
+          subheader={getPrinterDisplayName()}
+        />
         <CardContent>{this._renderContent()}</CardContent>
       </Card>
     );

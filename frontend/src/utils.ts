@@ -26,3 +26,11 @@ export function getSupportedExtensions(): string {
 
   return element?.content ?? "";
 }
+
+export function getPrinterDisplayName(): string | undefined {
+  const element: HTMLMetaElement | null = document.head.querySelector(
+    'meta[name="printer-display-name"]'
+  );
+
+  return element?.content;
+}
