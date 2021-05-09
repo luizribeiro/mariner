@@ -5,7 +5,7 @@ import os
 from flask import render_template
 from waitress import serve
 
-from mariner.config import FILES_DIRECTORY
+from mariner import config
 from mariner.file_formats.utils import get_supported_extensions
 from mariner.server.api import api as api_blueprint
 from mariner.server.app import app as flask_app
@@ -31,7 +31,7 @@ class CacheBootstrapper(multiprocessing.Process):
     def run(self) -> None:
         os.nice(5)
         globs = [
-            FILES_DIRECTORY.rglob(f"*{extension}")
+            config.get_files_directory().rglob(f"*{extension}")
             for extension in get_supported_extensions()
         ]
         for file in chain.from_iterable(globs):

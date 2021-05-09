@@ -1,3 +1,5 @@
 from pathlib import Path
 
-FILES_DIRECTORY = Path("/mnt/usb_share")
+
+def get_files_directory() -> Path:
+    return Path("/mnt/usb_share")

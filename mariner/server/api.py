@@ -14,7 +14,7 @@ from flask import (
 from pyre_extensions import none_throws
 from werkzeug.utils import secure_filename
 
-from mariner.config import FILES_DIRECTORY
+from mariner import config
 from mariner.exceptions import MarinerException
 from mariner.file_formats import SlicedModelFile
 from mariner.file_formats.utils import get_supported_extensions
@@ -51,7 +51,7 @@ def print_status() -> str:
             print_details = {}
         else:
             sliced_model_file = read_cached_sliced_model_file(
-                FILES_DIRECTORY / selected_file
+                config.get_files_directory() / selected_file
             )
 
             if print_status.current_byte == 0:
@@ -92,8 +92,11 @@ def print_status() -> str:
 @api.route("/list_files", methods=["GET"])
 def list_files() -> str:
     path_parameter = str(request.args.get("path", "."))
-    path = (FILES_DIRECTORY / path_parameter).resolve()
-    if FILES_DIRECTORY not in path.parents and path != FILES_DIRECTORY:
+    path = (config.get_files_directory() / path_parameter).resolve()
+    if (
+        config.get_files_directory() not in path.parents
+        and path != config.get_files_directory()
+    ):
         abort(400)
     with os.scandir(path) as dir_entries:
         files = []
@@ -110,7 +113,11 @@ def list_files() -> str:
 
                 file_data: Dict[str, Any] = {
                     "filename": dir_entry.name,
-                    "path": str((path / dir_entry.name).relative_to(FILES_DIRECTORY)),
+                    "path": str(
+                        (path / dir_entry.name).relative_to(
+                            config.get_files_directory()
+                        )
+                    ),
                 }
 
                 if sliced_model_file:
@@ -139,8 +146,8 @@ def list_files() -> str:
 @api.route("/file_details", methods=["GET"])
 def file_details() -> str:
     filename = str(request.args.get("filename"))
-    path = (FILES_DIRECTORY / filename).resolve()
-    if FILES_DIRECTORY not in path.parents:
+    path = (config.get_files_directory() / filename).resolve()
+    if config.get_files_directory() not in path.parents:
         abort(400)
     sliced_model_file = read_cached_sliced_model_file(path)
     return jsonify(
@@ -165,7 +172,7 @@ def upload_file() -> str:
     if os.path.splitext(file.filename)[1] not in get_supported_extensions():
         abort(400)
     filename = secure_filename(file.filename)
-    file.save(str(FILES_DIRECTORY / filename))
+    file.save(str(config.get_files_directory() / filename))
     os.sync()
     return jsonify({"success": True})
 
@@ -173,8 +180,8 @@ def upload_file() -> str:
 @api.route("/delete_file", methods=["POST"])
 def delete_file() -> str:
     filename = str(request.args.get("filename"))
-    path = (FILES_DIRECTORY / filename).resolve()
-    if FILES_DIRECTORY not in path.parents:
+    path = (config.get_files_directory() / filename).resolve()
+    if config.get_files_directory() not in path.parents:
         abort(400)
     # we use os.path.isfile instead of Path.is_file here because pyfakefs doesn't
     # seem to properly mock Path.is_file as of pyfakefs 4.4.0
@@ -187,8 +194,8 @@ def delete_file() -> str:
 @api.route("/file_preview", methods=["GET"])
 def file_preview() -> Response:
     filename = str(request.args.get("filename"))
-    path = (FILES_DIRECTORY / filename).resolve()
-    if FILES_DIRECTORY not in path.parents:
+    path = (config.get_files_directory() / filename).resolve()
+    if config.get_files_directory() not in path.parents:
         abort(400)
 
     preview_bytes = read_cached_preview(path)

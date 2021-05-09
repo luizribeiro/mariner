@@ -9,7 +9,7 @@ from pyexpect import expect
 from pyfakefs.fake_filesystem_unittest import TestCase
 from werkzeug.datastructures import FileStorage
 
-from mariner.config import FILES_DIRECTORY
+from mariner import config
 from mariner.exceptions import UnexpectedPrinterResponse
 from mariner.mars import (
     ElegooMars,
@@ -322,7 +322,9 @@ class MarinerServerTest(TestCase):
             response = self.client.post("/api/upload_file", data=data)
         expect(response.status_code).to_equal(200)
         expect(response.get_json()).to_equal({"success": True})
-        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY / "myfile.ctb"))
+        save_file_mock.assert_called_once_with(
+            str(config.get_files_directory() / "myfile.ctb")
+        )
 
     def test_upload_file_with_sanitized_file(self) -> None:
         data = {"file": (io.BytesIO(b"abcdef"), "../../../etc/passwd.ctb")}
@@ -330,19 +332,27 @@ class MarinerServerTest(TestCase):
             response = self.client.post("/api/upload_file", data=data)
         expect(response.status_code).to_equal(200)
         expect(response.get_json()).to_equal({"success": True})
-        save_file_mock.assert_called_once_with(str(FILES_DIRECTORY / "etc_passwd.ctb"))
+        save_file_mock.assert_called_once_with(
+            str(config.get_files_directory() / "etc_passwd.ctb")
+        )
 
     def test_delete_file(self) -> None:
-        expect(os.path.exists(FILES_DIRECTORY / "mariner.ctb")).to_equal(False)
+        expect(os.path.exists(config.get_files_directory() / "mariner.ctb")).to_equal(
+            False
+        )
         self.fs.create_file(
             "/mnt/usb_share/mariner.ctb", contents=self.ctb_file_contents
         )
-        expect(os.path.exists(FILES_DIRECTORY / "mariner.ctb")).to_equal(True)
+        expect(os.path.exists(config.get_files_directory() / "mariner.ctb")).to_equal(
+            True
+        )
 
         response = self.client.post("/api/delete_file?filename=mariner.ctb")
         expect(response.status_code).to_equal(200)
         expect(response.get_json()).to_equal({"success": True})
-        expect(os.path.exists(FILES_DIRECTORY / "mariner.ctb")).to_equal(False)
+        expect(os.path.exists(config.get_files_directory() / "mariner.ctb")).to_equal(
+            False
+        )
 
     def test_delete_file_that_is_not_file(self) -> None:
         with patch("os.remove") as remove_mock:

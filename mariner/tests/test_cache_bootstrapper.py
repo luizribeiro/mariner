@@ -17,7 +17,7 @@ class CacheBootstrapperTest(TestCase):
             pathlib.Path(__file__).parent.parent.absolute() / "file_formats" / "tests"
         )
 
-        with patch("mariner.server.FILES_DIRECTORY", files_directory):
+        with patch("mariner.config.get_files_directory", return_value=files_directory):
             CacheBootstrapper().run()
 
         read_cached_sliced_model_file_mock.assert_has_calls(
