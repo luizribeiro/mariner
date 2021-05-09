@@ -1,1 +1,2 @@
 ../frontend/dist/ opt/venvs/mariner3d
+../config.example.toml etc/mariner/config.toml
