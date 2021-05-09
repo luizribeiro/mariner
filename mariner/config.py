@@ -33,3 +33,19 @@ def _get_config() -> MutableMapping[str, object]:
 def get_files_directory() -> Path:
     config = _get_config()
     return Path(str(config.get("files_directory", "/mnt/usb_share")))
+
+
+def get_printer_serial_port() -> str:
+    default_port = "/dev/serial0"
+    printer_config = _get_config().get("printer")
+    if not isinstance(printer_config, dict):
+        return default_port
+    return str(printer_config.get("serial_port", default_port))
+
+
+def get_printer_baudrate() -> int:
+    default_baudrate = 115200
+    printer_config = _get_config().get("printer")
+    if not isinstance(printer_config, dict):
+        return default_baudrate
+    return int(printer_config.get("baudrate", default_baudrate))

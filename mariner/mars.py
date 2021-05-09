@@ -7,6 +7,7 @@ from typing import Match, Optional, Type
 
 import serial
 
+from mariner import config
 from mariner.exceptions import UnexpectedPrinterResponse
 
 
@@ -29,7 +30,7 @@ class ElegooMars:
 
     def __init__(self) -> None:
         self._serial_port = serial.Serial(
-            baudrate=115200,
+            baudrate=config.get_printer_baudrate(),
             timeout=0.1,
         )
 
@@ -40,7 +41,7 @@ class ElegooMars:
         return match
 
     def open(self) -> None:
-        self._serial_port.port = "/dev/serial0"
+        self._serial_port.port = config.get_printer_serial_port()
         self._serial_port.open()
 
     def close(self) -> None:
