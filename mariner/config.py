@@ -1,4 +1,4 @@
-from functools import lru_cache
+from functools import cache
 from pathlib import Path
 from typing import MutableMapping, Optional, Sequence
 
@@ -20,7 +20,7 @@ def __get_config_filename() -> Optional[str]:
     return str(path.absolute())
 
 
-@lru_cache
+@cache
 def _get_config() -> MutableMapping[str, object]:
     filename = __get_config_filename()
     if filename is None:
