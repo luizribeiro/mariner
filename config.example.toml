@@ -14,5 +14,14 @@
 files_directory = "/mnt/usb_share"
 
 [printer]
+# The name which will be displayed for the printer in the UI. By default no
+# printer name is displayed. Uncomment this line and set it to whatever you
+# want if you want to show a name on the print status. Useful for people with
+# multiple printers running multiple instances of mariner.
+#display_name = "Elegoo Mars Pro"
+
+# Serial port settings. Most of the time the default values are fine. This
+# is generally only helpful if you aren't running mariner on a Raspberry Pi
+# or if you are running with a printer that uses a different baud rate.
 serial_port = "/dev/serial0"
 baudrate = 115200
