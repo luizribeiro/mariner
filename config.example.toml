@@ -1,0 +1,17 @@
+# mariner configuration file
+# =============================================================================
+# This file holds the configuration of mariner. It can be placed on either of
+# the following paths:
+#   * ./config.toml (the running directory)
+#   * ~/.mariner/config.toml (home directory)
+#   * /etc/mariner/config.toml
+#
+# Default settings are commented out. If you would like to change them,
+# uncomment the line (remove #) and edit it.
+#
+# The config is formatted in the TOML format, see https://toml.io/en/ for
+# details on how TOML formats work.
+
+# The directory to which files should be uploaded. This is usually the same
+# directory that you are sharing to the printer through the USB Gadget
+# files_directory = "/mnt/usb_share"

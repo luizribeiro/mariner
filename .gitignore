@@ -11,6 +11,7 @@ coverage.xml
 frontend/dist/
 frontend/node_modules/
 *.deb
+config.toml
 
 dist/mariner-*
 dist/debian/.debhelper/
