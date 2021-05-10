@@ -6,6 +6,8 @@ from flask import Flask
 from flask_wtf.csrf import CSRFProtect
 from whitenoise import WhiteNoise
 
+from mariner import config
+
 
 def get_frontend_assets_path() -> str:
     potential_paths: Sequence[Path] = [
@@ -36,7 +38,7 @@ app.config.from_mapping(
     {
         "DEBUG": True,
         "CACHE_TYPE": "filesystem",
-        "CACHE_DIR": "/tmp/mariner/",
+        "CACHE_DIR": config.get_cache_directory(),
         "CACHE_DEFAULT_TIMEOUT": 300,
         "SECRET_KEY": os.urandom(16),
     }

@@ -33,3 +33,8 @@ baudrate = 115200
 host = "0.0.0.0"
 # TCP port on which to listen
 port = 5000
+
+[cache]
+# Directory in which cached information such as file metadata and thumbnails
+# will be stored
+directory = "/tmp/mariner/"

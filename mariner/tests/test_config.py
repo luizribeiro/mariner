@@ -21,6 +21,8 @@ class ConfigurationTest(TestCase):
         expect(config.get_http_host()).to_equal("0.0.0.0")
         expect(config.get_http_port()).to_equal(5050)
 
+        expect(config.get_cache_directory()).to_equal("/tmp/mariner/")
+
     def test_can_customize_files_directory(self) -> None:
         self.fs.create_file(
             "/etc/mariner/config.toml",
@@ -55,3 +57,13 @@ port = 80
         )
         expect(config.get_http_host()).to_equal("127.0.0.1")
         expect(config.get_http_port()).to_equal(80)
+
+    def test_can_customize_cache_settings(self) -> None:
+        self.fs.create_file(
+            "/etc/mariner/config.toml",
+            contents="""
+[cache]
+directory = "/dev/shm/mariner/"
+            """,
+        )
+        expect(config.get_cache_directory()).to_equal("/dev/shm/mariner/")

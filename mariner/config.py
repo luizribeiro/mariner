@@ -75,3 +75,11 @@ def get_http_port() -> int:
     if not isinstance(http_config, dict):
         return default_port
     return int(http_config.get("port", default_port))
+
+
+def get_cache_directory() -> str:
+    default_directory = "/tmp/mariner/"
+    cache_config = _get_config().get("cache")
+    if not isinstance(cache_config, dict):
+        return default_directory
+    return str(cache_config.get("directory", default_directory))
