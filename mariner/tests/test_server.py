@@ -363,3 +363,14 @@ class MarinerServerTest(TestCase):
     def test_delete_file_with_invalid_path(self) -> None:
         response = self.client.post("/api/delete_file?filename=../../etc/passwd")
         expect(response.status_code).to_equal(400)
+
+    def test_get_index(self) -> None:
+        with patch(
+            "mariner.server.render_template", return_value=""
+        ) as render_template_mock:
+            response = self.client.get("/")
+            render_template_mock.assert_called_with(
+                "index.html",
+                supported_extensions=ANY,
+            )
+        expect(response.status_code).to_equal(200)

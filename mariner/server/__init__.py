@@ -1,6 +1,7 @@
 import logging
 import multiprocessing
 import os
+from typing import Dict
 
 from flask import render_template
 from waitress import serve
@@ -22,11 +23,13 @@ flask_app.register_blueprint(api_blueprint)
 
 @flask_app.route("/", methods=["GET"])
 def index() -> str:
-    return render_template(
-        "index.html",
-        supported_extensions=",".join(get_supported_extensions()),
-        printer_display_name=config.get_printer_display_name(),
-    )
+    template_vars: Dict[str, str] = {
+        "supported_extensions": ",".join(get_supported_extensions()),
+    }
+    printer_display_name = config.get_printer_display_name()
+    if printer_display_name is not None:
+        template_vars["printer_display_name"] = printer_display_name
+    return render_template("index.html", **template_vars)
 
 
 class CacheBootstrapper(multiprocessing.Process):
