@@ -143,6 +143,11 @@ class MarinerServerTest(TestCase):
             self.fs.create_file(
                 "/mnt/usb_share/random_file.txt", contents="dummy content"
             )
+        with freeze_time("2021-05-14"):
+            self.fs.create_file(
+                "/mnt/usb_share/README",
+                contents=self.ctb_file_contents,
+            )
         with freeze_time("2021-05-15"):
             self.fs.create_file(
                 "/mnt/usb_share/case.CtB",
@@ -165,6 +170,11 @@ class MarinerServerTest(TestCase):
                         "path": "case.CtB",
                         "print_time_secs": 5621,
                         "can_be_printed": True,
+                    },
+                    {
+                        "filename": "README",
+                        "path": "README",
+                        "can_be_printed": False,
                     },
                     {
                         "filename": "b.ctb",
