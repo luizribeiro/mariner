@@ -96,17 +96,17 @@ pyflakes = ">=2.3.0,<2.4.0"
 
 [[package]]
 name = "flask"
-version = "1.1.2"
+version = "1.1.4"
 description = "A simple framework for building complex web applications."
 category = "main"
 optional = false
 python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 
 [package.dependencies]
-click = ">=5.1"
-itsdangerous = ">=0.24"
-Jinja2 = ">=2.10.1"
-Werkzeug = ">=0.15"
+click = ">=5.1,<8.0"
+itsdangerous = ">=0.24,<2.0"
+Jinja2 = ">=2.10.1,<3.0"
+Werkzeug = ">=0.15,<2.0"
 
 [package.extras]
 dev = ["pytest", "coverage", "tox", "sphinx", "pallets-sphinx-themes", "sphinxcontrib-log-cabinet", "sphinx-issues"]
@@ -380,7 +380,7 @@ python-versions = "*"
 
 [[package]]
 name = "pyre-check"
-version = "0.9.1"
+version = "0.9.3"
 description = "A performant type checker for Python"
 category = "dev"
 optional = false
@@ -649,7 +649,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "a2d4c99ecd953329141b67d89288e55699ff6cc044b27192ca81442acd439b84"
+content-hash = "05fb359148fc24eef15aa9b8b94d391b6f428378beee99bee20881130f069747"
 
 [metadata.files]
 appdirs = [
@@ -734,8 +734,8 @@ flake8 = [
     {file = "flake8-3.9.2.tar.gz", hash = "sha256:07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b"},
 ]
 flask = [
-    {file = "Flask-1.1.2-py2.py3-none-any.whl", hash = "sha256:8a4fdd8936eba2512e9c85df320a37e694c93945b33ef33c89946a340a238557"},
-    {file = "Flask-1.1.2.tar.gz", hash = "sha256:4efa1ae2d7c9865af48986de8aeb8504bf32c7f3d6fdc9353d34b21f4b127060"},
+    {file = "Flask-1.1.4-py2.py3-none-any.whl", hash = "sha256:c34f04500f2cbbea882b1acb02002ad6fe6b7ffa64a6164577995657f50aed22"},
+    {file = "Flask-1.1.4.tar.gz", hash = "sha256:0fbeb6180d383a9186d0d6ed954e0042ad9f18e0e8de088b2b419d526927d196"},
 ]
 flask-caching = [
     {file = "Flask-Caching-1.10.1.tar.gz", hash = "sha256:cf19b722fcebc2ba03e4ae7c55b532ed53f0cbf683ce36fafe5e881789a01c00"},
@@ -952,9 +952,9 @@ pypng = [
     {file = "pypng-0.0.20.tar.gz", hash = "sha256:1032833440c91bafee38a42c38c02d00431b24c42927feb3e63b104d8550170b"},
 ]
 pyre-check = [
-    {file = "pyre-check-0.9.1.tar.gz", hash = "sha256:e5118a683618232b26c475aa782c9d03854fbd7460fd119002f472553187c941"},
-    {file = "pyre_check-0.9.1-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:7e1647f3e7540e971562771fc26e16073449dd8929acf98187033c5136220996"},
-    {file = "pyre_check-0.9.1-py3-none-manylinux1_x86_64.whl", hash = "sha256:4fe4db2baeb04cf22962df7df2305c1d00f9540811ed78ff419e0151afa010eb"},
+    {file = "pyre-check-0.9.3.tar.gz", hash = "sha256:d5c03de101610d534eaf3d7b654702d91b95505209886feed211a30ded789daa"},
+    {file = "pyre_check-0.9.3-py3-none-macosx_10_11_x86_64.whl", hash = "sha256:989a82f1f76dd572da46e33bde34e56e7949f272df32f96d1f397241f42ebb13"},
+    {file = "pyre_check-0.9.3-py3-none-manylinux1_x86_64.whl", hash = "sha256:ed000307bcc7999b6e651bd8fa3d7716d6b3cc272855bf677643438f77ff54c1"},
 ]
 pyre-extensions = [
     {file = "pyre-extensions-0.0.21.tar.gz", hash = "sha256:585f630fc4e36019551c2ac50805d8d777d739b2d7f5bfe30d9b4daa0c95e66d"},
