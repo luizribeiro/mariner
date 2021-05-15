@@ -117,10 +117,8 @@ export default function FileDetailsDialog(
   } & DialogProps
 ): React.ReactElement {
   const classes = useStyles();
-  const [
-    isDeleteConfirmationDialogOpen,
-    setDeleteConfirmationDialogOpen,
-  ] = React.useState(false);
+  const [isDeleteConfirmationDialogOpen, setDeleteConfirmationDialogOpen] =
+    React.useState(false);
   const handleDeleteDialogClose = () => setDeleteConfirmationDialogOpen(false);
   const handleDelete = () => {
     setDeleteConfirmationDialogOpen(false);

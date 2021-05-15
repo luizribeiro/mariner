@@ -29,7 +29,7 @@ repos:
         pass_filenames: false
       - id: prettier
         name: prettier
-        entry: yarn --cwd frontend/ run prettier --check src/
+        entry: yarn --cwd frontend/ run prettier --check src
         language: node
         pass_filenames: false
       - id: tsc

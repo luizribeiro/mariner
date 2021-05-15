@@ -27,7 +27,8 @@ class UploadButton extends React.Component<
   UploadButtonState
 > {
   state: UploadButtonState = { isUploading: false };
-  uploadButtonRef: React.RefObject<HTMLInputElement> = React.createRef<HTMLInputElement>();
+  uploadButtonRef: React.RefObject<HTMLInputElement> =
+    React.createRef<HTMLInputElement>();
 
   async _onUploadStart(): Promise<void> {
     const files = nullthrows(this.uploadButtonRef.current?.files);
