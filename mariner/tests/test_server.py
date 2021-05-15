@@ -143,6 +143,11 @@ class MarinerServerTest(TestCase):
             self.fs.create_file(
                 "/mnt/usb_share/random_file.txt", contents="dummy content"
             )
+        with freeze_time("2021-05-15"):
+            self.fs.create_file(
+                "/mnt/usb_share/case.CtB",
+                contents=self.ctb_file_contents,
+            )
 
         response = self.client.get("/api/list_files")
         expect(response.get_json()).to_equal(
@@ -152,6 +157,12 @@ class MarinerServerTest(TestCase):
                     {
                         "filename": "foobar.ctb",
                         "path": "foobar.ctb",
+                        "print_time_secs": 5621,
+                        "can_be_printed": True,
+                    },
+                    {
+                        "filename": "case.CtB",
+                        "path": "case.CtB",
                         "print_time_secs": 5621,
                         "can_be_printed": True,
                     },

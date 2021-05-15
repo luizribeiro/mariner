@@ -106,7 +106,7 @@ def list_files() -> str:
         ):
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
-                if dir_entry.name.endswith(tuple(get_supported_extensions())):
+                if get_file_extension(dir_entry.name) in get_supported_extensions():
                     sliced_model_file = read_cached_sliced_model_file(
                         path / dir_entry.name
                     )
