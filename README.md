@@ -34,6 +34,7 @@ Mariner:
 * Creality LD-002R
 * Voxelab Proxima
 * Peopoly Phenom L
+* EPAX E10/X10
 
 If you have access to other models and want to contribute, please open an
 issue. We're happy to support more printers!
