@@ -17,7 +17,7 @@ from werkzeug.utils import secure_filename
 from mariner import config
 from mariner.exceptions import MarinerException
 from mariner.file_formats import SlicedModelFile
-from mariner.file_formats.utils import get_supported_extensions
+from mariner.file_formats.utils import get_file_extension, get_supported_extensions
 from mariner.mars import ElegooMars, PrinterState
 from mariner.server.utils import read_cached_preview, read_cached_sliced_model_file
 
@@ -169,7 +169,7 @@ def upload_file() -> str:
     file = request.files.get("file")
     if file is None or file.filename == "":
         abort(400)
-    if os.path.splitext(file.filename)[1] not in get_supported_extensions():
+    if get_file_extension(file.filename) not in get_supported_extensions():
         abort(400)
     filename = secure_filename(file.filename)
     file.save(str(config.get_files_directory() / filename))

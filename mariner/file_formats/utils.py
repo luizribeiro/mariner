@@ -14,10 +14,13 @@ EXTENSION_TO_FILE_FORMAT: Mapping[str, Type[SlicedModelFile]] = {
 }
 
 
-def get_file_format(filename: str) -> Type[SlicedModelFile]:
+def get_file_extension(filename: str) -> str:
     (_, extension) = os.path.splitext(filename)
+    return extension.lower()
 
-    file_format = EXTENSION_TO_FILE_FORMAT.get(extension.lower())
+
+def get_file_format(filename: str) -> Type[SlicedModelFile]:
+    file_format = EXTENSION_TO_FILE_FORMAT.get(get_file_extension(filename))
 
     assert file_format is not None
     return file_format
