@@ -3,7 +3,7 @@ name = "mariner"
 version = "0.2.0"
 description = "Web application for controlling Elegoo Mars 3D printers"
 license = "MIT"
-readme = "README.md"
+readme = "README.rst"
 authors = [
   "Luiz Ribeiro <luizribeiro@gmail.com>",
 ]
