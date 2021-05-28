@@ -5,7 +5,7 @@ Once your :doc:`hardware setup <hardware-setup>` done, you need to:
 
 * Install the `mariner3d` Debian package
 * Setup the `USB Gadget driver
-  <https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>` so that
+  <https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>`_ so that
   the printer can see uploaded files
 * Enable the serial port so the Raspberry Pi can send commands to the printer
 
@@ -30,9 +30,9 @@ USB Gadget Setup
 ----------------
 
 In order to make the printer see the files uploaded to mariner, we need to
-setup the `USB Gadget driver <https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>`_
-as a Mass Storage device. This section will guide you through that
-process.
+setup the `USB Gadget driver
+<https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>`_ as a Mass
+Storage device. This section will guide you through that process.
 
 Enable USB driver for gadget modules by adding this line to
 ``/boot/config.txt``:
