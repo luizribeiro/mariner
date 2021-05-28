@@ -47,6 +47,7 @@ Let us know if you succeed on using mariner with any other printers!
    :hidden:
 
    install
+   troubleshooting
    contributing
 
 .. |Screenshot| image:: /_static/screenshot.png
