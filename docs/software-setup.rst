@@ -3,7 +3,7 @@ Software Setup
 
 Once your :doc:`hardware setup <hardware-setup>` done, you need to:
 
-* Install the `mariner3d` Debian package
+* Install the ``mariner3d`` Debian package
 * Setup the `USB Gadget driver
   <https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>`_ so that
   the printer can see uploaded files
