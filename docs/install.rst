@@ -10,17 +10,12 @@ setting up Linux to share files with the printer and use the serial port.
    guarantee this will work on your printer, nor that it won't damage it.  Use
    at your own risk.
 
-Before you get started, make sure you have the following:
-
-* Raspberry Pi Zero W
-* One of the `supported 3D Printers <https://github.com/luizribeiro/mariner#supported-printers>`_
-* Micro USB to USB-A cable to connect between Pi and printer mainboard.
-* Power Supply for the Pi, or a 12V to 5V converter to power it from
-  printer's power supply.
+If you are ready to begin, head on to :ref:`Getting Started`!
 
 .. toctree::
    :hidden:
 
+   getting-started
    hardware-setup
    software-setup
    wrapping-up
