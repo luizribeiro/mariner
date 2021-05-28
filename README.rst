@@ -3,8 +3,8 @@
 
 |CI| |docs| |codecov| |Python| |MIT license|
 
-Web interface for controlling MSLA 3D Printers based on Chitu controllers,
-such as the ones by Elegoo and Phrozen.
+Web interface for controlling MSLA 3D Printers based on ChiTu controllers
+remotely.
 
 |Screenshot|
 
@@ -18,32 +18,35 @@ Features
 - Browse files available for printing.
 - Inspect ``.ctb`` files: image preview, print time and slicing settings.
 
+For more details on the feature set, refer to our `Documentation
+<https://mariner.readthedocs.io/en/latest/>`_.
+
 Supported Printers
 ------------------
 
-The following printers have been tested by the community and work with Mariner:
+Mariner supports a wide range of MSLA printers, including printers from the
+following manufacturers:
 
--  Elegoo Mars
--  Elegoo Mars Pro
--  Elegoo Mars 2 Pro
--  Elegoo Saturn
--  Phrozen Sonic Mighty 4K
--  Phrozen Sonic Mini 4K
--  Creality LD-002H
--  Creality LD-002R
--  Voxelab Proxima
--  Peopoly Phenom L
--  EPAX E10/X10
+- Creality
+- EPAX
+- Elegoo
+- Peopoly
+- Phrozen
+- Voxelab
 
-If you have access to other models and want to contribute, please open an issue.
-We're happy to support more printers!
+Please refer to the list of `Supported Printers
+<https://mariner.readthedocs.io/en/latest/getting-started.html#supported-printers>`_
+on our documentation for a full list of printer models that have been tested.
+If you have access to other printers and want to contribute, please open an
+issue.  We're happy to support more printers!
 
 Documentation
 -------------
 
 The documentation is available from `Read the Docs
-<https://mariner.readthedocs.io/en/latest/>`_.
-
+<https://mariner.readthedocs.io/en/latest/>`_. It contains a lot of information
+from how to setup the hardware, install the software, troubleshoot issues, and
+how to contribute to development.
 
 `This blog
 post <https://l9o.dev/posts/controlling-an-elegoo-mars-pro-remotely/>`__
