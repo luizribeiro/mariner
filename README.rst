@@ -41,18 +41,14 @@ We're happy to support more printers!
 Documentation
 -------------
 
+The documentation is available from `Read the Docs
+<https://mariner.readthedocs.io/en/latest/>`_.
+
+
 `This blog
 post <https://l9o.dev/posts/controlling-an-elegoo-mars-pro-remotely/>`__
 explains the setup end to end with pictures of the modifications done to an
 Elegoo Mars Pro.
-
-Alternatively, the documentation is hosted on this repository itself:
-
-- `Installing </docs/install.md>`_: how to setup mariner on a Raspberry Pi
-  Zero W and an Elegoo Mars Pro. These same instructions have been confirmed to
-  work with the printers listed on the section above.
-- `Contributing </docs/contributing.md>`_: how to setup your development
-  environment and contribute to the project. Pull requests are welcome!
 
 .. |CI| image:: https://github.com/luizribeiro/mariner/workflows/CI/badge.svg
    :target: https://github.com/luizribeiro/mariner/actions/workflows/ci.yaml
@@ -64,4 +60,4 @@ Alternatively, the documentation is hosted on this repository itself:
    :target: https://www.python.org/downloads/
 .. |MIT license| image:: https://img.shields.io/badge/License-MIT-blue.svg
    :target: https://luizribeiro.mit-license.org/
-.. |Screenshot| image:: /docs/img/screenshot.png
+.. |Screenshot| image:: /docs/_static/screenshot.png
