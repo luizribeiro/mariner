@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "mariner"
 version = "0.2.0"
-description = "Web application for controlling Elegoo Mars 3D printers"
+description = "Web application for controlling MSLA 3D Printers based on ChiTu controllers"
 license = "MIT"
 readme = "README.rst"
 authors = [

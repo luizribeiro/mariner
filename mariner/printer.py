@@ -25,7 +25,7 @@ class PrintStatus:
     total_bytes: Optional[int] = None
 
 
-class ElegooMars:
+class ChiTuPrinter:
     _serial_port: serial.Serial
 
     def __init__(self) -> None:
@@ -47,7 +47,7 @@ class ElegooMars:
     def close(self) -> None:
         self._serial_port.close()
 
-    def __enter__(self) -> "ElegooMars":
+    def __enter__(self) -> "ChiTuPrinter":
         self.open()
         return self
 

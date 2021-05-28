@@ -9,4 +9,4 @@ Package: mariner3d
 Architecture: any
 Pre-Depends: dpkg (>= 1.19.1), python3 (>= 3.7), ${misc:Pre-Depends}
 Depends: ${python:Depends}, ${misc:Depends}, libxslt1.1, libxml2, zlib1g
-Description: Web application for controlling Elegoo Mars 3D printers
+Description: Web application for controlling MSLA 3D Printers based on ChiTu controllers

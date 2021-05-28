@@ -11,8 +11,8 @@ from werkzeug.datastructures import FileStorage
 
 from mariner import config
 from mariner.exceptions import UnexpectedPrinterResponse
-from mariner.mars import (
-    ElegooMars,
+from mariner.printer import (
+    ChiTuPrinter,
     PrinterState,
     PrintStatus,
 )
@@ -38,8 +38,8 @@ class MarinerServerTest(TestCase):
         self.client = app.test_client()
         app.config["WTF_CSRF_ENABLED"] = False
 
-        self.printer_mock = Mock(spec=ElegooMars)
-        self.printer_patcher = patch("mariner.server.api.ElegooMars")
+        self.printer_mock = Mock(spec=ChiTuPrinter)
+        self.printer_patcher = patch("mariner.server.api.ChiTuPrinter")
         printer_constructor_mock = self.printer_patcher.start()
         printer_constructor_mock.return_value = self.printer_mock
         self.printer_mock.__enter__ = Mock(return_value=self.printer_mock)

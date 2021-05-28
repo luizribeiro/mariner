@@ -18,7 +18,7 @@ from mariner import config
 from mariner.exceptions import MarinerException
 from mariner.file_formats import SlicedModelFile
 from mariner.file_formats.utils import get_file_extension, get_supported_extensions
-from mariner.mars import ElegooMars, PrinterState
+from mariner.printer import ChiTuPrinter, PrinterState
 from mariner.server.utils import read_cached_preview, read_cached_sliced_model_file
 
 
@@ -42,9 +42,9 @@ def handle_mariner_exception(exception: MarinerException) -> Tuple[str, int]:
 
 @api.route("/print_status", methods=["GET"])
 def print_status() -> str:
-    with ElegooMars() as elegoo_mars:
-        selected_file = elegoo_mars.get_selected_file()
-        print_status = elegoo_mars.get_print_status()
+    with ChiTuPrinter() as printer:
+        selected_file = printer.get_selected_file()
+        print_status = printer.get_print_status()
 
         if print_status.state == PrinterState.IDLE:
             progress = 0.0
@@ -220,17 +220,17 @@ class PrinterCommand(Enum):
 @api.route("/printer/command/<command>", methods=["POST"])
 def printer_command(command: str) -> str:
     printer_command = PrinterCommand(command)
-    with ElegooMars() as elegoo_mars:
+    with ChiTuPrinter() as printer:
         if printer_command == PrinterCommand.START_PRINT:
             # TODO: validate filename before sending it to the printer
             filename = str(request.args.get("filename"))
-            elegoo_mars.start_printing(filename)
+            printer.start_printing(filename)
         elif printer_command == PrinterCommand.PAUSE_PRINT:
-            elegoo_mars.pause_printing()
+            printer.pause_printing()
         elif printer_command == PrinterCommand.RESUME_PRINT:
-            elegoo_mars.resume_printing()
+            printer.resume_printing()
         elif printer_command == PrinterCommand.CANCEL_PRINT:
-            elegoo_mars.stop_printing()
+            printer.stop_printing()
         elif printer_command == PrinterCommand.REBOOT:
-            elegoo_mars.reboot()
+            printer.reboot()
         return jsonify({"success": True})

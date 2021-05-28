@@ -6,11 +6,11 @@ import serial
 from pyexpect import expect
 
 from mariner.exceptions import UnexpectedPrinterResponse
-from mariner.mars import ElegooMars, PrinterState
+from mariner.printer import ChiTuPrinter, PrinterState
 
 
-class ElegooMarsTest(TestCase):
-    printer: ElegooMars
+class ChiTuPrinterTest(TestCase):
+    printer: ChiTuPrinter
     # pyre-ignore[24]: Generic type `unittest.mock._patch` expects
     # 1 type parameter
     serial_port_patcher: unittest.mock._patch
@@ -18,10 +18,10 @@ class ElegooMarsTest(TestCase):
 
     def setUp(self) -> None:
         self.serial_port_mock = Mock(spec=serial.Serial)
-        self.serial_port_patcher = patch("mariner.mars.serial.Serial")
+        self.serial_port_patcher = patch("mariner.printer.serial.Serial")
         serial_port_constructor = self.serial_port_patcher.start()
         serial_port_constructor.return_value = self.serial_port_mock
-        self.printer = ElegooMars()
+        self.printer = ChiTuPrinter()
 
     def tearDown(self) -> None:
         self.serial_port_patcher.stop()
