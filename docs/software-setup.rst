@@ -66,8 +66,8 @@ mounted on boot::
 
    /piusb.bin /mnt/usb_share vfat users,gid=mariner,umask=002 0 2
 
-Finally, make ``/etc/rc.local`` load the ``g_mass_storage`` module by adding
-this to it:
+Finally, make ``/etc/rc.local`` load the ``g_mass_storage`` module. If that file
+doesn't exist yet, create it with the following contents:
 
 .. code-block:: sh
 
@@ -76,6 +76,8 @@ this to it:
    modprobe g_mass_storage file=/piusb.bin stall=0 ro=1
 
    exit 0
+
+If the file exists, you should simply add the ``modprobe`` line to it.
 
 Once you restart the pi (or potentially run ``sudo mount -a``), the printer
 should start seeing the contents of ``/mnt/usb_share``.
