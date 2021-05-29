@@ -26,6 +26,7 @@ Mariner provides the following features:
 .. toctree::
    :hidden:
 
+   supported-printers
    install
    troubleshooting
    contributing

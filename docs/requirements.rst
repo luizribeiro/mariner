@@ -1,5 +1,5 @@
-Getting Started
-===============
+Requirements
+============
 
 Before you get started, make sure you have the following:
 
@@ -17,24 +17,3 @@ Before you get started, make sure you have the following:
   pins from the printer mainboard itself. However, that sometimes creates issues
   with poor WiFi signal, making uploading files too slow.
 * An hour or two and some basic Linux knowledge :-)
-
-Supported Printers
-------------------
-
-The following printers have been confirmed to work with mariner by our
-community:
-
-- Elegoo Mars
-- Elegoo Mars Pro
-- Elegoo Mars 2 Pro
-- Elegoo Saturn
-- Phrozen Sonic Mighty 4K
-- Phrozen Sonic Mini 4K
-- Creality LD-002H
-- Creality LD-002R
-- Voxelab Proxima
-- Peopoly Phenom L
-- EPAX E10/X10
-
-More printers probably work with mariner without any changes to the software.
-Let us know if you succeed on using mariner with any other printers!

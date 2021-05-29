@@ -10,12 +10,12 @@ setting up Linux to share files with the printer and use the serial port.
    guarantee this will work on your printer, nor that it won't damage it.  Use
    at your own risk.
 
-If you are ready to begin, head on to :ref:`Getting Started`!
+If you are ready to begin, head on to :ref:`Requirements` to get started!
 
 .. toctree::
    :hidden:
 
-   getting-started
+   requirements
    hardware-setup
    software-setup
    wrapping-up
