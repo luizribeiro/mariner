@@ -1,13 +1,15 @@
 Software Setup
 ==============
 
-Once your :doc:`hardware setup <hardware-setup>` done, you need to:
+Once your :doc:`hardware setup <hardware-setup>` done, you will have to:
 
-* Install the ``mariner3d`` Debian package
-* Setup the `USB Gadget driver
-  <https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>`_ so that
-  the printer can see uploaded files
-* Enable the serial port so the Raspberry Pi can send commands to the printer
+1. Install the ``mariner3d`` Debian package
+2. Setup the `USB Gadget driver
+   <https://www.kernel.org/doc/html/latest/driver-api/usb/gadget.html>`_ so that
+   the printer can see uploaded files
+3. Enable the serial port so the Raspberry Pi can send commands to the printer
+
+This section will guide you through those steps.
 
 Installing package
 ------------------
