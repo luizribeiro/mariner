@@ -89,4 +89,4 @@ Also check the message buffer of the Linux kernel for errors:
 
 Carefully read the :ref:`Installation Guide` once again and, if none of that
 helps, `file an issue on GitHub
-<https://github.com/luizribeiro/mariner/issues/new>`_!
+<https://github.com/luizribeiro/mariner/issues/new/choose>`_!
