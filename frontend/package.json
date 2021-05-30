@@ -55,6 +55,7 @@
     "utility-types": "3.10.0"
   },
   "jest": {
+    "testEnvironment": "jsdom",
     "testPathIgnorePatterns": [
       "/node_modules/",
       "/.typescript/"
