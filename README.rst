@@ -35,7 +35,7 @@ following manufacturers:
 - Voxelab
 
 Please refer to the list of `Supported Printers
-<https://mariner.readthedocs.io/en/latest/getting-started.html#supported-printers>`_
+<https://mariner.readthedocs.io/en/latest/supported-printers.html>`_
 on our documentation for a full list of printer models that have been tested.
 If you have access to other printers and want to contribute, please open an
 issue.  We're happy to support more printers!
