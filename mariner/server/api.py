@@ -15,11 +15,15 @@ from pyre_extensions import none_throws
 from werkzeug.utils import secure_filename
 
 from mariner import config
-from mariner.exceptions import MarinerException
+from mariner.exceptions import MarinerException, UnexpectedPrinterResponse
 from mariner.file_formats import SlicedModelFile
 from mariner.file_formats.utils import get_file_extension, get_supported_extensions
 from mariner.printer import ChiTuPrinter, PrinterState
-from mariner.server.utils import read_cached_preview, read_cached_sliced_model_file
+from mariner.server.utils import (
+    read_cached_preview,
+    read_cached_sliced_model_file,
+    retry,
+)
 
 
 api = Blueprint("api", __name__, url_prefix="/api")
@@ -44,7 +48,15 @@ def handle_mariner_exception(exception: MarinerException) -> Tuple[str, int]:
 def print_status() -> str:
     with ChiTuPrinter() as printer:
         selected_file = printer.get_selected_file()
-        print_status = printer.get_print_status()
+        # the printer sends periodic "ok" responses over serial. this means that
+        # sometimes we get an unexpected response from the printer (an "ok" instead of
+        # the print status we expected). due to this, we retry at most 3 times here
+        # until we have a successful response. see issue #180
+        print_status = retry(
+            printer.get_print_status,
+            UnexpectedPrinterResponse,
+            num_retries=3,
+        )
 
         if print_status.state == PrinterState.IDLE:
             progress = 0.0
