@@ -47,11 +47,15 @@ def handle_mariner_exception(exception: MarinerException) -> Tuple[str, int]:
 @api.route("/print_status", methods=["GET"])
 def print_status() -> str:
     with ChiTuPrinter() as printer:
-        selected_file = printer.get_selected_file()
         # the printer sends periodic "ok" responses over serial. this means that
         # sometimes we get an unexpected response from the printer (an "ok" instead of
         # the print status we expected). due to this, we retry at most 3 times here
         # until we have a successful response. see issue #180
+        selected_file = retry(
+            printer.get_selected_file,
+            UnexpectedPrinterResponse,
+            num_retries=3,
+        )
         print_status = retry(
             printer.get_print_status,
             UnexpectedPrinterResponse,
