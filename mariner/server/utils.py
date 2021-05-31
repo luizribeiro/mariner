@@ -1,5 +1,6 @@
 import io
 import os
+import time
 from typing import Callable, Type, TypeVar
 
 import png
@@ -41,6 +42,7 @@ def retry(
     exception_type: Type[Exception],
     *,
     num_retries: int,
+    delay_ms: int = 100,
 ) -> TReturn:
     attempts_left = num_retries
     while attempts_left > 0:
@@ -48,4 +50,5 @@ def retry(
             return func()
         except exception_type:
             attempts_left -= 1
+            time.sleep(delay_ms / 1000.0)
     return func()

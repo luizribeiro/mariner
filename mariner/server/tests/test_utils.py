@@ -1,10 +1,18 @@
 from unittest import TestCase
+from unittest.mock import patch
 
 from mariner.server.utils import retry
 
 
 class RetryTest(TestCase):
     num_attempts: int = 0
+
+    def setUp(self) -> None:
+        self.sleep_patcher = patch("mariner.server.utils.time.sleep")
+        self.sleep_patcher.start()
+
+    def tearDown(self) -> None:
+        self.sleep_patcher.stop()
 
     def test_fail_all_retries(self) -> None:
         def _always_fail() -> None:
