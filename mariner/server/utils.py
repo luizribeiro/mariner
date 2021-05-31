@@ -1,5 +1,6 @@
 import io
 import os
+from typing import Callable, Type, TypeVar
 
 import png
 from flask_caching import Cache
@@ -30,3 +31,21 @@ def read_cached_preview(filename: str) -> bytes:
     )
     preview_image.write(bytes)
     return bytes.getvalue()
+
+
+TReturn = TypeVar("TReturn")
+
+
+def retry(
+    func: Callable[[], TReturn],
+    exception_type: Type[Exception],
+    *,
+    num_retries: int,
+) -> TReturn:
+    attempts_left = num_retries
+    while attempts_left > 0:
+        try:
+            return func()
+        except exception_type:
+            attempts_left -= 1
+    return func()
