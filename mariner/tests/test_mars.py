@@ -58,7 +58,7 @@ class ChiTuPrinterTest(TestCase):
         firmware_version = self.printer.get_firmware_version()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4002")
+        self.serial_port_mock.write.assert_called_once_with(b"M4002\r\n")
         expect(firmware_version).to_equal("V4.3.4_LCDC")
 
     def test_get_state(self) -> None:
@@ -71,7 +71,7 @@ class ChiTuPrinterTest(TestCase):
         self.printer.get_state()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4000")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000\r\n")
 
     def test_get_print_status_when_not_printing(self) -> None:
         self.serial_port_mock.readline.return_value = (
@@ -82,7 +82,7 @@ class ChiTuPrinterTest(TestCase):
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4000")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000\r\n")
         expect(print_status.state).to_equal(PrinterState.IDLE)
         expect(print_status.current_byte).to_be_none()
         expect(print_status.total_bytes).to_be_none()
@@ -96,7 +96,7 @@ class ChiTuPrinterTest(TestCase):
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4000")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000\r\n")
         expect(print_status.state).to_equal(PrinterState.STARTING_PRINT)
         expect(print_status.current_byte).to_equal(0)
         expect(print_status.total_bytes).to_equal(11494803)
@@ -110,7 +110,7 @@ class ChiTuPrinterTest(TestCase):
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4000")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000\r\n")
         expect(print_status.state).to_equal(PrinterState.PRINTING)
         expect(print_status.current_byte).to_equal(76903)
         expect(print_status.total_bytes).to_equal(11494803)
@@ -124,7 +124,7 @@ class ChiTuPrinterTest(TestCase):
         print_status = self.printer.get_print_status()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4000")
+        self.serial_port_mock.write.assert_called_once_with(b"M4000\r\n")
         expect(print_status.state).to_equal(PrinterState.PAUSED)
         expect(print_status.current_byte).to_equal(5957675)
         expect(print_status.total_bytes).to_equal(11494803)
@@ -138,7 +138,7 @@ class ChiTuPrinterTest(TestCase):
         z_pos = self.printer.get_z_pos()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M114")
+        self.serial_port_mock.write.assert_called_once_with(b"M114\r\n")
         expect(z_pos).is_almost_equal(155.0, max_delta=1e-9)
 
     def test_get_selected_file(self) -> None:
@@ -148,7 +148,7 @@ class ChiTuPrinterTest(TestCase):
         selected_file = self.printer.get_selected_file()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4006")
+        self.serial_port_mock.write.assert_called_once_with(b"M4006\r\n")
         expect(selected_file).equals("LittleBBC.ctb")
 
     def test_get_selected_file_with_leading_slash(self) -> None:
@@ -158,7 +158,7 @@ class ChiTuPrinterTest(TestCase):
         selected_file = self.printer.get_selected_file()
         self.printer.close()
 
-        self.serial_port_mock.write.assert_called_once_with(b"M4006")
+        self.serial_port_mock.write.assert_called_once_with(b"M4006\r\n")
         expect(selected_file).equals("subdir/LittleBBC.ctb")
 
     def test_select_file(self) -> None:
@@ -169,7 +169,7 @@ class ChiTuPrinterTest(TestCase):
         self.printer.open()
         self.printer.select_file("lattice.ctb")
         self.printer.close()
-        self.serial_port_mock.write.assert_called_once_with(b"M23 /lattice.ctb")
+        self.serial_port_mock.write.assert_called_once_with(b"M23 /lattice.ctb\r\n")
 
     def test_select_nonexisting_file(self) -> None:
         self.serial_port_mock.readline.return_value = (
@@ -182,13 +182,13 @@ class ChiTuPrinterTest(TestCase):
         with self.assertRaises(UnexpectedPrinterResponse):
             self.printer.select_file("foobar.ctb")
         self.printer.close()
-        self.serial_port_mock.write.assert_called_once_with(b"M23 /foobar.ctb")
+        self.serial_port_mock.write.assert_called_once_with(b"M23 /foobar.ctb\r\n")
 
     def test_stop_printing(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
         self.printer.stop_printing()
-        self.serial_port_mock.write.assert_called_once_with(b"M33")
+        self.serial_port_mock.write.assert_called_once_with(b"M33\r\n")
         self.printer.close()
 
     def test_stop_printing_when_not_printing(self) -> None:
@@ -200,7 +200,7 @@ class ChiTuPrinterTest(TestCase):
         with self.assertRaises(UnexpectedPrinterResponse):
             self.printer.stop_printing()
         self.printer.close()
-        self.serial_port_mock.write.assert_called_once_with(b"M33")
+        self.serial_port_mock.write.assert_called_once_with(b"M33\r\n")
 
     def test_start_printing(self) -> None:
         self.serial_port_mock.readline.side_effect = [
@@ -211,8 +211,8 @@ class ChiTuPrinterTest(TestCase):
         self.printer.start_printing("benchy.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
-                call(b"M23 /benchy.ctb"),
-                call(b"M6030 'benchy.ctb'"),
+                call(b"M23 /benchy.ctb\r\n"),
+                call(b"M6030 'benchy.ctb'\r\n"),
             ]
         )
         self.printer.close()
@@ -226,8 +226,8 @@ class ChiTuPrinterTest(TestCase):
         self.printer.start_printing("more/model.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
-                call(b"M23 /more/model.ctb"),
-                call(b"M6030 'model.ctb'"),
+                call(b"M23 /more/model.ctb\r\n"),
+                call(b"M6030 'model.ctb'\r\n"),
             ]
         )
         self.printer.close()
@@ -242,8 +242,8 @@ class ChiTuPrinterTest(TestCase):
             self.printer.start_printing("benchy.ctb")
         self.serial_port_mock.write.assert_has_calls(
             [
-                call(b"M23 /benchy.ctb"),
-                call(b"M6030 'benchy.ctb'"),
+                call(b"M23 /benchy.ctb\r\n"),
+                call(b"M6030 'benchy.ctb'\r\n"),
             ]
         )
         self.printer.close()
@@ -252,14 +252,14 @@ class ChiTuPrinterTest(TestCase):
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
         self.printer.resume_printing()
-        self.serial_port_mock.write.assert_called_once_with(b"M24")
+        self.serial_port_mock.write.assert_called_once_with(b"M24\r\n")
         self.printer.close()
 
     def test_pause_printing(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
         self.printer.pause_printing()
-        self.serial_port_mock.write.assert_called_once_with(b"M25")
+        self.serial_port_mock.write.assert_called_once_with(b"M25\r\n")
         self.printer.close()
 
     def test_move_by(self) -> None:
@@ -267,15 +267,15 @@ class ChiTuPrinterTest(TestCase):
         self.printer.open()
 
         self.printer.move_by(10)
-        self.serial_port_mock.write.assert_called_once_with(b"G0 Z10.0 F600 I0")
+        self.serial_port_mock.write.assert_called_once_with(b"G0 Z10.0 F600 I0\r\n")
         self.serial_port_mock.reset_mock()
 
         self.printer.move_by(-10)
-        self.serial_port_mock.write.assert_called_once_with(b"G0 Z-10.0 F600 I0")
+        self.serial_port_mock.write.assert_called_once_with(b"G0 Z-10.0 F600 I0\r\n")
         self.serial_port_mock.reset_mock()
 
         self.printer.move_by(15.3, mm_per_min=30)
-        self.serial_port_mock.write.assert_called_once_with(b"G0 Z15.3 F30 I0")
+        self.serial_port_mock.write.assert_called_once_with(b"G0 Z15.3 F30 I0\r\n")
         self.serial_port_mock.reset_mock()
 
         self.printer.close()
@@ -284,14 +284,14 @@ class ChiTuPrinterTest(TestCase):
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
         self.printer.move_to_home()
-        self.serial_port_mock.write.assert_called_once_with(b"G28")
+        self.serial_port_mock.write.assert_called_once_with(b"G28\r\n")
         self.printer.close()
 
     def test_stop_motors(self) -> None:
         self.serial_port_mock.readline.return_value = b"ok N:0\r\n"
         self.printer.open()
         self.printer.stop_motors()
-        self.serial_port_mock.write.assert_called_once_with(b"M112")
+        self.serial_port_mock.write.assert_called_once_with(b"M112\r\n")
         self.printer.close()
 
     def test_reboot(self) -> None:
