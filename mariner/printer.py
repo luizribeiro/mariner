@@ -164,6 +164,9 @@ class ChiTuPrinter:
         self._send((f"M6040 I{delay_in_ms}").encode())
 
     def _send_and_read(self, data: bytes, timeout_secs: Optional[float] = None) -> str:
+        self._serial_port.reset_input_buffer()
+        self._serial_port.reset_output_buffer()
+
         self._send(data + b"\r\n")
 
         original_timeout = self._serial_port.timeout
