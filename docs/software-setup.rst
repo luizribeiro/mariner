@@ -60,7 +60,8 @@ just after ``rootwait``:
 
    modules-load=dwc2
 
-Setup a container file for storing uploaded files, the count= is in MB, use multiples of 1024 to get the number of GBs your want:
+Setup a container file for storing uploaded files, the ``count=`` is in MB,
+use multiples of 1024 to get the number of GBs you want:
 
 .. code-block:: bash
 
