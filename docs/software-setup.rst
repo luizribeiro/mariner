@@ -40,7 +40,9 @@ Enable USB driver for gadget modules by adding this line to
 ``/boot/config.txt``:
 
 If you are using a Pi Zero W or a Pi 4B add:
+
 .. code-block:: bash
+
    dtoverlay=dwc2
    
 If you are using a Pi 3A+, there is a little variant as these supports device
@@ -48,6 +50,7 @@ mode or host mode, but not "true" OTG which is auto-sensing between host and
 device (AKA gadget). So, for the Pi 3A+ you have to add:
 
 .. code-block:: bash
+
    dtoverlay=dwc2,dr_mode=peripheral
 
 Enable the dwc2 kernel module, by adding this to your ``/boot/cmdline.txt``
@@ -57,7 +60,7 @@ just after ``rootwait``:
 
    modules-load=dwc2
 
-Setup a container file for storing uploaded files:
+Setup a container file for storing uploaded files, the count= is in MB, use multiples of 1024 to get the number of GBs your want:
 
 .. code-block:: bash
 
