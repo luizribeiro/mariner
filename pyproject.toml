@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "mariner"
-version = "0.2.0"
+version = "0.2.1"
 description = "Web application for controlling MSLA 3D Printers based on ChiTu controllers"
 license = "MIT"
 readme = "README.rst"
