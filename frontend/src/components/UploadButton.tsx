@@ -20,29 +20,34 @@ export interface UploadButtonProps extends WithStyles, WithAPIProps {
 
 interface UploadButtonState {
   isUploading: boolean;
+  uploadProgress: number;
 }
 
 class UploadButton extends React.Component<
   UploadButtonProps,
   UploadButtonState
 > {
-  state: UploadButtonState = { isUploading: false };
+  state: UploadButtonState = { isUploading: false, uploadProgress: 0 };
   uploadButtonRef: React.RefObject<HTMLInputElement> =
     React.createRef<HTMLInputElement>();
 
   async _onUploadStart(): Promise<void> {
     const files = nullthrows(this.uploadButtonRef.current?.files);
 
-    await setState(this, { isUploading: true });
-    await this.props.api.uploadFile(files[0]);
-    await setState(this, { isUploading: false });
+    await setState(this, { isUploading: true, uploadProgress: 0 });
+    await this.props.api.uploadFile(files[0], (event: ProgressEvent) => {
+      this.setState({
+        uploadProgress: (event.loaded / event.total) * 100,
+      });
+    });
+    await setState(this, { isUploading: false, uploadProgress: 0 });
 
     await this.props.onUploadFinished();
   }
 
   render(): React.ReactElement {
     const { classes } = this.props;
-    const { isUploading } = this.state;
+    const { isUploading, uploadProgress } = this.state;
 
     return (
       <React.Fragment>
@@ -59,7 +64,15 @@ class UploadButton extends React.Component<
         <label htmlFor="upload-button">
           <Button
             startIcon={
-              isUploading ? <CircularProgress size={18} /> : <PublishIcon />
+              isUploading ? (
+                <CircularProgress
+                  variant="determinate"
+                  value={uploadProgress}
+                  size={18}
+                />
+              ) : (
+                <PublishIcon />
+              )
             }
             variant="outlined"
             color="primary"
