@@ -18,7 +18,7 @@ class PhotonHeader(LittleEndianStruct):
     bed_size_z_mm: float = StructType.float32()
     unknown_01: int = StructType.uint32() # 14
     unknown_02: int = StructType.uint32()
-    unknown_03: float = StructType.uint32()
+    height_mm: float = StructType.uint32()
     layer_height_mm: float = StructType.float32() # 20:
     layer_exposure: float = StructType.float32() # 24: Layer exposure(in seconds)
     bottom_exposure: float = StructType.float32() # 28: Bottom layers exposure(in seconds)
@@ -58,6 +58,31 @@ class PhotonParam(LittleEndianStruct):
     unknown_02: int = StructType.uint32() # 30:
     unknown_03: int = StructType.uint32() # 34:
     unknown_04: int = StructType.uint32() # 38:
+    
+@dataclass(frozen=True)
+class PhotonSlicer(LittleEndianStruct):
+    skip_0: int = StructType.uint32()
+    skip_1: int = StructType.uint32()
+    skip_2: int = StructType.uint32()
+    skip_3: int = StructType.uint32()
+    skip_4: int = StructType.uint32()
+    skip_5: int = StructType.uint32()
+    skip_6: int = StructType.uint32()
+    machine_offset: int = StructType.uint32()
+    machine_size: int = StructType.uint32()
+    encryption_mode: int = StructType.uint32()
+    time_seconds: int = StructType.uint32()
+    unknown_01: int = StructType.uint32()
+    version_patch: int = StructType.unsigned_char()
+    version_minor: int = StructType.unsigned_char()
+    version_major: int = StructType.unsigned_char()
+    version_release: int = StructType.unsigned_char()
+    unknown_02: int = StructType.uint32()
+    unknown_03: int = StructType.uint32()
+    unknown_04: float = StructType.float32()
+    unknown_05: int = StructType.uint32()
+    unknown_06: int = StructType.uint32()
+    unknown_07: float = StructType.float32()
 
 @dataclass(frozen=True)
 class PhotonLayerDef(LittleEndianStruct):
@@ -124,6 +149,12 @@ class PhotonFile(SlicedModelFile):
     def read(self, path: pathlib.Path) -> "PhotonFile":
         with open(str(path), "rb") as file:
             photon_header = PhotonHeader.unpack(file.read(PhotonHeader.get_size()))
+            
+            file.seek(photon_header.slicer_offset)
+            photon_slicer = PhotonSlicer.unpack(file.read(PhotonSlicer.get_size()))
+
+            file.seek(photon_slicer.machine_offset)
+            printer_name = file.read(photon_slicer.machine_size).decode()
 
             end_byte_offset_by_layer = []
             for layer in range(0, photon_header.layer_count):
@@ -140,14 +171,21 @@ class PhotonFile(SlicedModelFile):
                     round(photon_header.bed_size_y_mm, 4),
                     round(photon_header.bed_size_z_mm, 4),
                 ),
-                height_mm=photon_header.layer_height_mm*photon_header.layer_count,
+                height_mm=photon_header.height_mm,
                 layer_height_mm=photon_header.layer_height_mm,
                 layer_count=photon_header.layer_count,
                 resolution=(photon_header.resolution_x, photon_header.resolution_y),
                 print_time_secs=photon_header.print_time,
                 end_byte_offset_by_layer=end_byte_offset_by_layer,
-                slicer_version="1.6.5.1",
-                printer_name="ANYCUBIC PHOTON",
+                slicer_version=".".join(
+                    [
+                        str(photon_slicer.version_release),
+                        str(photon_slicer.version_major),
+                        str(photon_slicer.version_minor),
+                        str(photon_slicer.version_patch),
+                    ]
+                ),
+                printer_name=printer_name,
             )
 
     @classmethod
