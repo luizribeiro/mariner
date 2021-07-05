@@ -34,10 +34,9 @@ export const AlertServiceProvider = ({
 }): React.ReactElement => {
   const [alertState, setAlertState] = React.useState<AlertOptions | null>(null);
 
-  const awaitingPromiseRef =
-    React.useRef<{
-      resolve: () => void;
-    }>();
+  const awaitingPromiseRef = React.useRef<{
+    resolve: () => void;
+  }>();
 
   const openAlert = (options: AlertOptions) => {
     setAlertState(options);
