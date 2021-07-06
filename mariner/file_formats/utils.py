@@ -12,7 +12,7 @@ EXTENSION_TO_FILE_FORMAT: Mapping[str, Type[SlicedModelFile]] = {
     ".ctb": CTBFile,
     ".cbddlp": CBDDLPFile,
     ".fdg": FDGFile,
-    ".photon": PhotonFile
+    ".photon": PhotonFile,
 }
 
 
