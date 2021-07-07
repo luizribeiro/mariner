@@ -4,6 +4,7 @@ Supported Printers
 The following printers have been confirmed to work with mariner by our
 community:
 
+- Anycubic Photon
 - Elegoo Mars
 - Elegoo Mars Pro
 - Elegoo Mars 2
