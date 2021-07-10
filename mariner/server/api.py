@@ -123,9 +123,15 @@ def list_files() -> str:
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
                 if get_file_extension(dir_entry.name) in get_supported_extensions():
-                    sliced_model_file = read_cached_sliced_model_file(
-                        path / dir_entry.name
-                    )
+                    if dir_entry.name.startswith("._"):
+                        if b"Mac OS X" not in open(dir_entry, "rb").read(32):
+                            sliced_model_file = read_cached_sliced_model_file(
+                                path / dir_entry.name
+                            )
+                    else:
+                        sliced_model_file = read_cached_sliced_model_file(
+                            path / dir_entry.name
+                        )
 
                 file_data: Dict[str, Any] = {
                     "filename": dir_entry.name,

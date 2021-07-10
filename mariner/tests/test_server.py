@@ -30,9 +30,21 @@ class MarinerServerTest(TestCase):
         )
         with open(path, "rb") as file:
             self.ctb_file_contents = file.read()
+
+        forkpath = (
+            pathlib.Path(__file__)
+            .parent.parent.absolute()
+            .joinpath("file_formats", "tests", "._stairs.ctb")
+        )
+        with open(forkpath, "rb") as forkfile:
+            self.fork_file_contents = forkfile.read()
+
         self.setUpPyfakefs()
         self.fs.create_file(
             "/mnt/usb_share/foobar.ctb", contents=self.ctb_file_contents
+        )
+        self.fs.create_file(
+            "/mnt/usb_share/._foobar.ctb", contents=self.fork_file_contents
         )
 
         self.client = app.test_client()
@@ -159,6 +171,11 @@ class MarinerServerTest(TestCase):
             {
                 "directories": [{"dirname": "subdir"}],
                 "files": [
+                    {
+                        "filename": "._foobar.ctb",
+                        "path": "._foobar.ctb",
+                        "can_be_printed": False,
+                    },
                     {
                         "filename": "foobar.ctb",
                         "path": "foobar.ctb",
