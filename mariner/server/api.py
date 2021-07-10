@@ -130,8 +130,8 @@ def list_files() -> str:
                             )
                     else:
                         sliced_model_file = read_cached_sliced_model_file(
-                                path / dir_entry.name
-                            )
+                            path / dir_entry.name
+                        )
 
                 file_data: Dict[str, Any] = {
                     "filename": dir_entry.name,
