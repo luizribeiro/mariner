@@ -27,6 +27,7 @@ Supported Printers
 Mariner supports a wide range of MSLA printers, including printers from the
 following manufacturers:
 
+- Anycubic
 - Creality
 - EPAX
 - Elegoo

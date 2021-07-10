@@ -43,6 +43,25 @@ class CTBHeader(LittleEndianStruct):
 
 
 @dataclass(frozen=True)
+class CTBParam(LittleEndianStruct):
+    bottom_lift_height: float = StructType.float32()  # 00:
+    bottom_lift_speed: float = StructType.float32()  # 04:
+    lift_height: float = StructType.float32()  # 08:
+    lift_speed: float = StructType.float32()  # 0c:
+    retract_speed: float = StructType.float32()  # 10:
+    volume_ml: float = StructType.float32()  # 14: Volume of resin in ml
+    weight_gr: float = StructType.float32()  # 18: resin weight in grams
+    cost_dollars: float = StructType.float32()  # 1c: slicers estimated resin cost USD
+    bottom_lift_off_time: float = StructType.float32()  # 20
+    light_off_time: float = StructType.float32()  # 24:
+    bottom_layer_count: int = StructType.uint32()  # 28:
+    unknown_01: int = StructType.uint32()  # 2c:
+    unknown_02: float = StructType.float32()  # 30:
+    unknown_03: int = StructType.uint32()  # 34:
+    unknown_04: int = StructType.uint32()  # 38:
+
+
+@dataclass(frozen=True)
 class CTBSlicer(LittleEndianStruct):
     skip_0: int = StructType.uint32()
     skip_1: int = StructType.uint32()
