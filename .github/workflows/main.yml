@@ -24,7 +24,7 @@ jobs:
         if: steps.setup-venv.outputs.cache-hit != 'true'
 
   backend-build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     needs: setup-venv
     strategy:
       matrix:
@@ -48,7 +48,7 @@ jobs:
           path: backend-coverage.xml
 
   frontend-build:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     defaults:
       run:
         working-directory: frontend
@@ -68,7 +68,7 @@ jobs:
           path: frontend-coverage.json
 
   codecov:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     needs: [backend-build, frontend-build]
     steps:
       - uses: actions/checkout@v2
