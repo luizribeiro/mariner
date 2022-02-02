@@ -6,7 +6,7 @@ on: [push, pull_request]
 
 jobs:
   setup-venv:
-    runs-on: ubuntu-latest
+    runs-on: debian-latest
     strategy:
       matrix:
         python-version: ["3.7", "3.8", "3.9"]
