@@ -136,7 +136,7 @@ def list_files() -> str:
         files = []
         directories = []
         for dir_entry in sorted(
-            dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
+            dir_entries, key=lambda t: t.name, reverse=False
         ):
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
@@ -147,9 +147,10 @@ def list_files() -> str:
                                 path / dir_entry.name
                             )
                     else:
-                        sliced_model_file = read_cached_sliced_model_file(
-                            path / dir_entry.name
-                        )
+                        if not dir_entry.name.startswith("."):
+                            sliced_model_file = read_cached_sliced_model_file(
+                                path / dir_entry.name
+                            )
 
                 file_data: Dict[str, Any] = {
                     "filename": dir_entry.name,
@@ -174,7 +175,8 @@ def list_files() -> str:
 
                 files.append(file_data)
             else:
-                directories.append({"dirname": dir_entry.name})
+                if not dir_entry.name.startswith("if."):
+                    directories.append({"dirname": dir_entry.name})
         return jsonify(
             {
                 "directories": directories,
