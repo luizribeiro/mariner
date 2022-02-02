@@ -62,9 +62,13 @@ def print_status() -> str:
             num_retries=3,
         )
 
+        timestamp_file = config.get_cache_directory() + '/timestamp.txt'
+        
         if print_status.state == PrinterState.IDLE:
             progress = 0.0
             print_details = {}
+            if os.path.exists(timestamp_file) and os.path.isfile(timestamp_file):
+                os.remove(timestamp_file)
         else:
             sliced_model_file = read_cached_sliced_model_file(
                 config.get_files_directory() / selected_file
@@ -86,13 +90,27 @@ def print_status() -> str:
                 / none_throws(sliced_model_file.layer_count)
             )
 
+            time_left_secs = round(sliced_model_file.print_time_secs * (100.0 - progress) / 100.0)
+            elapsed_secs = 0
+            finish_time = "00:00"
+            if os.path.exists(timestamp_file) and os.path.isfile(timestamp_file) and current_layer > 1:
+                f = open(timestamp_file, 'r')
+                start_time = int(f.readline().rstrip())
+                f.close()
+
+                now_time = int(time.time())
+                elapsed_secs = now_time - start_time
+                time_left_secs = round ((elapsed_secs / current_layer) * (sliced_model_file.layer_count - current_layer))
+                finish_time_full = datetime.fromtimestamp(now_time + time_left_secs) 
+                finish_time = finish_time_full.strftime("%H:%M")
+            
             print_details = {
                 "current_layer": current_layer,
                 "layer_count": sliced_model_file.layer_count,
                 "print_time_secs": sliced_model_file.print_time_secs,
-                "time_left_secs": round(
-                    sliced_model_file.print_time_secs * (100.0 - progress) / 100.0
-                ),
+                "time_left_secs": time_left_secs,
+                "elapsed_secs": elapsed_secs,
+                "finish_time": finish_time,
             }
 
         return jsonify(
