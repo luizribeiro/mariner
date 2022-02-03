@@ -53,15 +53,19 @@ def print_status() -> str:
         # sometimes we get an unexpected response from the printer (an "ok" instead of
         # the print status we expected). due to this, we retry at most 3 times here
         # until we have a successful response. see issue #180
+        # fcollingwood: Sometimes the above occurs because the retry delay is too fast
+        # upped the retry count (cause it won't hurt) and added a 5s delay
         selected_file = retry(
             printer.get_selected_file,
             UnexpectedPrinterResponse,
-            num_retries=3,
+            num_retries=5,
+            delay_ms=5000,
         )
         print_status = retry(
             printer.get_print_status,
             UnexpectedPrinterResponse,
-            num_retries=3,
+            num_retries=5,
+            delay_ms=5000,
         )
 
         timestamp_file = config.get_cache_directory() + '/timestamp.txt'
@@ -138,7 +142,7 @@ def list_files() -> str:
         files = []
         directories = []
         for dir_entry in sorted(
-            dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
+            dir_entries, key=lambda t: t.name, reverse=False
         ):
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
@@ -149,34 +153,37 @@ def list_files() -> str:
                                 path / dir_entry.name
                             )
                     else:
-                        sliced_model_file = read_cached_sliced_model_file(
-                            path / dir_entry.name
-                        )
+                        if not dir_entry.name.startswith("."):
+                            sliced_model_file = read_cached_sliced_model_file(
+                                path / dir_entry.name
+                            )
 
-                file_data: Dict[str, Any] = {
-                    "filename": dir_entry.name,
-                    "path": str(
-                        (path / dir_entry.name).relative_to(
-                            config.get_files_directory()
-                        )
-                    ),
-                }
-
-                if sliced_model_file:
-                    file_data = {
-                        "print_time_secs": sliced_model_file.print_time_secs,
-                        "can_be_printed": True,
-                        **file_data,
-                    }
-                else:
-                    file_data = {
-                        "can_be_printed": False,
-                        **file_data,
+                if not dir_entry.name.startswith("."):
+                    file_data: Dict[str, Any] = {
+                        "filename": dir_entry.name,
+                        "path": str(
+                            (path / dir_entry.name).relative_to(
+                                config.get_files_directory()
+                            )
+                        ),
                     }
 
-                files.append(file_data)
+                    if sliced_model_file:
+                        file_data = {
+                            "print_time_secs": sliced_model_file.print_time_secs,
+                            "can_be_printed": True,
+                            **file_data,
+                        }
+                    else:
+                        file_data = {
+                            "can_be_printed": False,
+                            **file_data,
+                        }
+
+                    files.append(file_data)
             else:
-                directories.append({"dirname": dir_entry.name})
+                if not dir_entry.name.startswith("."):
+                    directories.append({"dirname": dir_entry.name})
         return jsonify(
             {
                 "directories": directories,
