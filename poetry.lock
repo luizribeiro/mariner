@@ -35,7 +35,7 @@ pytz = ">=2015.7"
 
 [[package]]
 name = "black"
-version = "20.8b1"
+version = "22.1.0"
 description = "The uncompromising code formatter."
 category = "dev"
 optional = false
