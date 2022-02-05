@@ -29,6 +29,7 @@ class ChiTuPrinter:
     _serial_port: serial.Serial
 
     def __init__(self) -> None:
+        # pyre-fixme[16]: pyserial stubs aren't working
         self._serial_port = serial.Serial(
             baudrate=config.get_printer_baudrate(),
             timeout=0.1,

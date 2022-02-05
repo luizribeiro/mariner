@@ -49,7 +49,7 @@ class RetryTest(TestCase):
         self.assertEquals(self.num_attempts, 1)
 
     def test_success_fully_returns_after_two_attempts(self) -> None:
-        def _fails_sometimes() -> None:
+        def _fails_sometimes() -> int:
             self.num_attempts += 1
             if self.num_attempts == 1:
                 raise Exception()
