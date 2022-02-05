@@ -34,7 +34,7 @@ pyfakefs = "4.5.4"
 pyre-check = "0.9.10"
 python-language-server = "0.36.2"
 sphinx = "4.4.0"
-sphinx-rtd-theme = "0.5.2"
+sphinx-rtd-theme = "1.0.0"
 
 [build-system]
 requires = ["poetry>=1.0.10"]
