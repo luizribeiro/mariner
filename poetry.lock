@@ -172,11 +172,11 @@ Flask = "*"
 
 [[package]]
 name = "flask-wtf"
-version = "0.15.1"
-description = "Simple integration of Flask and WTForms."
+version = "1.0.0"
+description = "Form rendering, validation, and CSRF protection for Flask with WTForms."
 category = "main"
 optional = false
-python-versions = ">= 3.6"
+python-versions = ">=3.6"
 
 [package.dependencies]
 Flask = "*"
@@ -946,7 +946,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=1.2.3)", "pytest-flake8", "pyt
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.7, !=3.9"
-content-hash = "163d9ab9964625806d1e4137b1ea6254debf08d7b478aa291b4ada751bc31cae"
+content-hash = "3128fbf4c080f54380ccc4e03de0a3b7d9ec81bb5ccf605cb0abd5299b3ce5c4"
 
 [metadata.files]
 alabaster = [
@@ -1059,8 +1059,8 @@ flask-caching = [
     {file = "Flask_Caching-1.10.1-py3-none-any.whl", hash = "sha256:bcda8acbc7508e31e50f63e9b1ab83185b446f6b6318bd9dd1d45626fba2e903"},
 ]
 flask-wtf = [
-    {file = "Flask-WTF-0.15.1.tar.gz", hash = "sha256:ff177185f891302dc253437fe63081e7a46a4e99aca61dfe086fb23e54fff2dc"},
-    {file = "Flask_WTF-0.15.1-py2.py3-none-any.whl", hash = "sha256:6ff7af73458f182180906a37a783e290bdc8a3817fe4ad17227563137ca285bf"},
+    {file = "Flask-WTF-1.0.0.tar.gz", hash = "sha256:872fbb17b5888bfc734edbdcf45bc08fb365ca39f69d25dc752465a455517b28"},
+    {file = "Flask_WTF-1.0.0-py3-none-any.whl", hash = "sha256:01feccfc395405cea48a3f36c23f0d766e2cc6fd2a5a065ad50ad3e5827ec797"},
 ]
 freezegun = [
     {file = "freezegun-1.1.0-py2.py3-none-any.whl", hash = "sha256:2ae695f7eb96c62529f03a038461afe3c692db3465e215355e1bb4b0ab408712"},
