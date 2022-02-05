@@ -4,6 +4,7 @@
     "esModuleInterop": true,
     "jsx": "react",
     "outDir": "./.typescript/",
-    "strict": true
+    "strict": true,
+    "skipLibCheck": true
   }
 }

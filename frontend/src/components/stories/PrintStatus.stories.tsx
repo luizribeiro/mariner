@@ -2,7 +2,6 @@ import { Story } from "@storybook/react";
 import axios from "axios";
 import MockAdapter from "axios-mock-adapter";
 import React from "react";
-import { MemoryRouter } from "react-router";
 import PrintStatus from "../PrintStatus";
 
 const axiosMock = new MockAdapter(axios);
@@ -32,11 +31,7 @@ const Template: Story = (args) => {
     print_time_secs: args.print_time_secs,
     time_left_secs: args.time_left_secs,
   });
-  return (
-    <MemoryRouter>
-      <PrintStatus />
-    </MemoryRouter>
-  );
+  return <PrintStatus />;
 };
 
 export const Printing = Template.bind({});
@@ -81,11 +76,7 @@ StartingPrint.args = {
 
 export const Loading = (): React.ReactElement => {
   axiosMock.onGet("api/print_status").abortRequest();
-  return (
-    <MemoryRouter>
-      <PrintStatus />
-    </MemoryRouter>
-  );
+  return <PrintStatus />;
 };
 
 export const Error = (): React.ReactElement => {
@@ -94,19 +85,11 @@ export const Error = (): React.ReactElement => {
     description: "The printer returned an unexpected response: 'foobar\\r\\n'",
   });
 
-  return (
-    <MemoryRouter>
-      <PrintStatus />
-    </MemoryRouter>
-  );
+  return <PrintStatus />;
 };
 
 export const UnknownError = (): React.ReactElement => {
   axiosMock.onGet("api/print_status").reply(500);
 
-  return (
-    <MemoryRouter>
-      <PrintStatus />
-    </MemoryRouter>
-  );
+  return <PrintStatus />;
 };

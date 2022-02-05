@@ -13,7 +13,7 @@ import InsertDriveFileIcon from "@material-ui/icons/InsertDriveFile";
 import LayersIcon from "@material-ui/icons/Layers";
 import nullthrows from "nullthrows";
 import React from "react";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   DirectoryAPIResponse,
   FileAPIResponse,
@@ -63,7 +63,7 @@ function FileListItem({
   const printTime = file.print_time_secs
     ? renderTime(file.print_time_secs)
     : null;
-  const history = useHistory();
+  const navigate = useNavigate();
   const api = useAPI();
   return (
     <React.Fragment>
@@ -82,7 +82,7 @@ function FileListItem({
         onPrint={async () => {
           await api.startPrint(file.path);
           setOpen(false);
-          history.push("/");
+          navigate("/");
         }}
         onDelete={async () => {
           await api.deleteFile(file.path);

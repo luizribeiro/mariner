@@ -17,6 +17,7 @@ class ChiTuPrinterTest(TestCase):
     serial_port_mock: MagicMock
 
     def setUp(self) -> None:
+        # pyre-fixme[16]: pyserial stubs aren't working
         self.serial_port_mock = Mock(spec=serial.Serial)
         self.serial_port_patcher = patch("mariner.printer.serial.Serial")
         serial_port_constructor = self.serial_port_patcher.start()

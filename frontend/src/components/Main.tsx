@@ -18,7 +18,7 @@ import HomeIcon from "@material-ui/icons/Home";
 import MenuIcon from "@material-ui/icons/Menu";
 import clsx from "clsx";
 import React from "react";
-import { Link, Route, Switch } from "react-router-dom";
+import { Link, Route, Routes } from "react-router-dom";
 import theme from "../theme";
 import FileList from "./FileList";
 import PrintStatus from "./PrintStatus";
@@ -189,10 +189,14 @@ function Main({ width }: WithWidth): React.ReactElement {
         <main className={classes.content}>
           <div className={classes.appBarSpacer} />
           <Container maxWidth="sm" className={classes.container}>
-            <Switch>
-              <Route path="/" component={PrintStatus} exact />
-              <Route path="/files" component={FileList} />
-            </Switch>
+            <Routes>
+              <Route path="/">
+                <PrintStatus />
+              </Route>
+              <Route path="/files">
+                <FileList />
+              </Route>
+            </Routes>
           </Container>
         </main>
       </ThemeProvider>

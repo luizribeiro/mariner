@@ -1,4 +1,5 @@
 import React from "react";
+import { MemoryRouter } from "react-router";
 import { AlertServiceProvider } from "../src/components/AlertServiceProvider";
 
 export const parameters = {
@@ -10,5 +11,10 @@ export const decorators = [
     <AlertServiceProvider>
       <Story />
     </AlertServiceProvider>
+  ),
+  (Story) => (
+    <MemoryRouter initialEntries={["/"]}>
+      <Story />
+    </MemoryRouter>
   ),
 ];
