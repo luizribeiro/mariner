@@ -173,8 +173,12 @@ export class API {
     }
   }
 
-  async _handleError(error: Error): Promise<void> {
+  async _handleError(error: unknown): Promise<void> {
     if (!this._alertFn) {
+      throw error;
+    }
+
+    if (!(error instanceof Error)) {
       throw error;
     }
 
