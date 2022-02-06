@@ -136,10 +136,7 @@ def list_files() -> str:
                                 path / dir_entry.name
                             )
                     else:
-                        if not (
-                            dir_entry.name.startswith(".")
-                            and not show_hidden_files
-                        ):
+                       if not (dir_entry.name.startswith(".") and not show_hidden_files):
                             sliced_model_file = read_cached_sliced_model_file(
                                 path / dir_entry.name
                             )
