@@ -119,7 +119,7 @@ def list_files() -> str:
         directories = []
         for dir_entry in sorted(
             dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
-            if config.get_file_sort_order() == "alpha":
+            if str(config.get_file_sort_order()) == "alpha":
                 dir_entries, key=lambda t: t.name, reverse=False
         ):
             if dir_entry.is_file():
