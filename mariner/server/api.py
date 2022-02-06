@@ -117,11 +117,11 @@ def list_files() -> str:
     with os.scandir(path) as dir_entries:
         files = []
         directories = []
-        for dir_entry in sorted(
-            dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
-            if str(config.get_file_sort_order()) == "alpha":
-                dir_entries, key=lambda t: t.name, reverse=False
-        ):
+        if config.get_file_sort_order() == "alpha":
+            sorted_dir_entries = sorted(dir_entries, key=lambda t: t.name, reverse=False)
+        else:
+            sorted_dir_entries = sorted(dir_entries, key=lambda t: t.stat().st_mtime, reverse=True)
+        for dir_entry in sorted_dir_entries:
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
                 if get_file_extension(dir_entry.name) in get_supported_extensions():
