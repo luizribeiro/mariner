@@ -35,6 +35,22 @@ def get_files_directory() -> Path:
     return Path(str(config.get("files_directory", "/mnt/usb_share")))
 
 
+def get_file_sort_order() -> str:
+    file_list = _get_config().get("file_list")
+    default_sort = "creation"
+    if not isinstance(file_list, dict)
+        return default_sort
+    return str(file_list.get("sort_order", default_sort))
+
+
+def get_show_hidden_files() -> bool:
+    file_list = _get_config().get("file_list")
+    default_show = true
+    if not isinstance(file_list, dict)
+        return default_show
+    return str(file_list.get("show_hidden", default_show))
+
+
 def get_printer_display_name() -> Optional[str]:
     printer_config = _get_config().get("printer")
     if not isinstance(printer_config, dict):
