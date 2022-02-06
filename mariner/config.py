@@ -45,7 +45,7 @@ def get_file_sort_order() -> str:
 
 def get_show_hidden_files() -> bool:
     file_list = _get_config().get("file_list")
-    default_show = bool(true)
+    default_show = True
     if not isinstance(file_list, dict):
         return default_show
     return str(file_list.get("show_hidden", default_show))
