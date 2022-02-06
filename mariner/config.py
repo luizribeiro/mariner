@@ -48,7 +48,9 @@ def get_show_hidden_files() -> bool:
     default_show = True
     if not isinstance(file_list, dict):
         return default_show
-    return str(file_list.get("show_hidden", default_show))
+    if file_list.get("show_hidden") == "false":
+        default_show = False
+    return bool(default_show)
 
 
 def get_printer_display_name() -> Optional[str]:
