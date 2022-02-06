@@ -19,9 +19,9 @@ files_directory = "/mnt/usb_share"
 #   * "creation" - for creation date/time sort
 #sort_order = "creation"
 
-# Show or hide files. Boolean. 
-# Note: must be True or False (uppercase first character). 
-#show_hidden = True
+# Show or hide files.  
+# Must be "true" or "false" 
+#show_hidden = "true"
 
 [printer]
 # The name which will be displayed for the printer in the UI. By default no
