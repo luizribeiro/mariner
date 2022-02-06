@@ -136,18 +136,12 @@ def list_files() -> str:
                                 path / dir_entry.name
                             )
                     else:
-                        if not (
-                            dir_entry.name.startswith(".")
-                            and not show_hidden_files
-                        ):
+                        if not (dir_entry.name.startswith(".") and not show_hidden_files):
                             sliced_model_file = read_cached_sliced_model_file(
                                 path / dir_entry.name
                             )
 
-                if not (
-                    dir_entry.name.startswith(".")
-                    and not show_hidden_files
-                ):
+                if not (dir_entry.name.startswith(".") and not show_hidden_files):
                     file_data: Dict[str, Any] = {
                         "filename": dir_entry.name,
                         "path": str(
@@ -171,10 +165,7 @@ def list_files() -> str:
 
                     files.append(file_data)
             else:
-                if not (
-                    dir_entry.name.startswith(".")
-                    and not show_hidden_files
-                ):
+                if not (dir_entry.name.startswith(".") and not show_hidden_files):
                     directories.append({"dirname": dir_entry.name})
         return jsonify(
             {
