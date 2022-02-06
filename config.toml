@@ -13,13 +13,14 @@
 # directory that you are sharing to the printer through the USB Gadget
 files_directory = "/mnt/usb_share"
 
-# The sort method for the file list in the frontend. Can be:
+[file_list]
+# The sort order for the file list in the frontend. Can be:
 #   * "alpha" - for Alphanumeric sort
 #   * "creation" - for creation date/time sort
-file_list_sort = "creation"
+#sort_order = "creation"
 
 # Show or hide files. Boolean
-show_hidden_files = false
+#show_hidden = true
 
 [printer]
 # The name which will be displayed for the printer in the UI. By default no
