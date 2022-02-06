@@ -119,6 +119,8 @@ def list_files() -> str:
         directories = []
         for dir_entry in sorted(
             dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
+            if config.get_file_sort_order() == "alpha":
+                dir_entries, key=lambda t: t.name, reverse=False
         ):
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
@@ -129,34 +131,37 @@ def list_files() -> str:
                                 path / dir_entry.name
                             )
                     else:
-                        sliced_model_file = read_cached_sliced_model_file(
-                            path / dir_entry.name
-                        )
+                        if not (dir_entry.name.startswith(".") and not config.get_show_hidden_files()):
+                            sliced_model_file = read_cached_sliced_model_file(
+                                path / dir_entry.name
+                            )
 
-                file_data: Dict[str, Any] = {
-                    "filename": dir_entry.name,
-                    "path": str(
-                        (path / dir_entry.name).relative_to(
-                            config.get_files_directory()
-                        )
-                    ),
-                }
-
-                if sliced_model_file:
-                    file_data = {
-                        "print_time_secs": sliced_model_file.print_time_secs,
-                        "can_be_printed": True,
-                        **file_data,
-                    }
-                else:
-                    file_data = {
-                        "can_be_printed": False,
-                        **file_data,
+                if not (dir_entry.name.startswith(".") and not config.get_show_hidden_files()):
+                    file_data: Dict[str, Any] = {
+                        "filename": dir_entry.name,
+                        "path": str(
+                            (path / dir_entry.name).relative_to(
+                                config.get_files_directory()
+                            )
+                        ),
                     }
 
-                files.append(file_data)
+                    if sliced_model_file:
+                        file_data = {
+                            "print_time_secs": sliced_model_file.print_time_secs,
+                            "can_be_printed": True,
+                            **file_data,
+                        }
+                    else:
+                        file_data = {
+                            "can_be_printed": False,
+                            **file_data,
+                        }
+
+                    files.append(file_data)
             else:
-                directories.append({"dirname": dir_entry.name})
+                if not (dir_entry.name.startswith(".") and not config.get_show_hidden_files()):
+                    directories.append({"dirname": dir_entry.name})
         return jsonify(
             {
                 "directories": directories,
