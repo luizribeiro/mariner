@@ -125,6 +125,7 @@ def list_files() -> str:
             sorted_dir_entries = sorted(
                 dir_entries, key=lambda t: t.stat().st_mtime, reverse=True
             )
+        show_hidden_files = config.get_show_hidden_files()
         for dir_entry in sorted_dir_entries:
             if dir_entry.is_file():
                 sliced_model_file: Optional[SlicedModelFile] = None
@@ -137,7 +138,7 @@ def list_files() -> str:
                     else:
                         if not (
                             dir_entry.name.startswith(".")
-                            and not config.get_show_hidden_files()
+                            and not show_hidden_files
                         ):
                             sliced_model_file = read_cached_sliced_model_file(
                                 path / dir_entry.name
@@ -145,7 +146,7 @@ def list_files() -> str:
 
                 if not (
                     dir_entry.name.startswith(".")
-                    and not config.get_show_hidden_files()
+                    and not show_hidden_files
                 ):
                     file_data: Dict[str, Any] = {
                         "filename": dir_entry.name,
@@ -172,7 +173,7 @@ def list_files() -> str:
             else:
                 if not (
                     dir_entry.name.startswith(".")
-                    and not config.get_show_hidden_files()
+                    and not show_hidden_files
                 ):
                     directories.append({"dirname": dir_entry.name})
         return jsonify(
