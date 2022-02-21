@@ -22,7 +22,7 @@ python = "^3.7, !=3.9"
 toml = "0.10.2"
 typedstruct = "0.1.0"
 waitress = "2.0.0"
-whitenoise = "5.3.0"
+whitenoise = "6.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "22.1.0"
