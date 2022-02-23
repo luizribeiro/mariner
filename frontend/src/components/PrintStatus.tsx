@@ -97,6 +97,8 @@ class PrintStatus extends React.Component<
           layerCount: response.layer_count,
           printTimeSecs: response.print_time_secs,
           timeLeftSecs: response.time_left_secs,
+          elapsedSecs: response.elapsed_seconds,
+          finishTime: response.finish_time,
         },
       });
     }
@@ -258,6 +260,18 @@ class PrintStatus extends React.Component<
           <Grid container spacing={3}>
             <Grid item xs={6}>
               <Typography variant="h5" color="textPrimary" display="inline">
+                {renderTime(nullthrows(elapsedSecs))}&nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                display="inline"
+              >
+                done
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h5" color="textPrimary" display="inline">
                 {renderTime(nullthrows(timeLeftSecs))}&nbsp;
               </Typography>
               <Typography
@@ -266,6 +280,18 @@ class PrintStatus extends React.Component<
                 display="inline"
               >
                 left
+              </Typography>
+            </Grid>
+            <Grid item xs={6}>
+              <Typography variant="h5" color="textPrimary" display="inline">
+                {finishTime}&nbsp;
+              </Typography>
+              <Typography
+                variant="body1"
+                color="textSecondary"
+                display="inline"
+              >
+                finish time
               </Typography>
             </Grid>
             <Grid item xs={6}>

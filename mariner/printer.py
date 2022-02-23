@@ -6,6 +6,7 @@ from types import TracebackType
 from typing import Match, Optional, Type
 
 import serial
+import time
 
 from mariner import config
 from mariner.exceptions import UnexpectedPrinterResponse
@@ -139,7 +140,11 @@ class ChiTuPrinter:
             timeout_secs=2.0,
         )
         if "ok" not in response:
-            raise UnexpectedPrinterResponse(response)
+            raise UnexpectedPrinterResponse(response)   
+        timestamp_file = config.get_cache_directory() + '/timestamp.txt'
+        f = open(timestamp_file,"w")
+        f.write(str(int(time.time())))
+        f.close()        
 
     def pause_printing(self) -> None:
         response = self._send_and_read(b"M25")
