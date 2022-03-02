@@ -73,11 +73,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Retrieve backend test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: backend-coverage
       - name: Retrieve frontend test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: frontend-coverage
       - uses: codecov/codecov-action@v2
