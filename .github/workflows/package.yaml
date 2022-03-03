@@ -78,7 +78,7 @@ jobs:
       - name: Shutdown container
         run: docker rm -v packager
 
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: ${{ env.DEBIAN_PKG_FILENAME }}
           path: ${{ env.DEBIAN_PKG_FILENAME }}
