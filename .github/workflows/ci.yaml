@@ -80,6 +80,6 @@ jobs:
         uses: actions/download-artifact@v2
         with:
           name: frontend-coverage
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
         with:
           files: ./backend-coverage.xml,./frontend-coverage.json
