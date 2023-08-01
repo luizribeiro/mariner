@@ -84,7 +84,8 @@ class ChiTuPrinter:
         if self._is_connected:
             data = self._send_and_read(b"M4000")
             match = self._extract_response_with_regex(
-                "D:([0-9]+)/([0-9]+)/([0-9]+)", data)
+                "D:([0-9]+)/([0-9]+)/([0-9]+)", data
+            )
 
             current_byte = int(match.group(1))
             total_bytes = int(match.group(2))

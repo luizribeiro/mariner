@@ -16,14 +16,15 @@ from mariner.file_formats.ctb import CTBFile
 
 MAGIC_CTB_ENCRYPTED = 0x12FD0107
 HASH_LENGTH = 32
-BHASH = b'32'
+BHASH = b"32"
 
 about_software = "UVtools"
 secret1 = "hQ36XB6yTk+zO02ysyiowt8yC1buK+nbLWyfY40EXoU="
 secret2 = "Wld+ampndVJecmVjYH5cWQ=="
 bigfoot = xorCipher(base64.b64decode(secret1, validate=True), about_software.encode())
-cookiemonster = xorCipher(base64.b64decode(
-    secret2, validate=True), about_software.encode())
+cookiemonster = xorCipher(
+    base64.b64decode(secret2, validate=True), about_software.encode()
+)
 
 
 @dataclass(frozen=True)
@@ -212,7 +213,7 @@ def _aes_crypt(enc: bytes, encrypt: bool):
     temp = bytearray()
     temp += enc
     if len(enc) % 16 != 0:
-        temp += ((16 - len(enc) % 16) * 'X')
+        temp += (16 - len(enc) % 16) * "X"
 
     if encrypt:
         return Cipher.encrypt(bytes(temp))
@@ -226,10 +227,15 @@ class CTBEncryptedFile(SlicedModelFile):
     def read(self, path: pathlib.Path) -> "CTBEncryptedFile":
         with open(str(path), "rb") as file:
             ctb_header = CTBEncryptedHeader.unpack(
-                file.read(CTBEncryptedHeader.get_size()))
+                file.read(CTBEncryptedHeader.get_size())
+            )
             if ctb_header.magic != MAGIC_CTB_ENCRYPTED:
-                raise TypeError("Not a valid encrypted CTB file\n" +
-                                str(ctb_header.magic) + "\n" + str(MAGIC_CTB_ENCRYPTED))
+                raise TypeError(
+                    "Not a valid encrypted CTB file\n"
+                    + str(ctb_header.magic)
+                    + "\n"
+                    + str(MAGIC_CTB_ENCRYPTED)
+                )
 
             file.seek(ctb_header.slicer_offset)
             encrypted_block = file.read(ctb_header.slicer_size)
@@ -244,34 +250,43 @@ class CTBEncryptedFile(SlicedModelFile):
             printer_name = file.read(ctb_slicer.machine_name_size).decode()
 
             # Validate hash
-            checksum_bytes = ctb_slicer.checksum_value.to_bytes(8, 'little')
+            checksum_bytes = ctb_slicer.checksum_value.to_bytes(8, "little")
             checksum_hash = computeSHA256Hash(checksum_bytes)
             encrypted_hash = _aes_crypt(checksum_hash, True)
 
             file.seek(-HASH_LENGTH, 2)
             hash = file.read(HASH_LENGTH)
             if not (set(hash) == set(encrypted_hash)):
-                raise TypeError("The file checksum does not match, malformed file.\n" +
-                                str(hash) + "\n" + str(encrypted_hash) + "\n" +
-                                str(int.from_bytes(hash, 'little')) + "\n" +
-                                str(int.from_bytes(encrypted_hash, 'little')) + "\n" +
-                                str(int.from_bytes(checksum_hash, 'little')))
+                raise TypeError(
+                    "The file checksum does not match, malformed file.\n"
+                    + str(hash)
+                    + "\n"
+                    + str(encrypted_hash)
+                    + "\n"
+                    + str(int.from_bytes(hash, "little"))
+                    + "\n"
+                    + str(int.from_bytes(encrypted_hash, "little"))
+                    + "\n"
+                    + str(int.from_bytes(checksum_hash, "little"))
+                )
 
             LayersPointer = [None] * ctb_slicer.layer_count
             for layer_index in range(0, ctb_slicer.layer_count):
                 file.seek(ctb_slicer.layer_table_offset)
                 LayersPointer[layer_index] = CTBLayerPointer.unpack(
-                    file.read(CTBLayerPointer.get_size()))
+                    file.read(CTBLayerPointer.get_size())
+                )
 
-            LayersDefinition = [None] * ctb_slicer.layer_count            
+            LayersDefinition = [None] * ctb_slicer.layer_count
             end_byte_offset_by_layer = []
             for layer in range(0, ctb_slicer.layer_count):
                 file.seek(LayersPointer[layer].layer_offset)
                 LayersDefinition[layer] = CTBEncryptedLayerDef.unpack(
-                    file.read(CTBEncryptedLayerDef.get_size()))
+                    file.read(CTBEncryptedLayerDef.get_size())
+                )
                 end_byte_offset_by_layer.append(
-                    LayersDefinition[layer].encrypted_data_offset +
-                    LayersDefinition[layer].encrypted_data_length
+                    LayersDefinition[layer].encrypted_data_offset
+                    + LayersDefinition[layer].encrypted_data_length
                 )
 
             return CTBEncryptedFile(
@@ -303,7 +318,8 @@ class CTBEncryptedFile(SlicedModelFile):
     def read_preview(cls, path: pathlib.Path) -> png.Image:
         with open(str(path), "rb") as file:
             ctb_header = CTBEncryptedHeader.unpack(
-                file.read(CTBEncryptedHeader.get_size()))
+                file.read(CTBEncryptedHeader.get_size())
+            )
             file.seek(ctb_header.slicer_offset)
             # We have to decrypt the block to get the preview information
             encrypted_block = file.read(CTBEncryptedSlicer.get_size())

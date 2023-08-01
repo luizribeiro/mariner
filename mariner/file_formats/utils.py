@@ -8,6 +8,7 @@ from mariner.file_formats.fdg import FDGFile
 from mariner.file_formats.photon import PhotonFile
 from mariner.file_formats.ctb_encrypted import check_encrypted
 import logging
+
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
