@@ -15,7 +15,8 @@ class PrinterState(Enum):
     IDLE = "IDLE"
     STARTING_PRINT = "STARTING_PRINT"
     PRINTING = "PRINTING"
-    PAUSED = "PAUSED"
+    PAUSED = "PAUSED"    
+    CLOSED = "CLOSED"
 
 
 @dataclass(frozen=True)
@@ -27,6 +28,8 @@ class PrintStatus:
 
 class ChiTuPrinter:
     _serial_port: serial.Serial
+      # Track serial / printer connection status to allow disconnects
+    _is_connected = False
 
     def __init__(self) -> None:
         # pyre-fixme[16]: pyserial stubs aren't working
@@ -42,11 +45,16 @@ class ChiTuPrinter:
         return match
 
     def open(self) -> None:
-        self._serial_port.port = config.get_printer_serial_port()
-        self._serial_port.open()
+        try:
+            self._serial_port.port = config.get_printer_serial_port()
+            self._serial_port.open()
+            self._is_connected = True
+        except:
+            self._is_connected = False
 
     def close(self) -> None:
-        self._serial_port.close()
+        if self._is_connected:        
+            self._serial_port.close()
 
     def __enter__(self) -> "ChiTuPrinter":
         self.open()
@@ -71,22 +79,25 @@ class ChiTuPrinter:
         return self._send_and_read(b"M4000")
 
     def get_print_status(self) -> PrintStatus:
-        data = self._send_and_read(b"M4000")
-        match = self._extract_response_with_regex("D:([0-9]+)/([0-9]+)/([0-9]+)", data)
+        if self._is_connected:
+            data = self._send_and_read(b"M4000")
+            match = self._extract_response_with_regex("D:([0-9]+)/([0-9]+)/([0-9]+)", data)
 
-        current_byte = int(match.group(1))
-        total_bytes = int(match.group(2))
-        is_paused = match.group(3) == "1"
+            current_byte = int(match.group(1))
+            total_bytes = int(match.group(2))
+            is_paused = match.group(3) == "1"
 
-        if total_bytes == 0:
-            return PrintStatus(state=PrinterState.IDLE)
+            if total_bytes == 0:
+                return PrintStatus(state=PrinterState.IDLE)
 
-        if current_byte == 0:
-            state = PrinterState.STARTING_PRINT
-        elif is_paused:
-            state = PrinterState.PAUSED
+            if current_byte == 0:
+                state = PrinterState.STARTING_PRINT
+            elif is_paused:
+                state = PrinterState.PAUSED
+            else:
+                state = PrinterState.PRINTING
         else:
-            state = PrinterState.PRINTING
+            state = PrinterState.CLOSED
 
         return PrintStatus(
             state=state,
@@ -99,6 +110,9 @@ class ChiTuPrinter:
         return float(self._extract_response_with_regex("Z:([0-9.]+)", data).group(1))
 
     def get_selected_file(self) -> str:
+        if not self._is_connected:
+            return ""
+                 
         data = self._send_and_read(b"M4006")
         selected_file = str(
             self._extract_response_with_regex("ok '([^']+)'\r\n", data).group(1)

@@ -47,6 +47,7 @@ def handle_mariner_exception(exception: MarinerException) -> Tuple[str, int]:
 @api.route("/print_status", methods=["GET"])
 def print_status() -> str:
     with ChiTuPrinter() as printer:
+        
         # the printer sends periodic "ok" responses over serial. this means that
         # sometimes we get an unexpected response from the printer (an "ok" instead of
         # the print status we expected). due to this, we retry at most 3 times here
@@ -62,7 +63,7 @@ def print_status() -> str:
             num_retries=3,
         )
 
-        if print_status.state == PrinterState.IDLE:
+        if print_status.state == PrinterState.IDLE or print_status.state == PrinterState.CLOSED:
             progress = 0.0
             print_details = {}
         else:

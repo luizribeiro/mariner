@@ -32,6 +32,8 @@ module.exports = {
     })
   ],
   devServer: {
-    writeToDisk: true
+    devMiddleware: {
+      writeToDisk: true
+    }
   }
 };
