@@ -243,7 +243,7 @@ class CTBEncryptedFile(SlicedModelFile):
             decrypted_block = _aes_crypt(encrypted_block, False)
             try:
                 ctb_slicer = CTBEncryptedSlicer.unpack(decrypted_block)
-            except:
+            except struct.error:
                 raise Exception("len(decrypted_block) = " + str(len(decrypted_block)))
 
             file.seek(ctb_slicer.machine_name_offset)
