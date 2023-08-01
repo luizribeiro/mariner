@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.7", "3.8", "3.9"]
+        python-version: ["3.7", "3.8", "3.9"]        
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v3
@@ -17,7 +17,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: syphar/restore-virtualenv@v1.2
         id: venv-cache
-      - uses: abatilo/actions-poetry@v2.1.4
+      - uses: abatilo/actions-poetry@v2.3.0
         if: steps.setup-venv.outputs.cache-hit != 'true'
       - name: Install Python dependencies
         run: poetry install -vv
