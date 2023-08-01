@@ -17,7 +17,7 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - uses: syphar/restore-virtualenv@v1.2
         id: venv-cache
-      - uses: abatilo/actions-poetry@v3.1.4
+      - uses: abatilo/actions-poetry@v2.1.4
         if: steps.setup-venv.outputs.cache-hit != 'true'
       - name: Install Python dependencies
         run: poetry install -vv
