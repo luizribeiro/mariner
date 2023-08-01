@@ -11,13 +11,13 @@ jobs:
       matrix:
         python-version: ["3.7", "3.8", "3.9"]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - uses: syphar/restore-virtualenv@v1.2
         id: venv-cache
-      - uses: abatilo/actions-poetry@v2.1.4
+      - uses: abatilo/actions-poetry@v3.1.4
         if: steps.setup-venv.outputs.cache-hit != 'true'
       - name: Install Python dependencies
         run: poetry install -vv
@@ -30,8 +30,8 @@ jobs:
       matrix:
         python-version: ["3.7", "3.8", "3.9"]
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v3
         with:
           python-version: ${{ matrix.python-version }}
       - uses: syphar/restore-virtualenv@v1.2
@@ -41,7 +41,7 @@ jobs:
       - run: poetry run pyre --noninteractive
       - run: poetry run green --run-coverage
       - run: poetry run coverage xml -o backend-coverage.xml
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         if: matrix.python-version == '3.8'
         with:
           name: backend-coverage
@@ -53,8 +53,8 @@ jobs:
       run:
         working-directory: frontend
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
       - run: yarn install
       - run: yarn lint
       - run: yarn run prettier --check src
@@ -62,7 +62,7 @@ jobs:
       - run: yarn build
       - run: yarn test --coverage --collectCoverageFrom "src/**/*"
       - run: mv coverage/coverage-final.json ../frontend-coverage.json
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v3
         with:
           name: frontend-coverage
           path: frontend-coverage.json
@@ -71,15 +71,15 @@ jobs:
     runs-on: ubuntu-latest
     needs: [backend-build, frontend-build]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Retrieve backend test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: backend-coverage
       - name: Retrieve frontend test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v3
         with:
           name: frontend-coverage
-      - uses: codecov/codecov-action@v2
+      - uses: codecov/codecov-action@v3
         with:
           files: ./backend-coverage.xml,./frontend-coverage.json
