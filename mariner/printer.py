@@ -49,7 +49,7 @@ class ChiTuPrinter:
             self._serial_port.port = config.get_printer_serial_port()
             self._serial_port.open()
             self._is_connected = True
-        except:
+        except serial.SerialException:
             self._is_connected = False
 
     def close(self) -> None:
