@@ -2,7 +2,6 @@ import pathlib
 import struct
 from dataclasses import dataclass
 from typing import List
-import numpy as np
 
 import png
 from typedstruct import LittleEndianStruct, StructType
@@ -23,23 +22,26 @@ about_software = "UVtools"
 secret1 = "hQ36XB6yTk+zO02ysyiowt8yC1buK+nbLWyfY40EXoU="
 secret2 = "Wld+ampndVJecmVjYH5cWQ=="
 bigfoot = xorCipher(base64.b64decode(secret1, validate=True), about_software.encode())
-cookiemonster = xorCipher(base64.b64decode(secret2, validate=True), about_software.encode())
+cookiemonster = xorCipher(base64.b64decode(
+    secret2, validate=True), about_software.encode())
+
 
 @dataclass(frozen=True)
 class CTBEncryptedHeader(LittleEndianStruct):
     magic: int = StructType.uint32()
     slicer_size: int = StructType.uint32()
-    slicer_offset: int =  StructType.uint32()
-    unknown_01: int =  StructType.uint32()
-    unknown_02: int =  StructType.uint32()
-    signature_size: int =  StructType.uint32()
+    slicer_offset: int = StructType.uint32()
+    unknown_01: int = StructType.uint32()
+    unknown_02: int = StructType.uint32()
+    signature_size: int = StructType.uint32()
     signature_offset: int = StructType.uint32()
-    unknown_03: int =  StructType.uint32()
+    unknown_03: int = StructType.uint32()
     unknown_04: int = StructType.uint16()
     unknown_05: int = StructType.uint16()
     unknown_06: int = StructType.uint32()
-    unknown_07: int =  StructType.uint32()
-    unknown_08: int =  StructType.uint32()
+    unknown_07: int = StructType.uint32()
+    unknown_08: int = StructType.uint32()
+
 
 @dataclass(frozen=True)
 class CTBEncryptedSlicer(LittleEndianStruct):
@@ -115,7 +117,8 @@ class CTBEncryptedSlicer(LittleEndianStruct):
     padding8: int = StructType.uint32()
     padding9: int = StructType.uint32()
     padding10: int = StructType.uint32()
-    #machine_name: bytes = StructType.chars()
+    # machine_name: bytes = StructType.chars()
+
 
 @dataclass(frozen=True)
 class CTBLayerPointer(LittleEndianStruct):
@@ -123,7 +126,7 @@ class CTBLayerPointer(LittleEndianStruct):
     padding_01: int = StructType.uint32()
     layer_table_size: int = StructType.uint32()
     padding_02: int = StructType.uint32()
-    
+
 
 @dataclass(frozen=True)
 class CTBEncryptedLayerDef(LittleEndianStruct):
@@ -150,6 +153,7 @@ class CTBEncryptedLayerDef(LittleEndianStruct):
     light_pwm: float = StructType.float32()
     unknown_06: int = StructType.uint32()
 
+
 @dataclass(frozen=True)
 class CTBPreview(LittleEndianStruct):
     resolution_x: int = StructType.uint32()
@@ -160,13 +164,15 @@ class CTBPreview(LittleEndianStruct):
 
 REPEAT_RGB15_MASK: int = 1 << 5
 
+
 def check_encrypted(filename: str):
     with open(filename, "rb") as file:
-            ctb_header = CTBEncryptedHeader.unpack(file.read(CTBEncryptedHeader.get_size()))
-            if ctb_header.magic == MAGIC_CTB_ENCRYPTED:
-                return CTBEncryptedFile
-            else:
-                return CTBFile
+        ctb_header = CTBEncryptedHeader.unpack(file.read(CTBEncryptedHeader.get_size()))
+        if ctb_header.magic == MAGIC_CTB_ENCRYPTED:
+            return CTBEncryptedFile
+        else:
+            return CTBFile
+
 
 def _read_image(width: int, height: int, data: bytes) -> png.Image:
     array: List[List[int]] = [[]]
@@ -179,7 +185,7 @@ def _read_image(width: int, height: int, data: bytes) -> png.Image:
         if color16 & REPEAT_RGB15_MASK:
             repeat += int(struct.unpack_from("<H", data, i)[0]) & 0xFFF
             i += 2
-            
+
         (r, g, b) = (
             (color16 >> 0) & 0x1F,
             (color16 >> 6) & 0x1F,
@@ -198,32 +204,36 @@ def _read_image(width: int, height: int, data: bytes) -> png.Image:
     array.pop()
 
     return png.from_array(array, "RGB;5")
-    
+
+
 def _aes_crypt(enc: bytes, encrypt: bool):
     Cipher = AES.new(bytes(bigfoot), AES.MODE_CBC, bytes(cookiemonster))
 
     temp = bytearray()
     temp += enc
     if len(enc) % 16 != 0:
-        temp += ((16 - len(enc) % 16)* 'X')
+        temp += ((16 - len(enc) % 16) * 'X')
 
     if encrypt:
         return Cipher.encrypt(bytes(temp))
     else:
         return Cipher.decrypt(bytes(temp))
 
+
 @dataclass(frozen=True)
 class CTBEncryptedFile(SlicedModelFile):
     @classmethod
     def read(self, path: pathlib.Path) -> "CTBEncryptedFile":
         with open(str(path), "rb") as file:
-            ctb_header = CTBEncryptedHeader.unpack(file.read(CTBEncryptedHeader.get_size()))
+            ctb_header = CTBEncryptedHeader.unpack(
+                file.read(CTBEncryptedHeader.get_size()))
             if ctb_header.magic != MAGIC_CTB_ENCRYPTED:
-                raise TypeError("Not a valid encrypted CTB file\n" + str(ctb_header.magic) + "\n" + str(MAGIC_CTB_ENCRYPTED))
+                raise TypeError("Not a valid encrypted CTB file\n" +
+                                str(ctb_header.magic) + "\n" + str(MAGIC_CTB_ENCRYPTED))
 
             file.seek(ctb_header.slicer_offset)
             encrypted_block = file.read(ctb_header.slicer_size)
-            
+
             decrypted_block = _aes_crypt(encrypted_block, False)
             try:
                 ctb_slicer = CTBEncryptedSlicer.unpack(decrypted_block)
@@ -241,23 +251,29 @@ class CTBEncryptedFile(SlicedModelFile):
             file.seek(-HASH_LENGTH, 2)
             hash = file.read(HASH_LENGTH)
             if not (set(hash) == set(encrypted_hash)):
-                raise TypeError("The file checksum does not match, malformed file.\n" + str(hash) + "\n" + str(encrypted_hash) + "\n" + str(int.from_bytes(hash, 'little')) + "\n" + str(int.from_bytes(encrypted_hash, 'little')) + "\n" + str(int.from_bytes(checksum_hash, 'little')))
+                raise TypeError("The file checksum does not match, malformed file.\n" +
+                                str(hash) + "\n" + str(encrypted_hash) + "\n" +
+                                str(int.from_bytes(hash, 'little')) + "\n" +
+                                str(int.from_bytes(encrypted_hash, 'little')) + "\n" +
+                                str(int.from_bytes(checksum_hash, 'little')))
 
             LayersPointer = [None] * ctb_slicer.layer_count
             for layer_index in range(0, ctb_slicer.layer_count):
                 file.seek(ctb_slicer.layer_table_offset)
-                LayersPointer[layer_index] = CTBLayerPointer.unpack(file.read(CTBLayerPointer.get_size()))
+                LayersPointer[layer_index] = CTBLayerPointer.unpack(
+                    file.read(CTBLayerPointer.get_size()))
 
-            LayersDefinition = [None] * ctb_slicer.layer_count
-            buggy_layers = []
+            LayersDefinition = [None] * ctb_slicer.layer_count            
             end_byte_offset_by_layer = []
             for layer in range(0, ctb_slicer.layer_count):
                 file.seek(LayersPointer[layer].layer_offset)
-                LayersDefinition[layer] = CTBEncryptedLayerDef.unpack(file.read(CTBEncryptedLayerDef.get_size()))
+                LayersDefinition[layer] = CTBEncryptedLayerDef.unpack(
+                    file.read(CTBEncryptedLayerDef.get_size()))
                 end_byte_offset_by_layer.append(
-                    LayersDefinition[layer].encrypted_data_offset + LayersDefinition[layer].encrypted_data_length
+                    LayersDefinition[layer].encrypted_data_offset +
+                    LayersDefinition[layer].encrypted_data_length
                 )
-    
+
             return CTBEncryptedFile(
                 filename=path.name,
                 bed_size_mm=(
@@ -286,9 +302,10 @@ class CTBEncryptedFile(SlicedModelFile):
     @classmethod
     def read_preview(cls, path: pathlib.Path) -> png.Image:
         with open(str(path), "rb") as file:
-            ctb_header = CTBEncryptedHeader.unpack(file.read(CTBEncryptedHeader.get_size()))
+            ctb_header = CTBEncryptedHeader.unpack(
+                file.read(CTBEncryptedHeader.get_size()))
             file.seek(ctb_header.slicer_offset)
-			# We have to decrypt the block to get the preview information
+            # We have to decrypt the block to get the preview information
             encrypted_block = file.read(CTBEncryptedSlicer.get_size())
             decrypted_block = _aes_crypt(encrypted_block, False)
             ctb_slicer = CTBEncryptedSlicer.unpack(decrypted_block)

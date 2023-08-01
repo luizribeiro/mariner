@@ -15,7 +15,7 @@ class PrinterState(Enum):
     IDLE = "IDLE"
     STARTING_PRINT = "STARTING_PRINT"
     PRINTING = "PRINTING"
-    PAUSED = "PAUSED"    
+    PAUSED = "PAUSED"
     CLOSED = "CLOSED"
 
 
@@ -28,7 +28,7 @@ class PrintStatus:
 
 class ChiTuPrinter:
     _serial_port: serial.Serial
-      # Track serial / printer connection status to allow disconnects
+    # Track serial / printer connection status to allow disconnects
     _is_connected = False
 
     def __init__(self) -> None:
@@ -53,7 +53,7 @@ class ChiTuPrinter:
             self._is_connected = False
 
     def close(self) -> None:
-        if self._is_connected:        
+        if self._is_connected:
             self._serial_port.close()
 
     def __enter__(self) -> "ChiTuPrinter":
@@ -79,9 +79,12 @@ class ChiTuPrinter:
         return self._send_and_read(b"M4000")
 
     def get_print_status(self) -> PrintStatus:
+        current_byte = 0
+        total_bytes = 0
         if self._is_connected:
             data = self._send_and_read(b"M4000")
-            match = self._extract_response_with_regex("D:([0-9]+)/([0-9]+)/([0-9]+)", data)
+            match = self._extract_response_with_regex(
+                "D:([0-9]+)/([0-9]+)/([0-9]+)", data)
 
             current_byte = int(match.group(1))
             total_bytes = int(match.group(2))
@@ -112,7 +115,7 @@ class ChiTuPrinter:
     def get_selected_file(self) -> str:
         if not self._is_connected:
             return ""
-                 
+
         data = self._send_and_read(b"M4006")
         selected_file = str(
             self._extract_response_with_regex("ok '([^']+)'\r\n", data).group(1)
