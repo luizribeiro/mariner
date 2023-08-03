@@ -17,6 +17,7 @@ Features
 - Remotely control the printer: start prints, pause/resume and stop.
 - Browse files available for printing.
 - Inspect ``.ctb`` files: image preview, print time and slicing settings.
+- *NEW* Inspect encrypted ``.ctb`` files.
 
 For more details on the feature set, refer to our `Documentation
 <https://mariner.readthedocs.io/en/latest/>`_.
@@ -54,14 +55,14 @@ post <https://l9o.dev/posts/controlling-an-elegoo-mars-pro-remotely/>`__
 explains the setup end to end with pictures of the modifications done to an
 Elegoo Mars Pro.
 
-.. |CI| image:: https://github.com/luizribeiro/mariner/workflows/CI/badge.svg
-   :target: https://github.com/luizribeiro/mariner/actions/workflows/ci.yaml
+.. |CI| image:: https://github.com/amd989/mariner/workflows/CI/badge.svg
+   :target: https://github.com/amd989/mariner/actions/workflows/ci.yaml
 .. |docs| image:: https://readthedocs.org/projects/mariner/badge/?version=latest
    :target: https://mariner.readthedocs.io/en/latest/?badge=latest
-.. |codecov| image:: https://codecov.io/gh/luizribeiro/mariner/branch/master/graph/badge.svg
-   :target: https://codecov.io/gh/luizribeiro/mariner
+.. |codecov| image:: https://codecov.io/gh/amd989/mariner/branch/master/graph/badge.svg
+   :target: https://codecov.io/gh/amd989/mariner
 .. |Python| image:: https://img.shields.io/badge/python-3.7%20%7C%203.8%20%7C%203.9-blue
    :target: https://www.python.org/downloads/
 .. |MIT license| image:: https://img.shields.io/badge/License-MIT-blue.svg
-   :target: https://luizribeiro.mit-license.org/
+   :target: https://amd.mit-license.org/
 .. |Screenshot| image:: /docs/_static/screenshot.png
