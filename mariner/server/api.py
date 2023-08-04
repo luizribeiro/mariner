@@ -52,13 +52,14 @@ def print_status() -> str:
         # sometimes we get an unexpected response from the printer (an "ok" instead of
         # the print status we expected). due to this, we retry at most 3 times here
         # until we have a successful response. see issue #180
-        selected_file = retry(
-            printer.get_selected_file,
+        print_status = retry(
+            printer.get_print_status,
             UnexpectedPrinterResponse,
             num_retries=3,
         )
-        print_status = retry(
-            printer.get_print_status,
+
+        selected_file = retry(
+            printer.get_selected_file,
             UnexpectedPrinterResponse,
             num_retries=3,
         )
@@ -175,6 +176,8 @@ def file_details() -> str:
     path = (config.get_files_directory() / filename).resolve()
     if config.get_files_directory() not in path.parents:
         abort(400)
+    if not os.path.isfile(path):
+        abort(400)
     sliced_model_file = read_cached_sliced_model_file(path)
     return jsonify(
         {
@@ -222,6 +225,8 @@ def file_preview() -> Response:
     filename = str(request.args.get("filename"))
     path = (config.get_files_directory() / filename).resolve()
     if config.get_files_directory() not in path.parents:
+        abort(400)
+    if not os.path.isfile(path):
         abort(400)
 
     preview_bytes = read_cached_preview(path)
