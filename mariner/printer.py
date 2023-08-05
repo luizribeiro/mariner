@@ -127,7 +127,7 @@ class ChiTuPrinter:
 
     def select_file(self, filename: str) -> None:
         response = self._send_and_read((f"M23 /{filename}").encode())
-        if "File opened" not in response:
+        if "File opened" not in response and "File selected" not in response:
             raise UnexpectedPrinterResponse(response)
 
     def move_by(self, z_dist_mm: float, mm_per_min: int = 600) -> None:
@@ -171,7 +171,7 @@ class ChiTuPrinter:
 
     def stop_printing(self) -> None:
         response = self._send_and_read(b"M33")
-        if "Error" in response:
+        if "Error" in response or "Er" in response:
             raise UnexpectedPrinterResponse(response)
 
     def stop_motors(self) -> None:
