@@ -41,7 +41,7 @@ jobs:
       - run: poetry run pyre --noninteractive
       - run: poetry run green --run-coverage
       - run: poetry run coverage xml -o backend-coverage.xml
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         if: matrix.python-version == '3.8'
         with:
           name: backend-coverage
@@ -62,7 +62,7 @@ jobs:
       - run: yarn build
       - run: yarn test --coverage --collectCoverageFrom "src/**/*"
       - run: mv coverage/coverage-final.json ../frontend-coverage.json
-      - uses: actions/upload-artifact@v2
+      - uses: actions/upload-artifact@v4
         with:
           name: frontend-coverage
           path: frontend-coverage.json
@@ -73,11 +73,11 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Retrieve backend test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: backend-coverage
       - name: Retrieve frontend test coverage
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: frontend-coverage
       - uses: codecov/codecov-action@v2
