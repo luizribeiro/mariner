@@ -47,22 +47,27 @@ def handle_mariner_exception(exception: MarinerException) -> Tuple[str, int]:
 @api.route("/print_status", methods=["GET"])
 def print_status() -> str:
     with ChiTuPrinter() as printer:
+
         # the printer sends periodic "ok" responses over serial. this means that
         # sometimes we get an unexpected response from the printer (an "ok" instead of
         # the print status we expected). due to this, we retry at most 3 times here
         # until we have a successful response. see issue #180
-        selected_file = retry(
-            printer.get_selected_file,
-            UnexpectedPrinterResponse,
-            num_retries=3,
-        )
         print_status = retry(
             printer.get_print_status,
             UnexpectedPrinterResponse,
             num_retries=3,
         )
 
-        if print_status.state == PrinterState.IDLE:
+        selected_file = retry(
+            printer.get_selected_file,
+            UnexpectedPrinterResponse,
+            num_retries=3,
+        )
+
+        if (
+            print_status.state == PrinterState.IDLE
+            or print_status.state == PrinterState.CLOSED
+        ):
             progress = 0.0
             print_details = {}
         else:
@@ -171,6 +176,8 @@ def file_details() -> str:
     path = (config.get_files_directory() / filename).resolve()
     if config.get_files_directory() not in path.parents:
         abort(400)
+    if not os.path.isfile(path):
+        abort(400)
     sliced_model_file = read_cached_sliced_model_file(path)
     return jsonify(
         {
@@ -218,6 +225,8 @@ def file_preview() -> Response:
     filename = str(request.args.get("filename"))
     path = (config.get_files_directory() / filename).resolve()
     if config.get_files_directory() not in path.parents:
+        abort(400)
+    if not os.path.isfile(path):
         abort(400)
 
     preview_bytes = read_cached_preview(path)

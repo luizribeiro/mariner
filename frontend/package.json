@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "start": "webpack-dev-server --watch --mode development",
+    "start": "webpack-dev-server --mode development",
     "build": "webpack --mode production",
     "test": "jest",
     "lint": "yarn eslint 'src/**/*.{js,jsx,ts,tsx}'",

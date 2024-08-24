@@ -18,6 +18,7 @@ cache = Cache(app)
 @cache.memoize(timeout=0)
 def read_cached_sliced_model_file(filename: str) -> SlicedModelFile:
     assert os.path.isabs(filename)
+    assert os.path.isfile(filename)
     file_format = get_file_format(filename)
     return file_format.read(config.get_files_directory() / filename)
 
@@ -25,6 +26,7 @@ def read_cached_sliced_model_file(filename: str) -> SlicedModelFile:
 @cache.memoize(timeout=0)
 def read_cached_preview(filename: str) -> bytes:
     assert os.path.isabs(filename)
+    assert os.path.isfile(filename)
     bytes = io.BytesIO()
     file_format = get_file_format(filename)
     preview_image: png.Image = file_format.read_preview(

@@ -1,3 +1,11 @@
+mariner3d (0.3.0-1) unstable; urgency=low
+
+  * Added support for encrypted .ctb files, courtesy of Desterly's fork  
+  * Upgrading dependencies.
+  * Fixed Github Actions workflows execution issues.
+
+ -- Alejandro Mora <mail@alejandro.md>  Tue, 3 Aug 2023 07:46:35 -0500
+
 mariner3d (0.2.0-1) unstable; urgency=low
 
   * Added support for more printers (see README.md)
