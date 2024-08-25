@@ -1,6 +1,8 @@
 ---
 name: "Package mariner3d as .deb"
 
+permissions: write-all
+ 
 # yamllint disable-line rule:truthy
 on:
   push:
